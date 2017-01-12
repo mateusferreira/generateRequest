@@ -1,0 +1,129 @@
+package control;
+
+import dao.EmpresaDAO;
+import dao.PessoaDAO;
+import dao.ToolsDAO;
+import entities.Empresa;
+import entities.Pessoa;
+import entities.Tools;
+import model.PessoaTableModel;
+import poi.MakeWordBusinessDocument;
+import poi.MakeWordDocument;
+import view.DialogChangeMajor;
+import view.EmpresaTableView;
+import view.MakeBusinessRequest;
+import view.MakeRequest;
+import view.PessoaTableView;
+import view.ViewStart;
+
+public class Controller {
+	
+	private MakeRequest request;
+	private MakeBusinessRequest businessRequest;
+	private ViewStart viewStart;
+	private PessoaDAO dao = new PessoaDAO();
+	private EmpresaDAO daoEmpresa = new EmpresaDAO();
+	private ToolsDAO toolsdao = new ToolsDAO();
+	private MakeWordDocument poi = new MakeWordDocument();
+	private MakeWordBusinessDocument poiBusiness = new MakeWordBusinessDocument();
+	private PessoaTableView pessoaTableView;
+	private EmpresaTableView empresaTableView;
+	private MakeBusinessRequest empresa;
+	
+	private Tools keepTools;
+	private DialogChangeMajor changeMajor = new DialogChangeMajor();
+	
+	public void init(){
+		//request = new MakeRequest(this);
+		//request.init();
+		viewStart = new ViewStart(this,"Gerenciador de Requerimentos");
+		viewStart.init();
+		
+	}
+	
+	public void goShowPersonTable(boolean cpfIsSelected){
+		viewStart.setVisible(false);
+		if(cpfIsSelected == true){//Vai pra tela de criação de requerimento Pessoa Física
+			pessoaTableView = new PessoaTableView(this, "Tabela");
+			pessoaTableView.init(dao.getListPessoas());
+		}
+		
+		else{
+			empresaTableView = new EmpresaTableView(this, "Tabela");
+			empresaTableView.init(daoEmpresa.getListEmpresa());
+		}
+	}
+	
+	public void goMakeRequest(Pessoa p){
+		//System.out.println(p.getNome());
+		//System.out.println("teste....");
+		pessoaTableView.setVisible(false);
+		request = new MakeRequest(this, "Cria Requerimento",p);
+		request.init();
+		
+	}
+	
+	public void goMakeRequest(Empresa empresa){
+		//System.out.println(p.getNome());
+		//System.out.println("teste....");
+		empresaTableView.setVisible(false);
+		businessRequest = new MakeBusinessRequest(this, "Cria Requerimento",empresa);
+		businessRequest.init();
+		
+	}
+	
+	
+	public Pessoa buscarPessoaNoBanco(String cpf){
+		//System.out.println("CPF: "+cpf);
+		return dao.getPessoa(cpf);
+		
+	}
+	
+	public void editarPessoa(Pessoa pessoa){
+		dao.updatePessoa(pessoa);
+	}
+	
+	public void editarEmpresa(Empresa empresa){
+		daoEmpresa.updateEmpresa(empresa);
+	}
+	
+	public void inserirNovaPessoa(Pessoa pessoa){
+		dao.insertPessoa(pessoa);
+	}
+	
+	public void inserirNovaEmpresa(Empresa empresa){
+		daoEmpresa.insertEmpresa(empresa);
+	}
+	
+	public void gerarWordCpf(Pessoa pessoa, String requere){
+		//request.setVisible(false);
+		
+		//System.out.println("DADOS: "+pessoa.getNome()+" - "+requere);
+		poi.geraReqCpf(pessoa, requere, keepTools);
+		
+	}
+	
+	public void gerarWordCnpj(Empresa empresa, String requere){
+		//TODO:
+		poiBusiness.geraReqCnpj(empresa, requere, keepTools);
+	}
+	
+	public void updateTools(Tools tools){
+		toolsdao.updateTools(tools);
+	}
+	
+	public Tools getTools(int id){
+		
+		return toolsdao.getTools(id);
+		
+	}
+	
+	public void guardaTools(Tools tools){
+		keepTools = tools;
+	}
+	
+	public void trocarPrefeito(Tools tools){
+		updateTools(changeMajor.display(tools));
+	}
+
+}
