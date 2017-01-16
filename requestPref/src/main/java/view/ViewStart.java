@@ -51,6 +51,8 @@ public class ViewStart extends JFrame{
 	private ButtonGroup group = new ButtonGroup();
 	private JButton button;
 	private JButton btMakeRequest;
+	private JButton btMakeCnd;
+	private JButton btCadastrarRequerimento;
 	
 	private Controller controller;
 	
@@ -194,14 +196,22 @@ public class ViewStart extends JFrame{
 			painel.add(radioCNPJ,c);
 			
 			//Row 1
-			button = new JButton("<html><center>CADASTRAR<br/>REQUERIMENTO</center></html>");
+			btCadastrarRequerimento = new JButton("<html><center>CADASTRAR<br/>REQUERIMENTO</center></html>");
 			
 			c.fill = GridBagConstraints.HORIZONTAL;
 			c.insets = new Insets(vTop,vLeft,vBottom,vRight);
 			c.gridwidth = 2;
 			c.gridx = 0;
 			c.gridy = 1;
-			painel.add(button, c);
+			painel.add(btCadastrarRequerimento, c);
+			
+			btCadastrarRequerimento.addActionListener(new ActionListener() {
+				
+				public void actionPerformed(ActionEvent e) {
+					JOptionPane.showMessageDialog(ViewStart.this, "Ainda não implementado");
+					
+				}
+			});
 			
 			lEmpty = new JLabel("");
 			c.fill = GridBagConstraints.HORIZONTAL;
@@ -240,6 +250,14 @@ public class ViewStart extends JFrame{
 			c.gridy = 2;
 			painel.add(button, c);
 			
+			button.addActionListener(new ActionListener() {
+				
+				public void actionPerformed(ActionEvent e) {
+					JOptionPane.showMessageDialog(ViewStart.this, "Ainda não implementado");
+					
+				}
+			});
+			
 			lEmpty = new JLabel("");
 			c.fill = GridBagConstraints.HORIZONTAL;
 			c.insets = new Insets(vTop,vLeft,vBottom,vRight);
@@ -248,7 +266,7 @@ public class ViewStart extends JFrame{
 			c.gridy = 2;
 			painel.add(lEmpty, c);
 			
-			button = new JButton("<html><center>GERAR<br/>CND</center></html>");
+			btMakeCnd = new JButton("<html><center>GERAR<br/>CND</center></html>");
 			c.fill = GridBagConstraints.HORIZONTAL;
 			c.insets = new Insets(vTop,vLeft,vBottom,vRight);
 			c.weightx = 0.5;
@@ -256,7 +274,15 @@ public class ViewStart extends JFrame{
 			//c.ipadx = 0;
 			c.gridx = 3;
 			c.gridy = 2;
-			painel.add(button, c);
+			painel.add(btMakeCnd, c);
+			
+			btMakeCnd.addActionListener(new ActionListener() {
+				
+				public void actionPerformed(ActionEvent e) {
+					JOptionPane.showMessageDialog(ViewStart.this, "Ainda não implementado");
+					
+				}
+			});
 			
 		}
 		return painel;

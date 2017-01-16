@@ -31,7 +31,7 @@ public class Empresa implements Serializable{
 	@Column (length = 8)
 	private String numero;
 	
-	@Column
+	@Column (nullable = false, length = 30)
 	private String bairro;
 	
 	@Column(nullable = false, length = 20)

@@ -7,7 +7,7 @@ CREATE TABLE pessoa(
 	rg VARCHAR(15),
 	endereco VARCHAR(50) NOT NULL,
 	numero VARCHAR(8),
-	bairro VARCHAR(15) NOT NULL,
+	bairro VARCHAR(35) NOT NULL,
 	cidade VARCHAR(20) NOT NULL,
 	estado VARCHAR(2) NOT NULL,
 	
@@ -22,7 +22,7 @@ CREATE TABLE empresa(
 	atividade VARCHAR(100),
 	endereco VARCHAR(50) NOT NULL,
 	numero VARCHAR(8),
-	bairro VARCHAR(15) NOT NULL,
+	bairro VARCHAR(30) NOT NULL,
 	cidade VARCHAR(20) NOT NULL,
 	estado VARCHAR(2) NOT NULL,
 	

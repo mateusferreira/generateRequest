@@ -1,4 +1,4 @@
-package view;
+	package view;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -34,6 +34,8 @@ import javax.swing.text.MaskFormatter;
 
 import control.Controller;
 import entities.Pessoa;
+import model.LimitTextField;
+
 
 public class MakeRequest extends JFrame {
 	
@@ -84,7 +86,9 @@ public class MakeRequest extends JFrame {
 	private JTextField textRG = new JTextField(10);
 	private JTextField textAddress = new JTextField(10);
 	private JTextField textNum = new JTextField(5);
-	private JTextField textBairro = new JTextField(10);
+	private JTextField textBairro = new JTextField();
+	//textBairro.setDocument(new LimitedDocument(10));
+	
 	private JTextField textCity = new JTextField(10);
 	
 	private JTextArea areaRequest = new JTextArea();
@@ -123,8 +127,19 @@ public class MakeRequest extends JFrame {
 		
 	}
 	
+	private void limitarTextFields(){
+		textBairro.setDocument(new LimitTextField(35));
+		textNome.setDocument(new LimitTextField(40));
+		textRG.setDocument(new LimitTextField(15));
+		textAddress.setDocument(new LimitTextField(50));
+		textNum.setDocument(new LimitTextField(8));
+		textNacionalidade.setDocument(new LimitTextField(15));
+		textCity.setDocument(new LimitTextField(20));
+	}
+	
 	
 	private JPanel getPainelGeral(){
+		limitarTextFields();
 		
 		if(painelGeral == null){
 			painelGeral = new JPanel();
@@ -134,6 +149,8 @@ public class MakeRequest extends JFrame {
 			painelGeral.add(getPainelLogo(), BorderLayout.NORTH);
 			painelGeral.add(getPainelRequest(), BorderLayout.SOUTH);
 			painelGeral.add(getPainel(), BorderLayout.CENTER);
+			
+			
 			
 			/*if(pessoa != null){	
 				setPainelDataPessoa();

@@ -35,6 +35,7 @@ package view;
 	import control.Controller;
 import entities.Empresa;
 import entities.Pessoa;
+import model.LimitTextField;
 
 public class MakeBusinessRequest extends JFrame{
 	
@@ -119,8 +120,19 @@ public class MakeBusinessRequest extends JFrame{
 			
 		}
 		
+		private void limitarTextFields(){
+			textBairro.setDocument(new LimitTextField(30));
+			textAtividade.setDocument(new LimitTextField(100));
+			textRazao.setDocument(new LimitTextField(40));
+			textAddress.setDocument(new LimitTextField(50));
+			textNum.setDocument(new LimitTextField(8));
+			textCity.setDocument(new LimitTextField(20));
+			textInscricao.setDocument(new LimitTextField(6));
+		}
+		
 		
 		private JPanel getPainelGeral(){
+			limitarTextFields();
 			
 			if(painelGeral == null){
 				painelGeral = new JPanel();
