@@ -18,6 +18,7 @@ import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
@@ -109,6 +110,8 @@ public class MakeRequest extends JFrame {
 	private JButton botaoSalvarAlteracoesCadastro = new JButton("Salvar Alterações");
 	private JButton botaoCriarRequerimento = new JButton("Criar");
 	
+	private JCheckBox checkCND = new JCheckBox("Gerar CND");
+	
 	private Pessoa pessoa;
 	
 	public MakeRequest(Controller controller, String titulo, Pessoa p){
@@ -130,7 +133,7 @@ public class MakeRequest extends JFrame {
 	private void limitarTextFields(){
 		textBairro.setDocument(new LimitTextField(35));
 		textNome.setDocument(new LimitTextField(40));
-		textRG.setDocument(new LimitTextField(15));
+		textRG.setDocument(new LimitTextField(20));
 		textAddress.setDocument(new LimitTextField(50));
 		textNum.setDocument(new LimitTextField(8));
 		textNacionalidade.setDocument(new LimitTextField(15));
@@ -653,7 +656,7 @@ public class MakeRequest extends JFrame {
 			
 			public void actionPerformed(ActionEvent e) {
 				dispose();//Fecha a Aplicação.
-				controller.gerarWordCpf(pessoa, areaRequest.getText());
+				controller.gerarWordCpf(pessoa, areaRequest.getText(), checkCND.isSelected());
 				
 			}
 		});
@@ -669,6 +672,9 @@ public class MakeRequest extends JFrame {
 				
 			}
 		});
+		
+		checkCND.setSelected(false);
+		painelSubmit.add(checkCND);
 		
 		return painelSubmit;
 	}

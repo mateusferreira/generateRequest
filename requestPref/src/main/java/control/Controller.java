@@ -1,5 +1,7 @@
 package control;
 
+import javax.swing.JOptionPane;
+
 import dao.EmpresaDAO;
 import dao.PessoaDAO;
 import dao.ToolsDAO;
@@ -7,6 +9,7 @@ import entities.Empresa;
 import entities.Pessoa;
 import entities.Tools;
 import model.PessoaTableModel;
+import poi.MakeCND;
 import poi.MakeWordBusinessDocument;
 import poi.MakeWordDocument;
 import view.DialogChangeMajor;
@@ -25,6 +28,7 @@ public class Controller {
 	private EmpresaDAO daoEmpresa = new EmpresaDAO();
 	private ToolsDAO toolsdao = new ToolsDAO();
 	private MakeWordDocument poi = new MakeWordDocument();
+	private MakeCND poiCnd = new MakeCND();
 	private MakeWordBusinessDocument poiBusiness = new MakeWordBusinessDocument();
 	private PessoaTableView pessoaTableView;
 	private EmpresaTableView empresaTableView;
@@ -95,12 +99,21 @@ public class Controller {
 		daoEmpresa.insertEmpresa(empresa);
 	}
 	
-	public void gerarWordCpf(Pessoa pessoa, String requere){
+	public void gerarWordCpf(Pessoa pessoa, String requere, boolean geraCND){
 		//request.setVisible(false);
 		
 		//System.out.println("DADOS: "+pessoa.getNome()+" - "+requere);
 		poi.geraReqCpf(pessoa, requere, keepTools);
 		
+		if(geraCND == true){
+			String resp = JOptionPane.showInputDialog(null, "FINALIDADE DA CND");
+			
+			if(resp != null){
+				poiCnd.geraWordPessoaCnd(pessoa, resp);
+				//System.out.println("Implementar CND");
+			}
+			
+		}
 	}
 	
 	public void gerarWordCnpj(Empresa empresa, String requere){

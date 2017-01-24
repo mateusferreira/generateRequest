@@ -75,6 +75,14 @@
 		    <version>1.10</version>
 		</dependency>
 		
+		<!-- https://mvnrepository.com/artifact/commons-logging/commons-logging -->
+		<!--<dependency>
+		    <groupId>commons-logging</groupId>
+		    <artifactId>commons-logging</artifactId>
+		    <version>1.2</version>
+		</dependency>-->
+		
+		
 				<!-- https://mvnrepository.com/artifact/org.apache.poi/poi-ooxml -->
 		<dependency>
 		    <groupId>org.apache.poi</groupId>
@@ -90,6 +98,14 @@
 		    <artifactId>openxml4j</artifactId>
 		    <version>1.0-beta</version>
 		</dependency>
+		
+		<!-- https://mvnrepository.com/artifact/org.apache.poi/poi-scratchpad -->
+		<dependency>
+    		<groupId>org.apache.poi</groupId>
+    		<artifactId>poi-scratchpad</artifactId>
+    		<version>3.14</version>
+		</dependency>
+		
   
     <dependency>
       <groupId>junit</groupId>
