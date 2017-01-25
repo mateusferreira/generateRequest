@@ -109,16 +109,25 @@ public class Controller {
 			String resp = JOptionPane.showInputDialog(null, "FINALIDADE DA CND");
 			
 			if(resp != null){
-				poiCnd.geraWordPessoaCnd(pessoa, resp);
+				poiCnd.geraWordPessoaCnd(pessoa, resp, keepTools);
 				//System.out.println("Implementar CND");
 			}
 			
 		}
 	}
 	
-	public void gerarWordCnpj(Empresa empresa, String requere){
+	public void gerarWordCnpj(Empresa empresa, String requere, boolean geraCND){
 		//TODO:
 		poiBusiness.geraReqCnpj(empresa, requere, keepTools);
+		
+		if(geraCND == true){
+			String resp = JOptionPane.showInputDialog(null, "FINALIDADE DA CND");
+			
+			if(resp != null){
+				poiCnd.geraWordEmpresaCnd(empresa, resp, keepTools);
+				//System.out.println("Implementar CND");
+			}
+		}
 	}
 	
 	public void updateTools(Tools tools){

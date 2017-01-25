@@ -18,7 +18,8 @@ package view;
 	import javax.swing.BorderFactory;
 	import javax.swing.ImageIcon;
 	import javax.swing.JButton;
-	import javax.swing.JComboBox;
+import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
 	import javax.swing.JFormattedTextField;
 	import javax.swing.JFrame;
 	import javax.swing.JLabel;
@@ -101,6 +102,8 @@ public class MakeBusinessRequest extends JFrame{
 		private JButton editarInformacoesCadastro = new JButton("Editar");
 		private JButton botaoSalvarAlteracoesCadastro = new JButton("Salvar Alterações");
 		private JButton botaoCriarRequerimento = new JButton("Criar");
+		
+		private JCheckBox checkCND = new JCheckBox("Gerar CND");
 		
 		private Empresa empresa;
 		
@@ -575,7 +578,7 @@ public class MakeBusinessRequest extends JFrame{
 				
 				public void actionPerformed(ActionEvent e) {
 					dispose();//Fecha a Aplicação.
-					controller.gerarWordCnpj(empresa, areaRequest.getText());//**************TODO
+					controller.gerarWordCnpj(empresa, areaRequest.getText(), checkCND.isSelected());//**************TODO
 					
 				}
 			});
@@ -591,6 +594,9 @@ public class MakeBusinessRequest extends JFrame{
 					
 				}
 			});
+			
+			checkCND.setSelected(false);
+			painelSubmit.add(checkCND);
 			
 			return painelSubmit;
 		}
