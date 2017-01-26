@@ -342,8 +342,10 @@ public class ViewStart extends JFrame{
 						
 						//File diretorio = new File(pathSaveFile);
 						
+						//CRIA-SE OS SUBDIRETÓRIOS AUTOMATICAMENTES (SE NÃO EXISTIR)
 						File subDiretorioFisica = new File(pathSaveFile+"/P.FISICA");
 						File subDiretorioEmpresa = new File(pathSaveFile+"/EMPRESA");
+						File subDiretorioCNDs = new File(pathSaveFile+"/CNDs");
 						
 						
 						if(!subDiretorioFisica.exists()){
@@ -352,6 +354,10 @@ public class ViewStart extends JFrame{
 						
 						if(!subDiretorioEmpresa.exists()){
 							subDiretorioEmpresa.mkdir();
+						}
+						
+						if(!subDiretorioCNDs.exists()){
+							subDiretorioCNDs.mkdir();
 						}
 						
 						tools.setPathFile(pathSaveFile);//INCLUIR A PASTA CRIADA

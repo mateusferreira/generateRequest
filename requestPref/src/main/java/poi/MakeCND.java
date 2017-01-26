@@ -55,7 +55,7 @@ public class MakeCND {
             range.replaceText("$P2","");
             range.replaceText("$P3","");
             range.replaceText("$P4", empresa.getRazao().toUpperCase());
-            range.replaceText("$P5",empresa.getEndereco().toUpperCase()+", "+empresa.getBairro().toUpperCase()+" "+empresa.getCidade().toUpperCase()+" - "+empresa.getEstado());
+            range.replaceText("$P5",empresa.getEndereco().toUpperCase()+" Nº "+empresa.getNumero()+", "+empresa.getBairro().toUpperCase()+" "+empresa.getCidade().toUpperCase()+" - "+empresa.getEstado());
             range.replaceText("$P6", empresa.getAtividade().toUpperCase());
             range.replaceText("$P7","");
             range.replaceText("$P8",empresa.getInscMunicipal());
@@ -93,7 +93,7 @@ public class MakeCND {
 
             range.replaceText("$P1", pessoa.getNome().toUpperCase());
             range.replaceText("$P2", pessoa.getCpf());
-            range.replaceText("$P3",pessoa.getEndereco().toUpperCase()+", "+pessoa.getBairro().toUpperCase()+" - "+pessoa.getCidade().toUpperCase()+" - "+pessoa.getEstado());
+            range.replaceText("$P3",pessoa.getEndereco().toUpperCase()+" Nº "+pessoa.getNumero()+", "+pessoa.getBairro().toUpperCase()+" - "+pessoa.getCidade().toUpperCase()+" - "+pessoa.getEstado());
             range.replaceText("$P4","");
             range.replaceText("$P5","");
             range.replaceText("$P6","");

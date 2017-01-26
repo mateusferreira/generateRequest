@@ -110,6 +110,7 @@ public class MakeRequest extends JFrame {
 	private JButton botaoSalvarAlteracoesCadastro = new JButton("Salvar Alterações");
 	private JButton botaoCriarRequerimento = new JButton("Criar");
 	
+	private JCheckBox checkRequerimento = new JCheckBox("Gerar Req.");
 	private JCheckBox checkCND = new JCheckBox("Gerar CND");
 	
 	private Pessoa pessoa;
@@ -284,18 +285,20 @@ public class MakeRequest extends JFrame {
 		int digitoVerificadorDois;
 		
 		int x = Character.getNumericValue(cpf.charAt(0));
-		boolean numEquals = false;
+		boolean numEquals = true;
 		for(int i = 1; i<14; i++){
-			if(x == Character.getNumericValue(cpf.charAt(i))){
-				numEquals = true;
-			}
-			else{
+			if(i==3 || i==7 || i==11)continue;//PULO OS PONTOS E O TRAÇO.(XXX.XXX.XXX-XX)
+			
+			if(x != Character.getNumericValue(cpf.charAt(i))){
+				numEquals = false;
 				break;
 			}
-			
 		}
 		
-		if(numEquals == true)return false;
+		if(numEquals == true){
+			System.out.println("Numeros iguais");
+			return false;
+		}
 		
 		digitoVerificadorUm = Character.getNumericValue(cpf.charAt(0)) + 2 * Character.getNumericValue(cpf.charAt(1)) + 3 * Character.getNumericValue(cpf.charAt(2));
 		digitoVerificadorUm += 4 * Character.getNumericValue(cpf.charAt(4)) +  5 * Character.getNumericValue(cpf.charAt(5)) + 6 * Character.getNumericValue(cpf.charAt(6));
@@ -649,6 +652,10 @@ public class MakeRequest extends JFrame {
 	
 	private JPanel getPanelSubmit(){
 		JPanel painelSubmit = new JPanel();
+		
+		checkRequerimento.setSelected(true);
+		painelSubmit.add(checkRequerimento);
+		
 		painelSubmit.add(botaoCriarRequerimento);
 		botaoCriarRequerimento.setEnabled(false);
 		
@@ -656,7 +663,8 @@ public class MakeRequest extends JFrame {
 			
 			public void actionPerformed(ActionEvent e) {
 				dispose();//Fecha a Aplicação.
-				controller.gerarWordCpf(pessoa, areaRequest.getText(), checkCND.isSelected());
+				controller.gerarWordCpf(pessoa, areaRequest.getText(), checkCND.isSelected(), checkRequerimento.isSelected());
+				controller.init();
 				
 			}
 		});

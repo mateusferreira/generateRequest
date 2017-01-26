@@ -99,11 +99,12 @@ public class Controller {
 		daoEmpresa.insertEmpresa(empresa);
 	}
 	
-	public void gerarWordCpf(Pessoa pessoa, String requere, boolean geraCND){
+	public void gerarWordCpf(Pessoa pessoa, String requere, boolean geraCND, boolean isGeraRequerimento){
 		//request.setVisible(false);
 		
 		//System.out.println("DADOS: "+pessoa.getNome()+" - "+requere);
-		poi.geraReqCpf(pessoa, requere, keepTools);
+		if(isGeraRequerimento == true)//Se for falso não vai criar o requerimento
+			poi.geraReqCpf(pessoa, requere, keepTools);
 		
 		if(geraCND == true){
 			String resp = JOptionPane.showInputDialog(null, "FINALIDADE DA CND");
