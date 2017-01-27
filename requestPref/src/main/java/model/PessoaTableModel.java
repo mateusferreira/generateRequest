@@ -52,5 +52,18 @@ public class PessoaTableModel extends DefaultTableModel {
 	public Pessoa getPessoaAt(int row) {
 		return internalList.get(row);
 	}
+	
+	public ArrayList<Pessoa> getPessaByAtribute (ArrayList<Pessoa> p,String atrib){
+		ArrayList<Pessoa> novaLista = new ArrayList<Pessoa>();
+		//System.out.println("CHEGA: "+atrib);
+		int i = 0;
+		for(; i< p.size(); i++){
+			if(p.get(i).getNome().contains(atrib)){
+				novaLista.add(p.get(i));
+			}
+		}
+		
+		return novaLista;
+	}
 
 }

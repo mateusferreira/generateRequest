@@ -1,5 +1,7 @@
 package control;
 
+import java.util.ArrayList;
+
 import javax.swing.JOptionPane;
 
 import dao.EmpresaDAO;

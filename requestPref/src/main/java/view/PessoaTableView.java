@@ -4,6 +4,8 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -12,8 +14,10 @@ import java.util.ArrayList;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.JTextField;
 
 import control.Controller;
 import entities.Pessoa;
@@ -31,6 +35,11 @@ public class PessoaTableView extends JFrame {
 	private JPanel painelBotoes;
 	private JPanel painelBusca;
 	
+	private JTextField textBusca = new JTextField(30);
+	
+	private JRadioButton radioNome = new JRadioButton("Nome");
+	private JRadioButton radioCPF = new JRadioButton("CPF");
+	
 	private JButton botaoAdicionarNovoCadastro = new JButton("Adicionar");
 	private JButton botaoVoltarTelaInicial = new JButton("Voltar");
 	
@@ -45,7 +54,6 @@ public class PessoaTableView extends JFrame {
 	public void init(ArrayList<Pessoa>newList){
 		
 		listPessoas = newList;
-		
 		//super.setContentPane(pnBase);
 		super.setSize(new Dimension(300, 200));
 		super.setContentPane(getPainelGeral());
@@ -106,6 +114,37 @@ public class PessoaTableView extends JFrame {
 		if(painelBusca == null){
 			painelBusca = new JPanel();
 			
+			radioNome.setSelected(true);
+			painelBusca.add(textBusca);
+			painelBusca.add(radioNome);
+			painelBusca.add(radioCPF);
+			
+			textBusca.addKeyListener(new KeyListener() {
+				
+				public void keyTyped(KeyEvent e) {
+				}
+				
+				public void keyReleased(KeyEvent e) {
+					String texto = textBusca.getText().toUpperCase();
+					model = new PessoaTableModel(model.getPessaByAtribute(listPessoas,texto));
+					table.setModel(model);
+					//System.out.println(texto);
+				}
+				
+				public void keyPressed(KeyEvent e) {
+					// TODO Auto-generated method stub
+				}
+			});
+			
+			/*textBusca.addActionListener(new ActionListener() {
+				
+				public void actionPerformed(ActionEvent e) {
+					listPessoas = controller.procuraPessoa(textBusca.getText());
+					System.out.println("VAi");
+					
+				}
+			});
+			*/
 		}
 		
 		return painelBusca;
