@@ -127,9 +127,10 @@ public class Controller {
 		}
 	}
 	
-	public void gerarWordCnpj(Empresa empresa, String requere, boolean geraCND){
+	public void gerarWordCnpj(Empresa empresa, String requere, boolean geraCND,boolean isGeraRequerimento){
 		//TODO:
-		poiBusiness.geraReqCnpj(empresa, requere, keepTools);
+		if(isGeraRequerimento == true)
+			poiBusiness.geraReqCnpj(empresa, requere, keepTools);
 		
 		if(geraCND == true){
 			String resp = JOptionPane.showInputDialog(null, "FINALIDADE DA CND");

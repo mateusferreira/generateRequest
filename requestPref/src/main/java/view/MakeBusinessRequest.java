@@ -110,6 +110,7 @@ public class MakeBusinessRequest extends JFrame{
 		private JButton botaoSalvarAlteracoesCadastro = new JButton("Salvar Alterações");
 		private JButton botaoCriarRequerimento = new JButton("Criar");
 		
+		private JCheckBox checkRequerimento = new JCheckBox("Gerar Req.");
 		private JCheckBox checkCND = new JCheckBox("Gerar CND");
 		
 		private Empresa empresa;
@@ -669,6 +670,10 @@ public class MakeBusinessRequest extends JFrame{
 		
 		private JPanel getPanelSubmit(){
 			JPanel painelSubmit = new JPanel();
+			
+			checkRequerimento.setSelected(true);
+			painelSubmit.add(checkRequerimento);
+			
 			painelSubmit.add(botaoCriarRequerimento);
 			botaoCriarRequerimento.setEnabled(false);
 			
@@ -676,7 +681,7 @@ public class MakeBusinessRequest extends JFrame{
 				
 				public void actionPerformed(ActionEvent e) {
 					dispose();//Fecha a Aplicação.
-					controller.gerarWordCnpj(empresa, areaRequest.getText(), checkCND.isSelected());//**************TODO
+					controller.gerarWordCnpj(empresa, areaRequest.getText(), checkCND.isSelected(),checkRequerimento.isSelected());//**************TODO
 					
 				}
 			});

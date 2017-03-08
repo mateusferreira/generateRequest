@@ -401,7 +401,7 @@ public class ViewStart extends JFrame{
 				public void actionPerformed(ActionEvent arg0) {
 					System.out.println("clicked");
 					JOptionPane.showMessageDialog(ViewStart.this, "Software para gestão Secretaria PMG!\n"
-							+ "Trial Version 1.0.1 - @2017\nUPDATE 20170127-11:41\n\nDeveloped By Mateus Ferreira de Souza\nmateus.ferreira@goncalves.mg.gov.br"
+							+ "Trial Version 1.0.2 - @2017\nUPDATE 20170308-14:30\n\nDeveloped By Mateus Ferreira de Souza\nmateus.ferreira@goncalves.mg.gov.br"
 							+"\nseraomateus@hotmail.com");
 					
 				}
