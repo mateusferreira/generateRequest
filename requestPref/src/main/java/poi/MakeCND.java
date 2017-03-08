@@ -50,6 +50,14 @@ public class MakeCND {
             HWPFDocument doc = new HWPFDocument(fs);
          
             Range range = doc.getOverallRange();
+            
+            Date dt = empresa.getDataInicio();
+            String dataFormada = "";
+			if(dt != null){
+				String data_form = "dd/MM/yyyy";
+				SimpleDateFormat simple =  new SimpleDateFormat(data_form);
+				dataFormada = simple.format(dt);
+			}
 
             range.replaceText("$P1","");
             range.replaceText("$P2","");
@@ -57,7 +65,7 @@ public class MakeCND {
             range.replaceText("$P4", empresa.getRazao().toUpperCase());
             range.replaceText("$P5",empresa.getEndereco().toUpperCase()+" Nº "+empresa.getNumero()+", "+empresa.getBairro().toUpperCase()+" "+empresa.getCidade().toUpperCase()+" - "+empresa.getEstado());
             range.replaceText("$P6", empresa.getAtividade().toUpperCase());
-            range.replaceText("$P7","");
+            range.replaceText("$P7", dataFormada);
             range.replaceText("$P8",empresa.getInscMunicipal());
             range.replaceText("$PZ","");
             range.replaceText("$P9", empresa.getCnpj());

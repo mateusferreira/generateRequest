@@ -8,6 +8,7 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Image;
 import java.awt.Insets;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
@@ -107,6 +108,7 @@ public class MakeRequest extends JFrame {
 	JComboBox comboUf = new JComboBox(uf);
 	//JButton
 	private JButton editarInformacoesCadastro = new JButton("Editar");
+	private JButton botaoDeletarPessoa = new JButton("Excluir");
 	private JButton botaoSalvarAlteracoesCadastro = new JButton("Salvar Alterações");
 	private JButton botaoCriarRequerimento = new JButton("Criar");
 	
@@ -128,6 +130,7 @@ public class MakeRequest extends JFrame {
 		//super.setJMenuBar(getMenu());
 		super.setVisible(true);
 		//super.setResizable(false);//Desabilitar o Maximizar
+		setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/imagens/PMG.png")));
 		
 	}
 	
@@ -217,12 +220,18 @@ public class MakeRequest extends JFrame {
 				//System.out.println("CPF não encontrado!");
 				int opcao = JOptionPane.showConfirmDialog(null, "Deseja cadastrar nova pessoa?", "ATENÇÃO!",JOptionPane.YES_NO_OPTION);
 				//System.out.println(opcao);//0 - SIM - 1 - NÃO
-				
+				botaoDeletarPessoa.setEnabled(false);
 				if(opcao == 0){
 					//textCpf.setEnabled(false);//trava o CPF;
 					botaoSalvarAlteracoesCadastro.setEnabled(true);
 					isPessoaNova = true;//habilito para escolher no clicar do botão Salvar Alterações.
 					isFieldsAble(true);//Habilito o Cadastro
+					
+					
+					//********SUGESTÕES PARA PREENCHIMENTO
+					textNacionalidade.setText("BRASILEIRO");
+					textCity.setText("GONÇALVES");
+					comboUf.setSelectedIndex(12);
 				}
 				else{
 					dispose();//Fecha a aplicação...
@@ -232,6 +241,7 @@ public class MakeRequest extends JFrame {
 			else{
 				//System.out.println("NOME: "+pessoa.getNome()+" ENDEREÇO: "+ pessoa.getEndereco());
 				
+				botaoDeletarPessoa.setEnabled(true);
 				setPainelDataPessoa();
 				editarInformacoesCadastro.setEnabled(true);
 				botaoCriarRequerimento.setEnabled(true);
@@ -253,7 +263,28 @@ public class MakeRequest extends JFrame {
 				}
 			});
 			
-			if(pessoa == null)//
+			painelCentroSup.add(botaoDeletarPessoa);
+			
+			botaoDeletarPessoa.addActionListener(new ActionListener() {
+				
+				public void actionPerformed(ActionEvent e) {
+					// TODO Auto-generated method stub
+					int opcao = JOptionPane.showConfirmDialog(null, "Tem certeza que deseja excluir o cadastro?", "ATENÇÃO!",JOptionPane.YES_NO_OPTION);
+					//System.out.println(opcao);//0 - SIM - 1 - NÃO
+					
+					if(opcao == 0){
+						//System.out.println("Implementar SIM");
+						controller.excluirPessoaBanco(pessoa);
+						dispose();
+						controller.init();
+					}
+					else{
+						System.out.println("Não fazer nada");
+					}
+				}
+			});
+			
+			if(pessoa == null)//TODO ... VERIFICAR SE NÃO POSSO COLOCAR NO TESTE DA LINHA 219
 				editarInformacoesCadastro.setEnabled(false);
 			
 		}

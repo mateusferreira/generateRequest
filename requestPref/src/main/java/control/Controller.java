@@ -85,6 +85,14 @@ public class Controller {
 		
 	}
 	
+	public void excluirPessoaBanco(Pessoa pessoa){
+		dao.excluirPessoa(pessoa);
+	}
+	
+	public void excluirEmpresaBanco(Empresa empresa){
+		daoEmpresa.excluirEmpresa(empresa);
+	}
+	
 	public void editarPessoa(Pessoa pessoa){
 		dao.updatePessoa(pessoa);
 	}

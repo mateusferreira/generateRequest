@@ -6,12 +6,13 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.Insets;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+
 
 import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
@@ -25,7 +26,6 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
-import javax.swing.JTextField;
 
 import control.Controller;
 import entities.Tools;
@@ -80,6 +80,7 @@ public class ViewStart extends JFrame{
 		super.setVisible(true);
 		super.setResizable(false);//Desabilitar o Maximizar
 		
+		setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/imagens/PMG.png")));
 		configTools();
 	}
 	
@@ -221,7 +222,7 @@ public class ViewStart extends JFrame{
 			c.gridy = 1;
 			painel.add(lEmpty, c);
 			
-			btMakeRequest = new JButton("<html><center>GERAR<br/>REQUERIMENTO</center></html>");
+			btMakeRequest = new JButton("<html><center>GERAR<br/>REQUERIMENTO/CND</center></html>");
 			c.fill = GridBagConstraints.HORIZONTAL;
 			c.insets = new Insets(vTop,vLeft,vBottom,vRight);
 			c.weightx = 0.5;

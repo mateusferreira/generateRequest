@@ -1,6 +1,7 @@
 package entities;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -25,6 +26,9 @@ public class Empresa implements Serializable{
 	@Column(length=100)
 	private String atividade;
 	
+	@Column
+	private Date dataInicio;
+	
 	@Column(nullable = false, length = 50)
 	private String endereco;
 	
@@ -44,11 +48,12 @@ public class Empresa implements Serializable{
 		
 	}
 	
-	public Empresa(String cnpj, String razao, String inscMunicipal,String atividade, String endereco, String numero, String bairro, String cidade, String estado){
+	public Empresa(String cnpj, String razao, String inscMunicipal,String atividade, Date dataInicio, String endereco, String numero, String bairro, String cidade, String estado){
 		this.cnpj = cnpj;
 		this.razao = razao;
 		this.inscMunicipal = inscMunicipal;
 		this.atividade = atividade;
+		this.dataInicio = dataInicio;
 		this.endereco = endereco;
 		this.numero = numero;
 		this.bairro = bairro;
@@ -86,6 +91,14 @@ public class Empresa implements Serializable{
 
 	public void setAtividade(String atividade) {
 		this.atividade = atividade;
+	}
+	
+	public Date getDataInicio(){
+		return dataInicio;
+	}
+	
+	public void setDataInicio(Date dataInicio){
+		this.dataInicio = dataInicio;
 	}
 
 	public String getEndereco() {

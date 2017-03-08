@@ -12,9 +12,12 @@ package view;
 	import java.awt.event.ActionListener;
 	import java.io.IOException;
 	import java.io.InputStream;
-	import java.text.ParseException;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
-	import javax.imageio.ImageIO;
+import javax.imageio.ImageIO;
 	import javax.swing.BorderFactory;
 	import javax.swing.ImageIcon;
 	import javax.swing.JButton;
@@ -68,6 +71,7 @@ public class MakeBusinessRequest extends JFrame{
 	private JLabel lcnpj = new JLabel("CNPJ:");
 	private JLabel lrazao = new JLabel("Razão:");
 	private JLabel lAtividade = new JLabel("Atividade:");
+	private JLabel lDataInicio = new JLabel("Data In.");
 	private JLabel linscMunicipal = new JLabel("Inscr.:");
 
 	private JLabel lAddress	= new JLabel("Endereço:");
@@ -80,12 +84,14 @@ public class MakeBusinessRequest extends JFrame{
 		//private JTextField textCpf = new JTextField(20);
 		//JFormattedTextField
 		private JFormattedTextField textCnpj = null;
+		private JFormattedTextField textDataInicio = null;
 		
 		//TextField
 		private JTextField textRazao = new JTextField(30);
 		private JTextField textInscricao = new JTextField(10);
 		private JTextField textAddress = new JTextField(10);
-		private JTextField textAtividade = new JTextField(45);
+		private JTextField textAtividade = new JTextField(30);
+		//private JTextField textDataInicio = new JTextField(10);
 		private JTextField textNum = new JTextField(5);
 		private JTextField textBairro = new JTextField(10);
 		private JTextField textCity = new JTextField(10);
@@ -100,6 +106,7 @@ public class MakeBusinessRequest extends JFrame{
 		JComboBox comboUf = new JComboBox(uf);
 		//JButton
 		private JButton editarInformacoesCadastro = new JButton("Editar");
+		private JButton botaoDeletarEmpresa = new JButton("Excluir");
 		private JButton botaoSalvarAlteracoesCadastro = new JButton("Salvar Alterações");
 		private JButton botaoCriarRequerimento = new JButton("Criar");
 		
@@ -217,7 +224,7 @@ public class MakeBusinessRequest extends JFrame{
 				
 				else{
 					//System.out.println("NOME: "+pessoa.getNome()+" ENDEREÇO: "+ pessoa.getEndereco());
-					
+					botaoDeletarEmpresa.setEnabled(true);
 					setPainelDataPessoa();
 					editarInformacoesCadastro.setEnabled(true);
 					botaoCriarRequerimento.setEnabled(true);
@@ -239,6 +246,27 @@ public class MakeBusinessRequest extends JFrame{
 					}
 				});
 				
+				painelCentroSup.add(botaoDeletarEmpresa);
+				
+				botaoDeletarEmpresa.addActionListener(new ActionListener() {
+					
+					public void actionPerformed(ActionEvent e) {
+						// TODO Auto-generated method stub
+						int opcao = JOptionPane.showConfirmDialog(null, "Tem certeza que deseja excluir o cadastro?", "ATENÇÃO!",JOptionPane.YES_NO_OPTION);
+						//System.out.println(opcao);//0 - SIM - 1 - NÃO
+						
+						if(opcao == 0){
+							//System.out.println("Implementar SIM");
+							controller.excluirEmpresaBanco(empresa);
+							dispose();
+							controller.init();
+						}
+						else{
+							System.out.println("Não fazer nada");
+						}
+					}
+				});
+				
 				if(empresa == null)//
 					editarInformacoesCadastro.setEnabled(false);
 				
@@ -253,6 +281,7 @@ public class MakeBusinessRequest extends JFrame{
 			textRazao.setEditable(able);
 			textAtividade.setEditable(able);
 			textInscricao.setEditable(able);
+			textDataInicio.setEditable(able);
 			textAddress.setEditable(able);
 			textBairro.setEditable(able);
 			textCity.setEditable(able);
@@ -323,6 +352,23 @@ public class MakeBusinessRequest extends JFrame{
 			return textCnpj;
 		}
 		
+		private JFormattedTextField mascaraData(){
+			if(textDataInicio == null){
+				try {
+					MaskFormatter ms = new MaskFormatter("##/##/####");
+					ms.setValidCharacters("0123456789");
+					//ms.setPlaceholderCharacter('_');
+					textDataInicio = new JFormattedTextField(ms);
+				} catch (ParseException e) {
+					e.printStackTrace();
+				}
+				textDataInicio.setPreferredSize(new Dimension(10,20));	
+				
+			}
+			
+			return textDataInicio;
+		}
+		
 		private JPanel getPainelCentralInferior(){
 				
 				if(painel == null){
@@ -384,11 +430,31 @@ public class MakeBusinessRequest extends JFrame{
 				
 				c.fill = GridBagConstraints.HORIZONTAL;
 				c.anchor =GridBagConstraints.WEST;
-				c.insets = new Insets(vTop,vLeft,vBottom,vRight * multBorda);
+				//c.insets = new Insets(vTop,vLeft,vBottom,vRight * multBorda);
+				c.insets = new Insets(vTop,vLeft,vBottom,vRight);
 				c.gridx = 1;
 				c.gridy = 1;
-				c.gridwidth = 6;
+				c.gridwidth = 4;
 				painel.add(textAtividade,c);
+				
+				c.gridwidth = 1;
+				c.fill = GridBagConstraints.HORIZONTAL;
+				c.anchor =GridBagConstraints.WEST;
+				//c.insets = new Insets(vTop,vLeft,vBottom,vRight * multBorda);
+				c.insets = new Insets(vTop,vLeft,vBottom,vRight);
+				c.gridx = 5;
+				c.gridy = 1;
+				painel.add(lDataInicio,c);
+				
+				
+				c.fill = GridBagConstraints.HORIZONTAL;
+				c.anchor =GridBagConstraints.WEST;
+				c.insets = new Insets(vTop,vLeft,vBottom,vRight * multBorda);
+				//c.insets = new Insets(vTop,vLeft,vBottom,vRight);
+				c.gridx = 6;
+				c.gridy = 1;
+				c.gridwidth = 2;
+				painel.add(textDataInicio,c);
 
 				
 				c.gridwidth = 1;
@@ -526,10 +592,20 @@ public class MakeBusinessRequest extends JFrame{
 			textBairro.setText(empresa.getBairro());
 			textCity.setText(empresa.getCidade());
 			textAtividade.setText(empresa.getAtividade());
+			
+			textDataInicio = mascaraData();
+			Date dt = empresa.getDataInicio();
+			if(dt != null){
+				String data_form = "dd/MM/yyyy";
+				SimpleDateFormat simple =  new SimpleDateFormat(data_form);
+				String dataFormada = simple.format(dt);
+				//System.out.println("Data: "+dataFormada);
+				textDataInicio.setText(dataFormada);
+			}
+			
+			
 			textNum.setText(empresa.getNumero());
-			
-			comboUf.setSelectedItem(empresa.getEstado());
-			
+			comboUf.setSelectedItem(empresa.getEstado());	
 		}
 		
 		private void updateDataEmpresa(){
@@ -550,11 +626,33 @@ public class MakeBusinessRequest extends JFrame{
 			}
 			
 			
+			if(textDataInicio.getText().equals("  /  /    ")){
+				empresa.setDataInicio(null);
+				//System.out.println("Entrou");
+			}
+			else{
+				
+				try {
+					empresa.setDataInicio(parseDate(textDataInicio.getText(), "dd/MM/yyyy"));
+					//Date data = parseDate(textDataInicio.getText(), "yyyy/MM/dd");
+				} catch (ParseException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			
 			empresa.setEndereco(textAddress.getText());
 			empresa.setNumero(textNum.getText());
 			empresa.setBairro(textBairro.getText());
 			empresa.setCidade(textCity.getText());
 			empresa.setEstado(uf[comboUf.getSelectedIndex()]);
+		}
+		
+		private Date parseDate(String date, String format) throws ParseException
+		{
+		    SimpleDateFormat formatter = new SimpleDateFormat(format);
+		    return formatter.parse(date);
+		
 		}
 		
 		private JTextArea getTextArea(){

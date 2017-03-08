@@ -7,6 +7,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 
 import entities.Empresa;
+import entities.Pessoa;
 import util.HibernateUtil;
 
 public class EmpresaDAO {
@@ -36,6 +37,12 @@ public class EmpresaDAO {
 		List<Empresa> list = query.getResultList();
 		
 		return new ArrayList<Empresa>(list);
+	}
+	
+	public void excluirEmpresa(Empresa empresa){
+		em.getTransaction().begin();
+		em.remove(empresa);
+		em.getTransaction().commit();
 	}
 
 }

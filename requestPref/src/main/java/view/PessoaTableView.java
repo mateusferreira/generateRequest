@@ -2,6 +2,7 @@ package view;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -9,15 +10,19 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.text.ParseException;
 import java.util.ArrayList;
 
+import javax.swing.ButtonGroup;
 import javax.swing.JButton;
+import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.text.MaskFormatter;
 
 import control.Controller;
 import entities.Pessoa;
@@ -36,9 +41,12 @@ public class PessoaTableView extends JFrame {
 	private JPanel painelBusca;
 	
 	private JTextField textBusca = new JTextField(30);
+	//private JFormattedTextField textBusca = null;
 	
 	private JRadioButton radioNome = new JRadioButton("Nome");
 	private JRadioButton radioCPF = new JRadioButton("CPF");
+	
+	private ButtonGroup group = new ButtonGroup();
 	
 	private JButton botaoAdicionarNovoCadastro = new JButton("Adicionar");
 	private JButton botaoVoltarTelaInicial = new JButton("Voltar");
@@ -60,6 +68,8 @@ public class PessoaTableView extends JFrame {
 		super.setVisible(true);
 		super.pack();
 		super.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		
+		setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/imagens/PMG.png")));
 		
 	}
 	
@@ -110,14 +120,59 @@ public class PessoaTableView extends JFrame {
 		return painelTable;
 	}
 	
+	/*private JFormattedTextField mascaraText(){
+		//if(textBusca == null){
+			try {
+				MaskFormatter ms = new MaskFormatter("                 ");
+				//ms.setPlaceholderCharacter('_');
+				textBusca = new JFormattedTextField(ms);
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
+			textBusca.setPreferredSize(new Dimension(100,20));	
+			
+		//}
+		
+		return textBusca;
+	}*/
+	
+	/*private JFormattedTextField mascaraCpf(){
+		//if(textBusca == null){
+			try {
+				MaskFormatter ms = new MaskFormatter("###.###.###-##");
+				//ms.setPlaceholderCharacter('_');
+				textBusca = new JFormattedTextField(ms);
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
+			textBusca.setPreferredSize(new Dimension(100,20));	
+			
+		//}
+		
+		return textBusca;
+	}*/
+	
 	private JPanel getPainelBusca(){
 		if(painelBusca == null){
 			painelBusca = new JPanel();
+			
+			group.add(radioCPF);
+			group.add(radioNome);
 			
 			radioNome.setSelected(true);
 			painelBusca.add(textBusca);
 			painelBusca.add(radioNome);
 			painelBusca.add(radioCPF);
+			
+			radioCPF.addActionListener(new ActionListener() {
+				
+				public void actionPerformed(ActionEvent e) {
+					// TODO Auto-generated method stub
+					System.out.println("entrou");
+					//mascaraCpf();
+					
+				}
+			});
 			
 			textBusca.addKeyListener(new KeyListener() {
 				

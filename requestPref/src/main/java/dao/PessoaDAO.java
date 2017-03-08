@@ -38,5 +38,11 @@ public class PessoaDAO {
 		return new ArrayList<Pessoa>(list);
 	}
 	
+	public void excluirPessoa(Pessoa pessoa){
+		em.getTransaction().begin();
+		em.remove(pessoa);
+		em.getTransaction().commit();
+	}
+	
 
 }
