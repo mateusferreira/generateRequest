@@ -4,16 +4,21 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
 
+import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.JTextField;
 
 import control.Controller;
 import entities.Empresa;
@@ -30,6 +35,14 @@ public class EmpresaTableView extends JFrame {
 	private JPanel painelTable;
 	private JPanel painelBotoes;
 	private JPanel painelBusca;
+	
+	private JTextField textBusca = new JTextField(30);
+	//private JFormattedTextField textBusca = null;
+	
+	private JRadioButton radioNome = new JRadioButton("Nome");
+	private JRadioButton radioCNPJ = new JRadioButton("CNPJ");
+	
+	private ButtonGroup group = new ButtonGroup();
 	
 	private JButton botaoAdicionarNovoCadastro = new JButton("Adicionar");
 	private JButton botaoVoltarTelaInicial = new JButton("Voltar");
@@ -105,6 +118,41 @@ public class EmpresaTableView extends JFrame {
 	private JPanel getPainelBusca(){
 		if(painelBusca == null){
 			painelBusca = new JPanel();
+			
+			group.add(radioCNPJ);
+			group.add(radioNome);
+			
+			radioNome.setSelected(true);
+			painelBusca.add(textBusca);
+			painelBusca.add(radioNome);
+			painelBusca.add(radioCNPJ);
+			
+			radioCNPJ.addActionListener(new ActionListener() {
+				
+				public void actionPerformed(ActionEvent e) {
+					// TODO Auto-generated method stub
+					System.out.println("entrou na busca por CNPJ");
+					//mascaraCpf();
+					
+				}
+			});
+			
+			textBusca.addKeyListener(new KeyListener() {
+				
+				public void keyTyped(KeyEvent e) {
+				}
+				
+				public void keyReleased(KeyEvent e) {
+					String texto = textBusca.getText().toUpperCase();
+					model = new EmpresaTableModel(model.getEmpresaByAtribute(listEmpresas,texto));
+					table.setModel(model);
+					//System.out.println(texto);
+				}
+				
+				public void keyPressed(KeyEvent e) {
+					// TODO Auto-generated method stub
+				}
+			});
 			
 		}
 		

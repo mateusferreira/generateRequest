@@ -34,7 +34,7 @@ public class Pessoa implements Serializable{
 	@Column(nullable = false, length = 50)
 	private String endereco;
 	
-	@Column (length = 8)
+	@Column (length = 14)
 	private String numero;
 	
 	@Column

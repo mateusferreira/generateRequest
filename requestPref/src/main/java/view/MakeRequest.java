@@ -139,7 +139,7 @@ public class MakeRequest extends JFrame {
 		textNome.setDocument(new LimitTextField(40));
 		textRG.setDocument(new LimitTextField(20));
 		textAddress.setDocument(new LimitTextField(50));
-		textNum.setDocument(new LimitTextField(8));
+		textNum.setDocument(new LimitTextField(14));
 		textNacionalidade.setDocument(new LimitTextField(15));
 		textCity.setDocument(new LimitTextField(20));
 	}

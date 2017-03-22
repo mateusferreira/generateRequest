@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import javax.swing.table.DefaultTableModel;
 
 import entities.Empresa;
-import entities.Pessoa;
 
 public class EmpresaTableModel extends DefaultTableModel {
 	
@@ -52,6 +51,19 @@ public class EmpresaTableModel extends DefaultTableModel {
 	
 	public Empresa getPessoaAt(int row) {
 		return internalList.get(row);
+	}
+	
+	public ArrayList<Empresa> getEmpresaByAtribute (ArrayList<Empresa> p,String atrib){
+		ArrayList<Empresa> novaLista = new ArrayList<Empresa>();
+		//System.out.println("CHEGA: "+atrib);
+		int i = 0;
+		for(; i< p.size(); i++){
+			if(p.get(i).getRazao().contains(atrib)){
+				novaLista.add(p.get(i));
+			}
+		}
+		
+		return novaLista;
 	}
 
 }

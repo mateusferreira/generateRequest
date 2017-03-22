@@ -136,7 +136,7 @@ public class MakeBusinessRequest extends JFrame{
 			textAtividade.setDocument(new LimitTextField(100));
 			textRazao.setDocument(new LimitTextField(40));
 			textAddress.setDocument(new LimitTextField(50));
-			textNum.setDocument(new LimitTextField(8));
+			textNum.setDocument(new LimitTextField(14));
 			textCity.setDocument(new LimitTextField(20));
 			textInscricao.setDocument(new LimitTextField(6));
 		}
@@ -232,8 +232,7 @@ public class MakeBusinessRequest extends JFrame{
 					isEmpresaNova = false;
 					isFieldsAble(false);
 				}
-						
-
+				
 				
 				painelCentroSup.add(editarInformacoesCadastro);
 				editarInformacoesCadastro.addActionListener(new ActionListener() {
@@ -277,11 +276,15 @@ public class MakeBusinessRequest extends JFrame{
 		}
 		
 		private void isFieldsAble (boolean able){
-			
+	
 			textCnpj.setEditable(able);
 			textRazao.setEditable(able);
 			textAtividade.setEditable(able);
 			textInscricao.setEditable(able);
+			
+			if(textDataInicio == null){
+				textDataInicio = mascaraData();
+			}
 			textDataInicio.setEditable(able);
 			textAddress.setEditable(able);
 			textBairro.setEditable(able);
