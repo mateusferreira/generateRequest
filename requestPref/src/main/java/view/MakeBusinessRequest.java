@@ -68,16 +68,16 @@ public class MakeBusinessRequest extends JFrame{
 	private JPanel painelRequest;
 		
 	//Label....
-	private JLabel lcnpj = new JLabel("CNPJ:");
-	private JLabel lrazao = new JLabel("Razão:");
+	private JLabel lcnpj = new JLabel("CNPJ: *");
+	private JLabel lrazao = new JLabel("Razão: *");
 	private JLabel lAtividade = new JLabel("Atividade:");
 	private JLabel lDataInicio = new JLabel("Data In.");
 	private JLabel linscMunicipal = new JLabel("Inscr.:");
 
-	private JLabel lAddress	= new JLabel("Endereço:");
+	private JLabel lAddress	= new JLabel("Endereço:*");
 	private JLabel lNumber = new JLabel("nº");
-	private JLabel lBairro = new JLabel("Bairro:");
-	private JLabel lCity = new JLabel("Cidade:");
+	private JLabel lBairro = new JLabel("Bairro:*");
+	private JLabel lCity = new JLabel("Cidade: *");
 	private JLabel lUf = new JLabel("Estado:");
 		
 		//TextField
@@ -217,6 +217,11 @@ public class MakeBusinessRequest extends JFrame{
 						botaoSalvarAlteracoesCadastro.setEnabled(true);
 						isEmpresaNova = true;//habilito para escolher no clicar do botão Salvar Alterações.
 						isFieldsAble(true);//Habilito o Cadastro
+						
+						//********SUGESTÕES PARA PREENCHIMENTO
+					
+						textCity.setText("GONÇALVES");
+						comboUf.setSelectedIndex(12);
 					}
 					else{
 						dispose();//Fecha a aplicação...
@@ -557,22 +562,30 @@ public class MakeBusinessRequest extends JFrame{
 						botaoCriarRequerimento.setEnabled(true);
 						areaRequest.setEnabled(true);
 						if(isEmpresaNova == false){
-							updateDataEmpresa();
-							controller.editarEmpresa(empresa);//fazer......................
-							isFieldsAble(false);
-							botaoSalvarAlteracoesCadastro.setEnabled(false);
-							textCnpj.setEnabled(true);
+							if(updateDataEmpresa()){
+								controller.editarEmpresa(empresa);//fazer......................
+								isFieldsAble(false);
+								botaoSalvarAlteracoesCadastro.setEnabled(false);
+								textCnpj.setEnabled(true);
+							}
+							else{
+								JOptionPane.showMessageDialog(null, "* CAMPOS DE PREENCHIMENTO OBRIGATÓRIO");
+							}
 						}
 						
 						else if(isEmpresaNova == true){
 							if(validarCnpj() == true){
 								empresa = new Empresa();
 								empresa.setCnpj(textCnpj.getText());
-								updateDataEmpresa();
-								controller.inserirNovaEmpresa(empresa);//fazer no DAO....................
-								isFieldsAble(false);
-								botaoSalvarAlteracoesCadastro.setEnabled(false);
-								textCnpj.setEnabled(true);
+								if(updateDataEmpresa()){
+									controller.inserirNovaEmpresa(empresa);//fazer no DAO....................
+									isFieldsAble(false);
+									botaoSalvarAlteracoesCadastro.setEnabled(false);
+									textCnpj.setEnabled(true);
+								}
+								else{
+									JOptionPane.showMessageDialog(null, "* CAMPOS DE PREENCHIMENTO OBRIGATÓRIO");
+								}
 							}
 							else{
 								//JOptionPane.showConfirmDialog(null, "Deseja cadastrar nova pessoa?", "ATENÇÃO!",JOptionPane.YES_NO_OPTION);
@@ -612,7 +625,19 @@ public class MakeBusinessRequest extends JFrame{
 			comboUf.setSelectedItem(empresa.getEstado());	
 		}
 		
-		private void updateDataEmpresa(){
+		private boolean validaCamposObrigatorios(){
+			if(textCnpj.getText().isEmpty() || textRazao.getText().isEmpty() || textAddress.getText().isEmpty() ||
+					textBairro.getText().isEmpty() || textCity.getText().isEmpty()){
+				return false;
+			}
+			return true;
+		}
+		
+		private boolean updateDataEmpresa(){
+			if(!validaCamposObrigatorios()){
+				return false;
+			}
+			
 			empresa.setRazao(textRazao.getText());
 			
 			if(textInscricao.getText().length() == 0){
@@ -650,6 +675,8 @@ public class MakeBusinessRequest extends JFrame{
 			empresa.setBairro(textBairro.getText());
 			empresa.setCidade(textCity.getText());
 			empresa.setEstado(uf[comboUf.getSelectedIndex()]);
+			
+			return true;
 		}
 		
 		private Date parseDate(String date, String format) throws ParseException
@@ -685,6 +712,7 @@ public class MakeBusinessRequest extends JFrame{
 				public void actionPerformed(ActionEvent e) {
 					dispose();//Fecha a Aplicação.
 					controller.gerarWordCnpj(empresa, areaRequest.getText(), checkCND.isSelected(),checkRequerimento.isSelected());//**************TODO
+					controller.init();
 					
 				}
 			});

@@ -14,6 +14,8 @@ import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.ParseException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
@@ -40,6 +42,8 @@ import model.LimitTextField;
 
 
 public class MakeRequest extends JFrame {
+	
+	private final static Logger LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
 	
 	final static boolean shouldFill = true;
 	final static boolean shouldWeightX = true;
@@ -121,6 +125,8 @@ public class MakeRequest extends JFrame {
 		super(titulo);
 		this.controller = controller;
 		pessoa = p;
+		//LOGGER.setLevel(Level.INFO);
+		LOGGER.info("Make Request");
 	}
 	
 	public void init(){
@@ -559,22 +565,37 @@ public class MakeRequest extends JFrame {
 					botaoCriarRequerimento.setEnabled(true);
 					areaRequest.setEnabled(true);
 					if(isPessoaNova == false){
-						updateDataPessoa();
-						controller.editarPessoa(pessoa);
-						isFieldsAble(false);
-						botaoSalvarAlteracoesCadastro.setEnabled(false);
-						textCpf.setEnabled(true);
+						if(updateDataPessoa()){
+							controller.editarPessoa(pessoa);
+							isFieldsAble(false);
+							botaoSalvarAlteracoesCadastro.setEnabled(false);
+							textCpf.setEnabled(true);
+						}
+						else{
+							JOptionPane.showMessageDialog(null, "* CAMPOS DE PREENCHIMENTO OBRIGATÓRIO");
+						}
 					}
 					
 					else if(isPessoaNova == true){
 						if(validarCpf() == true){
 							pessoa = new Pessoa();
 							pessoa.setCpf(textCpf.getText());
-							updateDataPessoa();
-							controller.inserirNovaPessoa(pessoa);
-							isFieldsAble(false);
-							botaoSalvarAlteracoesCadastro.setEnabled(false);
-							textCpf.setEnabled(true);
+							if(updateDataPessoa()){
+								try {
+									controller.inserirNovaPessoa(pessoa);
+									isFieldsAble(false);
+									botaoSalvarAlteracoesCadastro.setEnabled(false);
+									textCpf.setEnabled(true);
+								} catch (Exception e1) {
+									// TODO Auto-generated catch block
+									e1.printStackTrace();
+									textCpf.setText("");
+									JOptionPane.showMessageDialog(null, "ERRO!!! CPF JÁ CADASTRADO!!");
+								}
+							}
+							else{
+								JOptionPane.showMessageDialog(null, "* CAMPOS DE PREENCHIMENTO OBRIGATÓRIO");
+							}
 						}
 						else{
 							//JOptionPane.showConfirmDialog(null, "Deseja cadastrar nova pessoa?", "ATENÇÃO!",JOptionPane.YES_NO_OPTION);
@@ -620,7 +641,20 @@ public class MakeRequest extends JFrame {
 		
 	}
 	
-	private void updateDataPessoa(){
+	private boolean validaCamposObrigatorios(){
+		if(textCpf.getText().isEmpty() || textNome.getText().isEmpty() || textAddress.getText().isEmpty() ||
+				textBairro.getText().isEmpty() || textCity.getText().isEmpty()){
+			return false;
+		}
+		return true;
+	}
+	
+	private boolean updateDataPessoa(){
+		
+		if(!validaCamposObrigatorios()){
+			return false;
+		}
+		
 		pessoa.setNome(textNome.getText().toUpperCase());
 		
 		System.out.println("RG: "+textRG.getText()+"RG SIZE: "+textRG.getText().length());
@@ -667,6 +701,8 @@ public class MakeRequest extends JFrame {
 		pessoa.setBairro(textBairro.getText().toUpperCase());
 		pessoa.setCidade(textCity.getText().toUpperCase());
 		pessoa.setEstado(uf[comboUf.getSelectedIndex()]);
+		
+		return true;
 	}
 	
 	private JTextArea getTextArea(){

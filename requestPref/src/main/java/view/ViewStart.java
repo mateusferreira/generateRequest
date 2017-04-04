@@ -12,7 +12,9 @@ import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
-
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
@@ -28,10 +30,13 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 
 import control.Controller;
+import entities.MyLog;
 import entities.Tools;
 
 public class ViewStart extends JFrame{
 	
+	private final static Logger LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
+
 	final static boolean shouldFill = true;
 	final static boolean shouldWeightX = true;
 	
@@ -69,6 +74,17 @@ public class ViewStart extends JFrame{
 	public ViewStart(Controller controller, String titulo) {
 		super(titulo);
 		this.controller = controller;
+		
+		try {
+			MyLog.setup();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			throw new RuntimeException("Problems with creating the log files");
+		}
+		
+		LOGGER.setLevel(Level.INFO);
+		LOGGER.info("Iniciando serviços");
 	}
 	
 	public void init(){
@@ -267,7 +283,7 @@ public class ViewStart extends JFrame{
 			c.gridy = 2;
 			painel.add(lEmpty, c);
 			
-			btMakeCnd = new JButton("<html><center>GERAR<br/>CND</center></html>");
+			btMakeCnd = new JButton("<html><center>DISABLED</center></html>");
 			c.fill = GridBagConstraints.HORIZONTAL;
 			c.insets = new Insets(vTop,vLeft,vBottom,vRight);
 			c.weightx = 0.5;
@@ -401,7 +417,7 @@ public class ViewStart extends JFrame{
 				public void actionPerformed(ActionEvent arg0) {
 					System.out.println("clicked");
 					JOptionPane.showMessageDialog(ViewStart.this, "Software para gestão Secretaria PMG!\n"
-							+ "Beta Version 1.1 - @2017\nUPDATE 20170322-09:10\n\nDeveloped By Mateus Ferreira de Souza\nmateus.ferreira@goncalves.mg.gov.br"
+							+ "Beta Version 1.1.2 - @2017\nUPDATE 20170404-08:52\n\nDeveloped By Mateus Ferreira de Souza\nmateus.ferreira@goncalves.mg.gov.br"
 							+"\nseraomateus@hotmail.com");
 					
 				}
