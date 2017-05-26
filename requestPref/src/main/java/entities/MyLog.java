@@ -28,7 +28,7 @@ public class MyLog {
         }
 */
         logger.setLevel(Level.INFO);
-        fileTxt = new FileHandler("D:/Logging.txt");
+        fileTxt = new FileHandler("D:/myLog.txt");
 
         // create a TXT formatter
         formatterTxt = new SimpleFormatter();

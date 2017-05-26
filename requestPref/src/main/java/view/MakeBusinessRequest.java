@@ -113,6 +113,8 @@ public class MakeBusinessRequest extends JFrame{
 		private JCheckBox checkRequerimento = new JCheckBox("Gerar Req.");
 		private JCheckBox checkCND = new JCheckBox("Gerar CND");
 		
+		private JCheckBox checkCampoDeferido = new JCheckBox("IMPRIMIR LOCAL DEFERIMENTO");
+		
 		private Empresa empresa;
 		
 		public MakeBusinessRequest(Controller controller, String titulo, Empresa e){
@@ -134,7 +136,7 @@ public class MakeBusinessRequest extends JFrame{
 		private void limitarTextFields(){
 			textBairro.setDocument(new LimitTextField(30));
 			textAtividade.setDocument(new LimitTextField(100));
-			textRazao.setDocument(new LimitTextField(40));
+			textRazao.setDocument(new LimitTextField(80));
 			textAddress.setDocument(new LimitTextField(50));
 			textNum.setDocument(new LimitTextField(14));
 			textCity.setDocument(new LimitTextField(20));
@@ -545,9 +547,18 @@ public class MakeBusinessRequest extends JFrame{
 				c.gridy = 4;
 				c.gridwidth =7;
 				painel.add(new JSeparator(SwingConstants.HORIZONTAL), c);
+				
+				//linha 5
 				c.gridwidth = 1;
+				c.fill = GridBagConstraints.HORIZONTAL;
+				c.insets = new Insets(vTop,vLeft,vBottom,vRight);
+				c.gridx = 0;
+				c.gridy = 5;
+				c.gridwidth = 5;
+				checkCampoDeferido.setSelected(true);
+				painel.add(checkCampoDeferido,c);
 				
-				
+				c.gridwidth = 1;
 				c.fill = GridBagConstraints.HORIZONTAL;
 				c.insets = new Insets(vTop,vLeft,vBottom,vRight);
 				c.gridx = 5;
@@ -711,7 +722,7 @@ public class MakeBusinessRequest extends JFrame{
 				
 				public void actionPerformed(ActionEvent e) {
 					dispose();//Fecha a Aplicação.
-					controller.gerarWordCnpj(empresa, areaRequest.getText(), checkCND.isSelected(),checkRequerimento.isSelected());//**************TODO
+					controller.gerarWordCnpj(empresa, areaRequest.getText(), checkCND.isSelected(),checkRequerimento.isSelected(), checkCampoDeferido.isSelected());//**************TODO
 					controller.init();
 					
 				}

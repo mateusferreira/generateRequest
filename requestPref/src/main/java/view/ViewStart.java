@@ -32,11 +32,14 @@ import javax.swing.JRadioButton;
 import control.Controller;
 import entities.MyLog;
 import entities.Tools;
+import requestPref.requestPref.Runner;
 
 public class ViewStart extends JFrame{
 	
+	
+	//private static Logger testLog;
+	//private Runner run;
 	private final static Logger LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
-
 	final static boolean shouldFill = true;
 	final static boolean shouldWeightX = true;
 	
@@ -75,16 +78,10 @@ public class ViewStart extends JFrame{
 		super(titulo);
 		this.controller = controller;
 		
-		try {
-			MyLog.setup();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			throw new RuntimeException("Problems with creating the log files");
-		}
 		
-		LOGGER.setLevel(Level.INFO);
-		LOGGER.info("Iniciando serviços");
+		
+		//run.getLogger().setLevel(Level.INFO);
+		//run.getLogger().info("Iniciando serviços");
 	}
 	
 	public void init(){
@@ -417,7 +414,7 @@ public class ViewStart extends JFrame{
 				public void actionPerformed(ActionEvent arg0) {
 					System.out.println("clicked");
 					JOptionPane.showMessageDialog(ViewStart.this, "Software para gestão Secretaria PMG!\n"
-							+ "Beta Version 1.1.2 - @2017\nUPDATE 20170404-08:52\n\nDeveloped By Mateus Ferreira de Souza\nmateus.ferreira@goncalves.mg.gov.br"
+							+ "Beta Version 1.1.3 - @2017\nUPDATE 20170526-15:32\n\nDeveloped By Mateus Ferreira de Souza\nmateus.ferreira@goncalves.mg.gov.br"
 							+"\nseraomateus@hotmail.com");
 					
 				}

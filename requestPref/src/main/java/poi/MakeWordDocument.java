@@ -65,7 +65,7 @@ public class MakeWordDocument {
 	    jc.setVal(justification);
 	}
 	
-	public void geraReqCpf(Pessoa pessoa, String assunto, Tools tools){
+	public void geraReqCpf(Pessoa pessoa, String assunto, Tools tools, boolean areaDeferido){
 		int tF = 12;
 		int tabular = 1100;
 		String letra = "Times New Roman";
@@ -161,7 +161,7 @@ public class MakeWordDocument {
 		Date data = new Date();
 		String t;
 		t = sdf.format(data);
-		runTermos.setText(t);
+		runTermos.setText(t.toLowerCase());
 		runTermos.setFontSize(tF);
 		runTermos.setFontFamily(letra);
 		runTermos.setBold(false);
@@ -188,36 +188,38 @@ public class MakeWordDocument {
 		runSign.setBold(false);
 		sign.setAlignment(ParagraphAlignment.CENTER);
 		
-		XWPFTable table = document.createTable();
-	
-		setTableAlignment(table,STJc.RIGHT);
-	
-		XWPFTableRow tableRowOne = table.getRow(0);
+		if(areaDeferido){
+			XWPFTable table = document.createTable();
 		
-		XWPFParagraph caixa = tableRowOne.getCell(0).addParagraph();
-		caixa.setAlignment(ParagraphAlignment.LEFT);
+			setTableAlignment(table,STJc.RIGHT);
 		
-		XWPFRun runCaixa = caixa.createRun();
-		setRun(runCaixa,"Bookman Old Style",10,false);
-		runCaixa.setText("(  )Deferido");
-		runCaixa.addBreak();
-		runCaixa.setText("(  )Indeferido       __/__/__");
-		runCaixa.addBreak();
-		runCaixa.setText("Despacho:__________________");
-		runCaixa.addBreak();
-		runCaixa.setText("____________________________");
-		
-		XWPFParagraph boxSign = tableRowOne.getCell(0).addParagraph();
-		boxSign.setAlignment(ParagraphAlignment.LEFT);
-		XWPFRun runBoxSign = boxSign.createRun();
-		boxSign.setAlignment(ParagraphAlignment.CENTER);
-		setRun(runBoxSign,letra,10,true);
-		
-		runBoxSign.setText("________________________");
-		runBoxSign.addBreak();
-		runBoxSign.setText(tools.getNome());
-		runBoxSign.addBreak();
-		runBoxSign.setText(tools.getCargo());
+			XWPFTableRow tableRowOne = table.getRow(0);
+			
+			XWPFParagraph caixa = tableRowOne.getCell(0).addParagraph();
+			caixa.setAlignment(ParagraphAlignment.LEFT);
+			
+			XWPFRun runCaixa = caixa.createRun();
+			setRun(runCaixa,"Bookman Old Style",10,false);
+			runCaixa.setText("(  )Deferido");
+			runCaixa.addBreak();
+			runCaixa.setText("(  )Indeferido       __/__/__");
+			runCaixa.addBreak();
+			runCaixa.setText("Despacho:__________________");
+			runCaixa.addBreak();
+			runCaixa.setText("____________________________");
+			
+			XWPFParagraph boxSign = tableRowOne.getCell(0).addParagraph();
+			boxSign.setAlignment(ParagraphAlignment.LEFT);
+			XWPFRun runBoxSign = boxSign.createRun();
+			boxSign.setAlignment(ParagraphAlignment.CENTER);
+			setRun(runBoxSign,letra,10,true);
+			
+			runBoxSign.setText("________________________");
+			runBoxSign.addBreak();
+			runBoxSign.setText(tools.getNome());
+			runBoxSign.addBreak();
+			runBoxSign.setText(tools.getCargo());
+		}
 		
 		try{
 			//String pathFile = "D:/Usuários/Mateus_2/Documents/SECRETARIA/Secretaria 2017/REQUERIMENTOS 2017/P.FISICA/";

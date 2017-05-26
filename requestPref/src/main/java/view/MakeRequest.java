@@ -39,11 +39,14 @@ import javax.swing.text.MaskFormatter;
 import control.Controller;
 import entities.Pessoa;
 import model.LimitTextField;
+import requestPref.requestPref.Runner;
 
 
 public class MakeRequest extends JFrame {
 	
 	private final static Logger LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
+	private String lineSeparator = System.getProperty("line.separator");
+	//private Runner run;
 	
 	final static boolean shouldFill = true;
 	final static boolean shouldWeightX = true;
@@ -119,13 +122,15 @@ public class MakeRequest extends JFrame {
 	private JCheckBox checkRequerimento = new JCheckBox("Gerar Req.");
 	private JCheckBox checkCND = new JCheckBox("Gerar CND");
 	
+	private JCheckBox checkCampoDeferido = new JCheckBox("IMPRIMIR LOCAL DEFERIMENTO");
+	
 	private Pessoa pessoa;
 	
 	public MakeRequest(Controller controller, String titulo, Pessoa p){
 		super(titulo);
 		this.controller = controller;
 		pessoa = p;
-		//LOGGER.setLevel(Level.INFO);
+		LOGGER.setLevel(Level.INFO);
 		LOGGER.info("Make Request");
 	}
 	
@@ -550,6 +555,16 @@ public class MakeRequest extends JFrame {
 			painel.add(new JSeparator(SwingConstants.HORIZONTAL), c);
 			c.gridwidth = 1;
 			
+			//linha 5
+			c.gridwidth = 1;
+			c.fill = GridBagConstraints.HORIZONTAL;
+			c.insets = new Insets(vTop,vLeft,vBottom,vRight);
+			c.gridx = 0;
+			c.gridy = 5;
+			c.gridwidth = 5;
+			checkCampoDeferido.setSelected(true);
+			painel.add(checkCampoDeferido,c);
+			
 			
 			c.fill = GridBagConstraints.HORIZONTAL;
 			c.insets = new Insets(vTop,vLeft,vBottom,vRight);
@@ -572,6 +587,8 @@ public class MakeRequest extends JFrame {
 							textCpf.setEnabled(true);
 						}
 						else{
+							LOGGER.setLevel(Level.WARNING);
+							LOGGER.info("PREENCHER CAMPOS OBRIGATÓRIOS");
 							JOptionPane.showMessageDialog(null, "* CAMPOS DE PREENCHIMENTO OBRIGATÓRIO");
 						}
 					}
@@ -589,6 +606,8 @@ public class MakeRequest extends JFrame {
 								} catch (Exception e1) {
 									// TODO Auto-generated catch block
 									e1.printStackTrace();
+									LOGGER.setLevel(Level.WARNING);
+									LOGGER.info("CPF JÁ CADASTRADO: "+textCpf.getText());
 									textCpf.setText("");
 									JOptionPane.showMessageDialog(null, "ERRO!!! CPF JÁ CADASTRADO!!");
 								}
@@ -599,6 +618,8 @@ public class MakeRequest extends JFrame {
 						}
 						else{
 							//JOptionPane.showConfirmDialog(null, "Deseja cadastrar nova pessoa?", "ATENÇÃO!",JOptionPane.YES_NO_OPTION);
+							LOGGER.setLevel(Level.WARNING);
+							LOGGER.info("CPF INVÁLIDO: "+textCpf.getText());
 							JOptionPane.showMessageDialog(null, "CPF Inválido!");
 							textCpf.setText("");
 						}
@@ -639,6 +660,8 @@ public class MakeRequest extends JFrame {
 		
 		comboUf.setSelectedItem(pessoa.getEstado());
 		
+		imprimeLogDataPessoa();
+		
 	}
 	
 	private boolean validaCamposObrigatorios(){
@@ -649,8 +672,18 @@ public class MakeRequest extends JFrame {
 		return true;
 	}
 	
-	private boolean updateDataPessoa(){
+	private void imprimeLogDataPessoa(){
+		LOGGER.setLevel(Level.INFO);
+		LOGGER.info("*******DADOS CADASTRAIS********"+lineSeparator+
+				"CPF: "+textCpf.getText()+lineSeparator+ "NOME: "+textNome.getText()+lineSeparator+"RG: "+textRG.getText()+lineSeparator+"NACIONALIDADE: "
+		+textNacionalidade.getText()+lineSeparator+"ENDEREÇO: "+textAddress.getText());
+		//LOGGER.info("RG Nº :"+textRG.getText());
+		//LOGGER.info("NACIONALIDADE: "+textNacionalidade.getText());
 		
+	}
+	
+	private boolean updateDataPessoa(){
+		imprimeLogDataPessoa();
 		if(!validaCamposObrigatorios()){
 			return false;
 		}
@@ -729,8 +762,10 @@ public class MakeRequest extends JFrame {
 		botaoCriarRequerimento.addActionListener(new ActionListener() {
 			
 			public void actionPerformed(ActionEvent e) {
+				LOGGER.setLevel(Level.INFO);
+				LOGGER.info("BOTÃO  OK PRESSIONADO");
 				dispose();//Fecha a Aplicação.
-				controller.gerarWordCpf(pessoa, areaRequest.getText(), checkCND.isSelected(), checkRequerimento.isSelected());
+				controller.gerarWordCpf(pessoa, areaRequest.getText(), checkCND.isSelected(), checkRequerimento.isSelected(), checkCampoDeferido.isSelected());
 				controller.init();
 				
 			}
@@ -742,6 +777,8 @@ public class MakeRequest extends JFrame {
 		bt2.addActionListener(new ActionListener() {
 			
 			public void actionPerformed(ActionEvent e) {
+				LOGGER.setLevel(Level.INFO);
+				LOGGER.info("BOTÃO  CANCELAR PRESSIONADO");
 				dispose();//fecha a aplicação.
 				controller.init();
 				

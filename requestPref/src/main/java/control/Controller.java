@@ -109,12 +109,12 @@ public class Controller {
 		daoEmpresa.insertEmpresa(empresa);
 	}
 	
-	public void gerarWordCpf(Pessoa pessoa, String requere, boolean geraCND, boolean isGeraRequerimento){
+	public void gerarWordCpf(Pessoa pessoa, String requere, boolean geraCND, boolean isGeraRequerimento, boolean flag){
 		//request.setVisible(false);
 		
 		//System.out.println("DADOS: "+pessoa.getNome()+" - "+requere);
 		if(isGeraRequerimento == true)//Se for falso não vai criar o requerimento
-			poi.geraReqCpf(pessoa, requere, keepTools);
+			poi.geraReqCpf(pessoa, requere, keepTools, flag);
 		
 		if(geraCND == true){
 			String resp = JOptionPane.showInputDialog(null, "FINALIDADE DA CND");
@@ -127,10 +127,10 @@ public class Controller {
 		}
 	}
 	
-	public void gerarWordCnpj(Empresa empresa, String requere, boolean geraCND,boolean isGeraRequerimento){
+	public void gerarWordCnpj(Empresa empresa, String requere, boolean geraCND,boolean isGeraRequerimento, boolean flag){
 		//TODO:
 		if(isGeraRequerimento == true)
-			poiBusiness.geraReqCnpj(empresa, requere, keepTools);
+			poiBusiness.geraReqCnpj(empresa, requere, keepTools, flag);
 		
 		if(geraCND == true){
 			String resp = JOptionPane.showInputDialog(null, "FINALIDADE DA CND");
