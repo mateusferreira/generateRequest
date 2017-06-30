@@ -13,9 +13,16 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.util.Properties;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 
+import javax.persistence.Entity;
+import javax.persistence.EntityManager;
+import javax.persistence.Persistence;
 import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -30,16 +37,13 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 
 import control.Controller;
-import entities.MyLog;
 import entities.Tools;
 import requestPref.requestPref.Runner;
+import util.HibernateUtil;
+
 
 public class ViewStart extends JFrame{
 	
-	
-	//private static Logger testLog;
-	//private Runner run;
-	private final static Logger LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
 	final static boolean shouldFill = true;
 	final static boolean shouldWeightX = true;
 	
@@ -78,10 +82,6 @@ public class ViewStart extends JFrame{
 		super(titulo);
 		this.controller = controller;
 		
-		
-		
-		//run.getLogger().setLevel(Level.INFO);
-		//run.getLogger().info("Iniciando serviços");
 	}
 	
 	public void init(){
@@ -94,7 +94,36 @@ public class ViewStart extends JFrame{
 		super.setResizable(false);//Desabilitar o Maximizar
 		
 		setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/imagens/PMG.png")));
-		configTools();
+		
+	
+		Connection conn = null;
+		try {
+			Class.forName("org.postgresql.Driver");
+			//Tentar tirar essa redundância em escrever aqui e em persistence.xml as mesmas informações.
+			conn = DriverManager.getConnection("jdbc:postgresql://192.168.0.36:5432/requerimento","postgres", "ptmsneipt123");
+			Runner.LOGGER.setLevel(Level.INFO);
+			Runner.LOGGER.info("CONECTANDO COM O BANCO DE DADOS");
+			configTools();
+		} catch (ClassNotFoundException  e) {
+			// TODO Auto-generated catch block
+			System.out.println("Where is your PostgreSQL JDBC Driver? Include in your library path!");
+			Runner.LOGGER.info("Where is your PostgreSQL JDBC Driver? Include in your library path!");
+			JOptionPane.showMessageDialog(ViewStart.this, "Where is your PostgreSQL JDBC Driver? Include in your library path!");
+			e.printStackTrace();
+			System.exit(1);
+		}
+		catch (SQLException e)
+	    {
+		System.out.println("Falha ao conectar com o banco de dados conexão negada");
+		//Runner.LOGGER.setLevel(Level.WARNING);
+		Runner.LOGGER.info("FALHA AO CONECTAR COM O BANCO DE DADOS. CONEXÃO NEGADA");
+		JOptionPane.showMessageDialog(ViewStart.this, "Falha ao conectar com o banco de dados");
+	      e.printStackTrace();
+	      System.exit(1);
+	      
+	    }
+		
+	     
 	}
 	
 	private void configTools(){
@@ -248,6 +277,7 @@ public class ViewStart extends JFrame{
 			btMakeRequest.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
 					controller.goShowPersonTable(radioCPF.isSelected());
+					Runner.LOGGER.info("BOTÃO MAKE REQUEST PRESSIONADO");
 				}
 			});
 			
@@ -328,6 +358,7 @@ public class ViewStart extends JFrame{
 				
 				public void actionPerformed(ActionEvent arg0) {
 					//System.out.println("teste...");
+					Runner.LOGGER.info("MENU TROCAR PREFEITO PRESSIONADO");
 					controller.trocarPrefeito(tools);
 				}
 			});
@@ -335,6 +366,7 @@ public class ViewStart extends JFrame{
 			itemSaveFile.addActionListener(new ActionListener() {
 				
 				public void actionPerformed(ActionEvent arg0) {
+					Runner.LOGGER.info("MENU LOCAL PARA SALVAR ARQUIVOS PRESSIONADO");
 					System.out.println("Escolher local para salvar arquivos");
 					JFileChooser arquivo = new JFileChooser();
 					arquivo.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
@@ -387,7 +419,7 @@ public class ViewStart extends JFrame{
 				
 				
 				public void actionPerformed(ActionEvent arg0) {
-					
+					Runner.LOGGER.info("MENU SAIR PRESSIONADO");
 					int resp = JOptionPane.showConfirmDialog(ViewStart.this, 
 															"Deseja sair ?",
 															"Sair",
@@ -412,9 +444,10 @@ public class ViewStart extends JFrame{
 			about.addActionListener(new ActionListener() {
 				
 				public void actionPerformed(ActionEvent arg0) {
+					Runner.LOGGER.info("MENU SOBRE PRESSIONADO");
 					System.out.println("clicked");
 					JOptionPane.showMessageDialog(ViewStart.this, "Software para gestão Secretaria PMG!\n"
-							+ "Beta Version 1.1.3 - @2017\nUPDATE 20170526-15:32\n\nDeveloped By Mateus Ferreira de Souza\nmateus.ferreira@goncalves.mg.gov.br"
+							+ "Beta Version - @2017\n\nDeveloped By Mateus Ferreira de Souza\nmateus.ferreira@goncalves.mg.gov.br"
 							+"\nseraomateus@hotmail.com");
 					
 				}

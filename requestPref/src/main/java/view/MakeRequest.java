@@ -44,7 +44,7 @@ import requestPref.requestPref.Runner;
 
 public class MakeRequest extends JFrame {
 	
-	private final static Logger LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
+	//private final static Logger LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
 	private String lineSeparator = System.getProperty("line.separator");
 	//private Runner run;
 	
@@ -130,8 +130,8 @@ public class MakeRequest extends JFrame {
 		super(titulo);
 		this.controller = controller;
 		pessoa = p;
-		LOGGER.setLevel(Level.INFO);
-		LOGGER.info("Make Request");
+		Runner.LOGGER.setLevel(Level.INFO);
+		Runner.LOGGER.info("Make Request");
 	}
 	
 	public void init(){
@@ -372,6 +372,8 @@ public class MakeRequest extends JFrame {
 				//ms.setPlaceholderCharacter('_');
 				textCpf = new JFormattedTextField(ms);
 			} catch (ParseException e) {
+				Runner.LOGGER.setLevel(Level.WARNING);
+				Runner.LOGGER.info("Erro mascara CPF!");
 				e.printStackTrace();
 			}
 			textCpf.setPreferredSize(new Dimension(100,20));	
@@ -587,8 +589,10 @@ public class MakeRequest extends JFrame {
 							textCpf.setEnabled(true);
 						}
 						else{
-							LOGGER.setLevel(Level.WARNING);
-							LOGGER.info("PREENCHER CAMPOS OBRIGATÓRIOS");
+							Runner.LOGGER.setLevel(Level.WARNING);
+							//LOGGER.setLevel(Level.WARNING);
+							Runner.LOGGER.info("PREENCHER CAMPOS OBRIGATÓRIOS");
+							//LOGGER.info("PREENCHER CAMPOS OBRIGATÓRIOS");
 							JOptionPane.showMessageDialog(null, "* CAMPOS DE PREENCHIMENTO OBRIGATÓRIO");
 						}
 					}
@@ -606,8 +610,8 @@ public class MakeRequest extends JFrame {
 								} catch (Exception e1) {
 									// TODO Auto-generated catch block
 									e1.printStackTrace();
-									LOGGER.setLevel(Level.WARNING);
-									LOGGER.info("CPF JÁ CADASTRADO: "+textCpf.getText());
+									Runner.LOGGER.setLevel(Level.WARNING);
+									Runner.LOGGER.info("CPF JÁ CADASTRADO: "+textCpf.getText());
 									textCpf.setText("");
 									JOptionPane.showMessageDialog(null, "ERRO!!! CPF JÁ CADASTRADO!!");
 								}
@@ -618,8 +622,8 @@ public class MakeRequest extends JFrame {
 						}
 						else{
 							//JOptionPane.showConfirmDialog(null, "Deseja cadastrar nova pessoa?", "ATENÇÃO!",JOptionPane.YES_NO_OPTION);
-							LOGGER.setLevel(Level.WARNING);
-							LOGGER.info("CPF INVÁLIDO: "+textCpf.getText());
+							Runner.LOGGER.setLevel(Level.WARNING);
+							Runner.LOGGER.info("CPF INVÁLIDO: "+textCpf.getText());
 							JOptionPane.showMessageDialog(null, "CPF Inválido!");
 							textCpf.setText("");
 						}
@@ -673,8 +677,8 @@ public class MakeRequest extends JFrame {
 	}
 	
 	private void imprimeLogDataPessoa(){
-		LOGGER.setLevel(Level.INFO);
-		LOGGER.info("*******DADOS CADASTRAIS********"+lineSeparator+
+		Runner.LOGGER.setLevel(Level.INFO);
+		Runner.LOGGER.info("*******DADOS CADASTRAIS********"+lineSeparator+
 				"CPF: "+textCpf.getText()+lineSeparator+ "NOME: "+textNome.getText()+lineSeparator+"RG: "+textRG.getText()+lineSeparator+"NACIONALIDADE: "
 		+textNacionalidade.getText()+lineSeparator+"ENDEREÇO: "+textAddress.getText());
 		//LOGGER.info("RG Nº :"+textRG.getText());
@@ -762,8 +766,8 @@ public class MakeRequest extends JFrame {
 		botaoCriarRequerimento.addActionListener(new ActionListener() {
 			
 			public void actionPerformed(ActionEvent e) {
-				LOGGER.setLevel(Level.INFO);
-				LOGGER.info("BOTÃO  OK PRESSIONADO");
+				Runner.LOGGER.setLevel(Level.INFO);
+				Runner.LOGGER.info("BOTÃO  OK PRESSIONADO");
 				dispose();//Fecha a Aplicação.
 				controller.gerarWordCpf(pessoa, areaRequest.getText(), checkCND.isSelected(), checkRequerimento.isSelected(), checkCampoDeferido.isSelected());
 				controller.init();
@@ -777,8 +781,8 @@ public class MakeRequest extends JFrame {
 		bt2.addActionListener(new ActionListener() {
 			
 			public void actionPerformed(ActionEvent e) {
-				LOGGER.setLevel(Level.INFO);
-				LOGGER.info("BOTÃO  CANCELAR PRESSIONADO");
+				Runner.LOGGER.setLevel(Level.INFO);
+				Runner.LOGGER.info("BOTÃO  CANCELAR PRESSIONADO");
 				dispose();//fecha a aplicação.
 				controller.init();
 				

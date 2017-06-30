@@ -28,8 +28,8 @@ public class MyLog {
         }
 */
         logger.setLevel(Level.INFO);
-        fileTxt = new FileHandler("D:/myLog.txt");
-
+        //fileTxt = new FileHandler("D:/myLog.txt");
+        fileTxt = new FileHandler(System.getProperty("user.dir")+"/myLog.txt");
         // create a TXT formatter
         formatterTxt = new SimpleFormatter();
         fileTxt.setFormatter(formatterTxt);

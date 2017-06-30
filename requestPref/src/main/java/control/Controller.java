@@ -23,6 +23,7 @@ import view.ViewStart;
 
 public class Controller {
 	
+	private String version = "VER.: 20170630.1548";
 	private MakeRequest request;
 	private MakeBusinessRequest businessRequest;
 	private ViewStart viewStart;
@@ -42,7 +43,7 @@ public class Controller {
 	public void init(){
 		//request = new MakeRequest(this);
 		//request.init();
-		viewStart = new ViewStart(this,"Gerenciador de Requerimentos");
+		viewStart = new ViewStart(this,"Gerenciador de Requerimentos "+version);
 		viewStart.init();
 		
 	}
@@ -64,7 +65,7 @@ public class Controller {
 		//System.out.println(p.getNome());
 		//System.out.println("teste....");
 		pessoaTableView.setVisible(false);
-		request = new MakeRequest(this, "Cria Requerimento",p);
+		request = new MakeRequest(this, "Cria Requerimento "+version,p);
 		request.init();
 		
 	}
@@ -73,7 +74,7 @@ public class Controller {
 		//System.out.println(p.getNome());
 		//System.out.println("teste....");
 		empresaTableView.setVisible(false);
-		businessRequest = new MakeBusinessRequest(this, "Cria Requerimento",empresa);
+		businessRequest = new MakeBusinessRequest(this, "Cria Requerimento "+version,empresa);
 		businessRequest.init();
 		
 	}

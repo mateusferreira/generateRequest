@@ -11,7 +11,8 @@ import entities.Tools;
 import util.HibernateUtil;
 
 public class ToolsDAO {
-EntityManager em = HibernateUtil.getEntityManager();
+	EntityManager em = HibernateUtil.getEntityManager();
+	
 	public Tools getTools(int id){
 
 	return em.find(Tools.class, id);

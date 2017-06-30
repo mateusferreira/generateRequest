@@ -11,11 +11,8 @@ import entities.MyLog;
 
 public class Runner {
 	
-	private final static Logger LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
+	public final static Logger LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
 	
-	public Logger getLogger(){
-		return LOGGER;
-	}
 
 	public static void main(String[] args) {
 		try {
@@ -26,13 +23,12 @@ public class Runner {
 			throw new RuntimeException("Problems with creating the log files");
 		}
 		
-		System.out.println("Iniciando....");
+		//System.out.println("Iniciando.... "+System.getProperty("user.dir"));
 		LOGGER.setLevel(Level.INFO);
-		LOGGER.info("Iniciando serviços");
+		LOGGER.info("Iniciando a Aplicação");
 		
 		new Controller().init();
-		
-
+	
 	}
 
 }

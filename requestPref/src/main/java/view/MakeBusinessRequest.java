@@ -135,7 +135,7 @@ public class MakeBusinessRequest extends JFrame{
 		
 		private void limitarTextFields(){
 			textBairro.setDocument(new LimitTextField(30));
-			textAtividade.setDocument(new LimitTextField(100));
+			textAtividade.setDocument(new LimitTextField(80));
 			textRazao.setDocument(new LimitTextField(80));
 			textAddress.setDocument(new LimitTextField(50));
 			textNum.setDocument(new LimitTextField(14));

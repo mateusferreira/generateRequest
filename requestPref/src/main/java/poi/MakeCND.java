@@ -132,7 +132,7 @@ public class MakeCND {
     		String t;
     		t = sdf.format(data);
     		
-            range.replaceText("$PY","Gonçalves, "+t);
+            range.replaceText("$PY","GONÇALVES, "+t.toUpperCase());
             
             saveWord(doc, data, pessoa.getNome(),tools);
             
