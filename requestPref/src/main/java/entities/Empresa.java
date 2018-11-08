@@ -20,6 +20,9 @@ public class Empresa implements Serializable{
 	@Column(nullable = false, length=40)
 	private String razao;
 	
+	@Column(length=40)
+	private String fantasia;
+	
 	@Column(length=6)
 	private String inscMunicipal;
 	
@@ -48,9 +51,10 @@ public class Empresa implements Serializable{
 		
 	}
 	
-	public Empresa(String cnpj, String razao, String inscMunicipal,String atividade, Date dataInicio, String endereco, String numero, String bairro, String cidade, String estado){
+	public Empresa(String cnpj, String razao,  String fantasia, String inscMunicipal,String atividade, Date dataInicio, String endereco, String numero, String bairro, String cidade, String estado){
 		this.cnpj = cnpj;
 		this.razao = razao;
+		this.fantasia = fantasia;
 		this.inscMunicipal = inscMunicipal;
 		this.atividade = atividade;
 		this.dataInicio = dataInicio;
@@ -72,9 +76,17 @@ public class Empresa implements Serializable{
 	public String getRazao() {
 		return razao;
 	}
+	
+	public String getFantasia(){
+		return fantasia;
+	}
 
 	public void setRazao(String razao) {
 		this.razao = razao;
+	}
+	
+	public void setFantasia(String fantasia){
+		this.fantasia = fantasia;
 	}
 
 	public String getInscMunicipal() {

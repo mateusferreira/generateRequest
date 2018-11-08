@@ -93,21 +93,34 @@ public class MakeWordBusinessDocument {
 		
 		XWPFParagraph body = document.createParagraph();
 		XWPFRun roda4 = body.createRun();
-		XWPFRun roda2 = body.createRun();
-		XWPFRun roda = body.createRun();
-		XWPFRun roda3 = body.createRun();
-		
 		
 		roda4.setFontSize(tF);
 		roda4.setFontFamily(letra);
 		roda4.setText("A Firma ");
+		
+		XWPFRun roda2 = body.createRun();
 		
 		roda2.setFontSize(tF);
 		roda2.setFontFamily(letra);
 		roda2.setBold(true);
 		roda2.setText(empresa.getRazao().toUpperCase());
 		
-
+		if(empresa.getFantasia() != null){
+			XWPFRun rodaX = body.createRun();
+			rodaX.setFontSize(tF);
+			rodaX.setFontFamily(letra);
+			rodaX.setBold(false);
+			rodaX.setText(", nome fantasia ");
+			
+			XWPFRun rodaY = body.createRun();
+			rodaY.setFontSize(tF);
+			rodaY.setFontFamily(letra);
+			rodaY.setBold(true);
+			rodaY.setText(empresa.getFantasia());
+		}
+		
+		XWPFRun roda = body.createRun();
+		
 		roda.setText(", inscrita no CNPJ nº ");
 		roda.setText(empresa.getCnpj());
 		
@@ -115,12 +128,25 @@ public class MakeWordBusinessDocument {
 			roda.setText(" - Inscrição Municipal nº "+empresa.getInscMunicipal());
 		}
 		
-		
-		roda.setText(", situada à "+capitalizeFirstWord(empresa.getEndereco()));
-		roda.setText(", nº "+empresa.getNumero()+" - ");
-		roda.setText(capitalizeFirstWord(empresa.getBairro())+", ");
-		roda.setText(capitalizeFirstWord(empresa.getCidade())+" - "+empresa.getEstado());
-		
+		String temporario = empresa.getBairro();
+		if(temporario.equals("CENTRO") || temporario.equals("SERRINHA")){
+			roda.setText(", situada à "+capitalizeFirstWord(empresa.getEndereco()));
+			
+			temporario = empresa.getNumero();
+			
+			if(temporario.equals("S/Nº") || temporario.equals("S/N"))
+				roda.setText(", "+empresa.getNumero()+" - ");
+			else
+				roda.setText(", nº "+empresa.getNumero()+" - ");
+			
+			roda.setText(capitalizeFirstWord(empresa.getBairro())+", ");
+			roda.setText(capitalizeFirstWord(empresa.getCidade())+" - "+empresa.getEstado());
+		}
+		else{
+			roda.setText(", situada no bairro "+capitalizeFirstWord(empresa.getBairro()));
+			roda.setText(" - "+empresa.getEndereco());
+			System.out.println("teste: "+empresa.getBairro()+"  - "+ empresa.getBairro().length());
+		}
 		
 		roda.setText(", vem mui respeitosamente requerer de V. Sª.,");
 		
@@ -132,6 +158,7 @@ public class MakeWordBusinessDocument {
 		body.setAlignment(ParagraphAlignment.BOTH);
 		body.setIndentationFirstLine(tabular);
 		
+		XWPFRun roda3 = body.createRun();
 		//String assunto = "baixa do ISSQN (Imposto sobre Serviço de qualquer natureza), na atividade na atividade de Motorista";
 		roda3.setText(assunto);
 		roda3.setText(".");

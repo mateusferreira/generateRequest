@@ -116,7 +116,7 @@ public class ViewStart extends JFrame{
 	    {
 		System.out.println("Falha ao conectar com o banco de dados conexão negada");
 		//Runner.LOGGER.setLevel(Level.WARNING);
-		Runner.LOGGER.info("FALHA AO CONECTAR COM O BANCO DE DADOS. CONEXÃO NEGADA");
+		Runner.LOGGER.info("FALHA AO CONECTAR COM O BANCO DE DADOS. CONEXÃO NEGADA. IP 192.168.0.36");
 		JOptionPane.showMessageDialog(ViewStart.this, "Falha ao conectar com o banco de dados");
 	      e.printStackTrace();
 	      System.exit(1);
@@ -447,7 +447,7 @@ public class ViewStart extends JFrame{
 					Runner.LOGGER.info("MENU SOBRE PRESSIONADO");
 					System.out.println("clicked");
 					JOptionPane.showMessageDialog(ViewStart.this, "Software para gestão Secretaria PMG!\n"
-							+ "Beta Version - @2017\n\nDeveloped By Mateus Ferreira de Souza\nmateus.ferreira@goncalves.mg.gov.br"
+							+ "Beta Version - @2018\n\nDeveloped By Mateus Ferreira de Souza\nmateus.ferreira@goncalves.mg.gov.br"
 							+"\nseraomateus@hotmail.com");
 					
 				}

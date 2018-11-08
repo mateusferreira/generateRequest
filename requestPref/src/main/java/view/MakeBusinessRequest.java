@@ -69,6 +69,7 @@ public class MakeBusinessRequest extends JFrame{
 		
 	//Label....
 	private JLabel lcnpj = new JLabel("CNPJ: *");
+	private JLabel lfantasia = new JLabel("Nome Fantasia");
 	private JLabel lrazao = new JLabel("Razão: *");
 	private JLabel lAtividade = new JLabel("Atividade:");
 	private JLabel lDataInicio = new JLabel("Data In.");
@@ -88,6 +89,7 @@ public class MakeBusinessRequest extends JFrame{
 		
 		//TextField
 		private JTextField textRazao = new JTextField(30);
+		private JTextField textFantasia = new JTextField(30);
 		private JTextField textInscricao = new JTextField(10);
 		private JTextField textAddress = new JTextField(10);
 		private JTextField textAtividade = new JTextField(30);
@@ -137,6 +139,7 @@ public class MakeBusinessRequest extends JFrame{
 			textBairro.setDocument(new LimitTextField(30));
 			textAtividade.setDocument(new LimitTextField(80));
 			textRazao.setDocument(new LimitTextField(80));
+			textFantasia.setDocument(new LimitTextField(80));
 			textAddress.setDocument(new LimitTextField(50));
 			textNum.setDocument(new LimitTextField(14));
 			textCity.setDocument(new LimitTextField(20));
@@ -286,6 +289,7 @@ public class MakeBusinessRequest extends JFrame{
 	
 			textCnpj.setEditable(able);
 			textRazao.setEditable(able);
+			textFantasia.setEditable(able);
 			textAtividade.setEditable(able);
 			textInscricao.setEditable(able);
 			
@@ -431,12 +435,32 @@ public class MakeBusinessRequest extends JFrame{
 				painel.add(textInscricao,c);
 				c.gridwidth = 1;
 				
+				//vamo lá inserir a linha nome fantasia: 08/11/2018
+				c.fill = GridBagConstraints.HORIZONTAL;
+				//c.anchor = GridBagConstraints.WEST;
+				c.insets = new Insets(vTop,vLeft * multBorda,vBottom,vRight);
+				c.gridx = 0;
+				c.gridy = 1;
+				painel.add(lfantasia,c);
+				
+				c.fill = GridBagConstraints.HORIZONTAL;
+				//c.anchor = GridBagConstraints.WEST;
+				c.insets = new Insets(vTop,vLeft,vBottom,vRight);
+				c.gridx = 1;
+				c.gridy = 1;
+				c.gridwidth = 4;
+				painel.add(textFantasia,c);
+				
+				c.gridwidth = 1;
+				
+				//******
+				
 				c.fill = GridBagConstraints.NONE;
 				c.anchor = GridBagConstraints.WEST;
 				c.insets = new Insets(vTop,vLeft * multBorda,vBottom,vRight);
 				//c.weightx = 0.2;
 				c.gridx = 0;
-				c.gridy = 1;
+				c.gridy = 2;
 				painel.add(lAtividade,c);
 				
 				c.fill = GridBagConstraints.HORIZONTAL;
@@ -444,7 +468,7 @@ public class MakeBusinessRequest extends JFrame{
 				//c.insets = new Insets(vTop,vLeft,vBottom,vRight * multBorda);
 				c.insets = new Insets(vTop,vLeft,vBottom,vRight);
 				c.gridx = 1;
-				c.gridy = 1;
+				c.gridy = 2;
 				c.gridwidth = 4;
 				painel.add(textAtividade,c);
 				
@@ -454,7 +478,7 @@ public class MakeBusinessRequest extends JFrame{
 				//c.insets = new Insets(vTop,vLeft,vBottom,vRight * multBorda);
 				c.insets = new Insets(vTop,vLeft,vBottom,vRight);
 				c.gridx = 5;
-				c.gridy = 1;
+				c.gridy = 2;
 				painel.add(lDataInicio,c);
 				
 				
@@ -463,7 +487,7 @@ public class MakeBusinessRequest extends JFrame{
 				c.insets = new Insets(vTop,vLeft,vBottom,vRight * multBorda);
 				//c.insets = new Insets(vTop,vLeft,vBottom,vRight);
 				c.gridx = 6;
-				c.gridy = 1;
+				c.gridy = 2;
 				c.gridwidth = 2;
 				painel.add(textDataInicio,c);
 
@@ -473,13 +497,13 @@ public class MakeBusinessRequest extends JFrame{
 				c.fill = GridBagConstraints.HORIZONTAL;
 				c.insets = new Insets(vTop,vLeft * multBorda,vBottom,vRight);
 				c.gridx = 0;
-				c.gridy = 2;
+				c.gridy = 3;
 				painel.add(lAddress,c);
 				
 				c.fill = GridBagConstraints.HORIZONTAL;
 				c.insets = new Insets(vTop,vLeft,vBottom,vRight);
 				c.gridx = 1;
-				c.gridy = 2;
+				c.gridy = 3;
 				c.gridwidth = 4;
 				painel.add(textAddress,c);
 				
@@ -487,27 +511,27 @@ public class MakeBusinessRequest extends JFrame{
 				c.fill = GridBagConstraints.HORIZONTAL;
 				c.insets = new Insets(vTop,vLeft,vBottom,vRight);
 				c.gridx = 5;
-				c.gridy = 2;
+				c.gridy = 3;
 				painel.add(lNumber,c);
 				
 				c.fill = GridBagConstraints.NONE;
 				c.anchor = GridBagConstraints.WEST;
 				c.insets = new Insets(vTop,vLeft,vBottom,vRight * multBorda);
 				c.gridx = 6;
-				c.gridy = 2;
+				c.gridy = 3;
 				painel.add(textNum,c);
 				
 				//Linha 3 Bairro - Cidade - Estado
 				c.fill = GridBagConstraints.HORIZONTAL;
 				c.insets = new Insets(vTop,vLeft * multBorda,vBottom,vRight);
 				c.gridx = 0;
-				c.gridy = 3;
+				c.gridy = 4;
 				painel.add(lBairro,c);
 				
 				c.fill = GridBagConstraints.HORIZONTAL;
 				c.insets = new Insets(vTop,vLeft,vBottom,vRight);
 				c.gridx = 1;
-				c.gridy = 3;
+				c.gridy = 4;
 				painel.add(textBairro,c);
 				
 				c.fill = GridBagConstraints.NONE;
@@ -515,7 +539,7 @@ public class MakeBusinessRequest extends JFrame{
 				c.insets = new Insets(vTop,vLeft,vBottom,vRight);
 				//c.weightx = 0.2;
 				c.gridx = 2;
-				c.gridy = 3;
+				c.gridy = 4;
 				painel.add(lCity,c);
 				
 				c.fill = GridBagConstraints.HORIZONTAL;
@@ -523,20 +547,20 @@ public class MakeBusinessRequest extends JFrame{
 				c.insets = new Insets(vTop,vLeft,vBottom,vRight);
 				c.gridwidth = 2;
 				c.gridx = 3;
-				c.gridy = 3;
+				c.gridy = 4;
 				painel.add(textCity,c);
 				
 				c.gridwidth = 1;
 				c.fill = GridBagConstraints.HORIZONTAL;
 				c.insets = new Insets(vTop,vLeft,vBottom,vRight);
 				c.gridx = 5;
-				c.gridy = 3;
+				c.gridy = 4;
 				painel.add(lUf,c);
 				
 				c.fill = GridBagConstraints.HORIZONTAL;
 				c.insets = new Insets(vTop,vLeft,vBottom,vRight * multBorda);
 				c.gridx = 6;
-				c.gridy = 3;
+				c.gridy = 4;
 				painel.add(comboUf,c);
 				
 				//linha 4
@@ -544,7 +568,7 @@ public class MakeBusinessRequest extends JFrame{
 				c.fill = GridBagConstraints.HORIZONTAL;
 				c.insets = new Insets(vTop,vLeft,vBottom,vRight);
 				c.gridx = 0;
-				c.gridy = 4;
+				c.gridy = 5;
 				c.gridwidth =7;
 				painel.add(new JSeparator(SwingConstants.HORIZONTAL), c);
 				
@@ -553,7 +577,7 @@ public class MakeBusinessRequest extends JFrame{
 				c.fill = GridBagConstraints.HORIZONTAL;
 				c.insets = new Insets(vTop,vLeft,vBottom,vRight);
 				c.gridx = 0;
-				c.gridy = 5;
+				c.gridy = 6;
 				c.gridwidth = 5;
 				checkCampoDeferido.setSelected(true);
 				painel.add(checkCampoDeferido,c);
@@ -562,7 +586,7 @@ public class MakeBusinessRequest extends JFrame{
 				c.fill = GridBagConstraints.HORIZONTAL;
 				c.insets = new Insets(vTop,vLeft,vBottom,vRight);
 				c.gridx = 5;
-				c.gridy = 5;
+				c.gridy = 6;
 				c.gridwidth = 2;
 				painel.add(botaoSalvarAlteracoesCadastro,c);
 				botaoSalvarAlteracoesCadastro.setEnabled(isEmpresaNova ? true : false);//TEste....
@@ -615,6 +639,7 @@ public class MakeBusinessRequest extends JFrame{
 		private void setPainelDataPessoa(){
 			textCnpj.setText(empresa.getCnpj());
 			textRazao.setText(empresa.getRazao());
+			textFantasia.setText(empresa.getFantasia());
 			textInscricao.setText(empresa.getInscMunicipal());
 			textAddress.setText(empresa.getEndereco());
 			textBairro.setText(empresa.getBairro());
@@ -650,6 +675,7 @@ public class MakeBusinessRequest extends JFrame{
 			}
 			
 			empresa.setRazao(textRazao.getText());
+			empresa.setFantasia(textFantasia.getText());
 			
 			if(textInscricao.getText().length() == 0){
 				empresa.setInscMunicipal(null);

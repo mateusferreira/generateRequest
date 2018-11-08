@@ -5,6 +5,10 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.logging.Level;
+
+import javax.swing.JOptionPane;
+
 import java.awt.Desktop;
 import java.io.File;
 import java.io.FileInputStream;
@@ -16,6 +20,8 @@ import org.apache.poi.poifs.filesystem.POIFSFileSystem;
 import entities.Empresa;
 import entities.Pessoa;
 import entities.Tools;
+import requestPref.requestPref.Runner;
+import view.ViewStart;
 
 public class MakeCND {
 	
@@ -45,6 +51,18 @@ public class MakeCND {
         }
     }
 	
+	private String fitAddress(String address){
+		while(address.length() >=78){
+       	 address = (String)JOptionPane.showInputDialog(null, "*********************** PERMITIDO NO MÁXIMO 77 CARACTERES **********************",
+					"TAMANHO EXCEDIDO: "+address.length() +" > 77 CARACTERES",
+					JOptionPane.PLAIN_MESSAGE, null, null, address);
+       }
+       
+       Runner.LOGGER.info("Campo Endereço com "+address.length()+" caracteres");
+       
+       return address;
+	}
+	
 	public void geraWordEmpresaCnd(Empresa empresa, String finalidade, Tools tools){
 		try {            
             fs = new POIFSFileSystem(new FileInputStream(tools.getPathFile()+"/base_GERAR_CND.doc"));            
@@ -59,6 +77,12 @@ public class MakeCND {
 				SimpleDateFormat simple =  new SimpleDateFormat(data_form);
 				dataFormada = simple.format(dt);
 			}
+			else{
+				dataFormada = "";
+				System.out.println("Data de início não informada!");
+				Runner.LOGGER.setLevel(Level.INFO);
+				Runner.LOGGER.info("Empresa com data de início não informada");
+			}
 			
 			if(empresa.getNumero().equals("S/N") || empresa.getNumero().equals("S/Nº") || empresa.getNumero().equals("SN") || empresa.getNumero().equals("S/Nº"))
 				textoNum = " ";
@@ -66,16 +90,34 @@ public class MakeCND {
 				textoNum = " Nº ";
 			
 			
-			
-
+			String campoEndereco = empresa.getEndereco().toUpperCase() +textoNum +empresa.getNumero()+", BAIRRO "+empresa.getBairro().toUpperCase()+", "+empresa.getCidade().toUpperCase()+" - "+empresa.getEstado();
             range.replaceText("$P1","");
             range.replaceText("$P2","");
             range.replaceText("$P3","");
             range.replaceText("$P4", empresa.getRazao().toUpperCase());
-            range.replaceText("$P5",empresa.getEndereco().toUpperCase() +textoNum +empresa.getNumero()+", BAIRRO "+empresa.getBairro().toUpperCase()+", "+empresa.getCidade().toUpperCase()+" - "+empresa.getEstado());
-            range.replaceText("$P6", empresa.getAtividade().toUpperCase());
+            
+            campoEndereco = fitAddress(campoEndereco);
+           /* while(campoEndereco.length() >=78){
+            	 campoEndereco = (String)JOptionPane.showInputDialog(null, "*********************** PERMITIDO NO MÁXIMO 77 CARACTERES **********************",
+						"TAMANHO EXCEDIDO: "+campoEndereco.length() +" > 77 CARACTERES",
+						JOptionPane.PLAIN_MESSAGE, null, null, campoEndereco);
+            }
+            */
+            range.replaceText("$P5", campoEndereco);
+        
+            
+            if(empresa.getAtividade() == null)
+            	range.replaceText("$P6","");
+            else
+            	range.replaceText("$P6", empresa.getAtividade().toUpperCase());
+            
             range.replaceText("$P7", dataFormada);
-            range.replaceText("$P8",empresa.getInscMunicipal());
+            
+            if(empresa.getInscMunicipal() == null)
+            	range.replaceText("$P8","");
+            else
+            	range.replaceText("$P8",empresa.getInscMunicipal());
+            
             range.replaceText("$PZ","");
             range.replaceText("$P9", empresa.getCnpj());
            
@@ -113,10 +155,15 @@ public class MakeCND {
             //else if(pessoa.getNumero().equals(""))
 			else
 				textoNum = " Nº ";
+            
+            String campoEndereco = pessoa.getEndereco().toUpperCase()+ textoNum +pessoa.getNumero()+", BAIRRO "+pessoa.getBairro().toUpperCase()+", "+pessoa.getCidade().toUpperCase()+" - "+pessoa.getEstado();
 
             range.replaceText("$P1", pessoa.getNome().toUpperCase());
             range.replaceText("$P2", pessoa.getCpf());
-            range.replaceText("$P3",pessoa.getEndereco().toUpperCase()+ textoNum +pessoa.getNumero()+", BAIRRO "+pessoa.getBairro().toUpperCase()+", "+pessoa.getCidade().toUpperCase()+" - "+pessoa.getEstado());
+            
+            campoEndereco = fitAddress(campoEndereco);
+            
+            range.replaceText("$P3", campoEndereco);
             range.replaceText("$P4","");
             range.replaceText("$P5","");
             range.replaceText("$P6","");

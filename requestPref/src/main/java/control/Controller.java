@@ -23,7 +23,7 @@ import view.ViewStart;
 
 public class Controller {
 	
-	private String version = "VER.: 20170630.1548";
+	private String version = "VER.: 20181108.1516";
 	private MakeRequest request;
 	private MakeBusinessRequest businessRequest;
 	private ViewStart viewStart;
