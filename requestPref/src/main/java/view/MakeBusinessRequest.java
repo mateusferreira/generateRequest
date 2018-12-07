@@ -34,7 +34,8 @@ import javax.swing.JComboBox;
 	import javax.swing.JTextArea;
 	import javax.swing.JTextField;
 	import javax.swing.SwingConstants;
-	import javax.swing.text.MaskFormatter;
+import javax.swing.plaf.basic.BasicComboBoxUI.ComboBoxLayoutManager;
+import javax.swing.text.MaskFormatter;
 
 	import control.Controller;
 import entities.Empresa;
@@ -80,6 +81,16 @@ public class MakeBusinessRequest extends JFrame{
 	private JLabel lBairro = new JLabel("Bairro:*");
 	private JLabel lCity = new JLabel("Cidade: *");
 	private JLabel lUf = new JLabel("Estado:");
+	
+	private JLabel lbombeiro = new JLabel("Alv. Bombeiros");
+	private JLabel lagua = new JLabel("Água");
+	private JLabel lcadastur = new JLabel("CADASTUR");
+	private JLabel lcopam = new JLabel("COPAM");
+	private JLabel lFone = new JLabel("Fone");
+	private JLabel lEmail = new JLabel("E-Mail");
+	private JLabel lStatus = new JLabel("Status");
+	private JLabel lLenha = new JLabel("Lenha");
+	private JLabel lNotas = new JLabel("Observação");
 		
 		//TextField
 		//private JTextField textCpf = new JTextField(20);
@@ -98,6 +109,16 @@ public class MakeBusinessRequest extends JFrame{
 		private JTextField textBairro = new JTextField(10);
 		private JTextField textCity = new JTextField(10);
 		
+		//Campos novos 
+		private JTextField textBombeiro = new JTextField(10);
+		private JTextField textAgua = new JTextField(10);
+		private JTextField textCadastur = new JTextField(10);
+		private JTextField textCopam = new JTextField(10);
+		private JTextField textFone = new JTextField(10);
+		private JTextField textEmail = new JTextField(10);
+		private JTextField textNotas = new JTextField(30);
+	
+		
 		private JTextArea areaRequest = new JTextArea();
 		
 		
@@ -106,6 +127,14 @@ public class MakeBusinessRequest extends JFrame{
 								"PE", "PI", "RJ", "RN", "RO", "RS", "RR", "SC", "SE", "SP", "TO"};
 		
 		JComboBox comboUf = new JComboBox(uf);
+		
+		private String[] status = {"ATIVO", "BAIXADO", "CRIANDO"};
+		JComboBox comboStatus = new JComboBox(status);
+		
+		private String[] lenha = {"N/A", "OK", "FALTA DOC"};
+		JComboBox comboLenha = new JComboBox(lenha);
+		
+		
 		//JButton
 		private JButton editarInformacoesCadastro = new JButton("Editar");
 		private JButton botaoDeletarEmpresa = new JButton("Excluir");
@@ -126,7 +155,7 @@ public class MakeBusinessRequest extends JFrame{
 		}
 		
 		public void init(){
-			super.setSize(650, 560);
+			super.setSize(700, 720);//Largura X Altura
 			super.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 			super.setContentPane(getPainelGeral());
 			//super.setJMenuBar(getMenu());
@@ -144,6 +173,10 @@ public class MakeBusinessRequest extends JFrame{
 			textNum.setDocument(new LimitTextField(14));
 			textCity.setDocument(new LimitTextField(20));
 			textInscricao.setDocument(new LimitTextField(6));
+
+			//Implementar depois os novos campos (bombeiros, agua, etc....)
+			textEmail.setDocument(new LimitTextField(50));
+			
 		}
 		
 		
@@ -302,6 +335,15 @@ public class MakeBusinessRequest extends JFrame{
 			textCity.setEditable(able);
 			textNum.setEditable(able);
 			comboUf.setEnabled(able);
+			textBombeiro.setEditable(able);
+			textAgua.setEditable(able);
+			textCadastur.setEditable(able);
+			textCopam.setEditable(able);
+			textFone.setEditable(able);
+			textEmail.setEditable(able);
+			comboStatus.setEnabled(able);
+			comboLenha.setEnabled(able);
+			textNotas.setEditable(able);
 			
 		}
 		
@@ -572,12 +614,148 @@ public class MakeBusinessRequest extends JFrame{
 				c.gridwidth =7;
 				painel.add(new JSeparator(SwingConstants.HORIZONTAL), c);
 				
-				//linha 5
+				//linha 5 Bombeiros - água cadastur
+				c.gridwidth = 1;
+				c.insets = new Insets(vTop,vLeft * multBorda,vBottom,vRight);
+				c.gridx = 0;
+				c.gridy = 6;
+				painel.add(lbombeiro, c);
+				
+				c.fill = GridBagConstraints.HORIZONTAL;
+				c.insets = new Insets(vTop,vLeft,vBottom,vRight);
+				c.gridx = 1;
+				c.gridy = 6;
+				painel.add(textBombeiro,c);
+				
+				c.fill = GridBagConstraints.NONE;
+				c.anchor = GridBagConstraints.WEST;
+				c.insets = new Insets(vTop,vLeft,vBottom,vRight);
+				//c.weightx = 0.2;
+				c.gridx = 2;
+				c.gridy = 6;
+				painel.add(lagua,c);
+				
+				c.fill = GridBagConstraints.HORIZONTAL;
+				//c.anchor = GridBagConstraints.WEST;
+				c.insets = new Insets(vTop,vLeft,vBottom,vRight);
+				c.gridwidth = 2;
+				c.gridx = 3;
+				c.gridy = 6;
+				painel.add(textAgua,c);
+				
+				c.gridwidth = 1;
+				c.fill = GridBagConstraints.HORIZONTAL;
+				c.insets = new Insets(vTop,vLeft,vBottom,vRight);
+				c.gridx = 5;
+				c.gridy = 6;
+				painel.add(lcadastur,c);
+				
+				c.fill = GridBagConstraints.HORIZONTAL;
+				c.insets = new Insets(vTop,vLeft,vBottom,vRight * multBorda);
+				c.gridx = 6;
+				c.gridy = 6;
+				painel.add(textCadastur,c);
+				
+				//Linha COPAM LENHA  E STATUS
+				
+				c.gridwidth = 1;
+				c.insets = new Insets(vTop,vLeft * multBorda,vBottom,vRight);
+				c.gridx = 0;
+				c.gridy = 7;
+				painel.add(lcopam, c);
+				
+				c.fill = GridBagConstraints.HORIZONTAL;
+				c.insets = new Insets(vTop,vLeft,vBottom,vRight);
+				c.gridx = 1;
+				c.gridy = 7;
+				painel.add(textCopam,c);
+				
+				c.fill = GridBagConstraints.HORIZONTAL;
+				c.insets = new Insets(vTop,vLeft,vBottom,vRight);
+				c.gridx = 2;
+				c.gridy = 7;
+				painel.add(lLenha,c);
+				
+				c.fill = GridBagConstraints.HORIZONTAL;
+				c.insets = new Insets(vTop,vLeft,vBottom,vRight);
+				c.gridx = 3;
+				c.gridy = 7;
+				c.gridwidth = 2;
+				painel.add(comboLenha,c);
+				
+				c.gridwidth = 1;
+				c.fill = GridBagConstraints.HORIZONTAL;
+				c.insets = new Insets(vTop,vLeft,vBottom,vRight);
+				c.gridx = 5;
+				c.gridy = 7;
+				painel.add(lStatus,c);
+				
+				c.fill = GridBagConstraints.HORIZONTAL;
+				c.insets = new Insets(vTop,vLeft,vBottom,vRight * multBorda);
+				c.gridx = 6;
+				c.gridy = 7;
+				painel.add(comboStatus,c);
+				
+				//Linha Fone e Email
+				c.gridwidth = 1;
+				c.insets = new Insets(vTop,vLeft * multBorda,vBottom,vRight);
+				c.gridx = 0;
+				c.gridy = 8;
+				painel.add(lFone, c);
+				
+				c.fill = GridBagConstraints.HORIZONTAL;
+				c.insets = new Insets(vTop,vLeft,vBottom,vRight);
+				c.gridx = 1;
+				c.gridy = 8;
+				c.gridwidth = 2;
+				painel.add(textFone,c);
+				
+				c.gridwidth = 1;
+				c.fill = GridBagConstraints.HORIZONTAL;
+				c.insets = new Insets(vTop,vLeft,vBottom,vRight);
+				c.gridx = 3;
+				c.gridy = 8;
+				painel.add(lEmail,c);
+				
+				c.gridwidth = 1;
+				c.fill = GridBagConstraints.HORIZONTAL;
+				c.insets = new Insets(vTop,vLeft,vBottom,vRight * multBorda);
+				c.gridx = 4;
+				c.gridy = 8;
+				c.gridwidth = 4;
+				painel.add(textEmail,c);
+				
+				//Linha Observação:
+				
+				c.gridwidth = 1;
+				c.insets = new Insets(vTop,vLeft * multBorda,vBottom,vRight);
+				c.gridx = 0;
+				c.gridy = 9;
+				painel.add(lNotas, c);
+				
+				c.gridwidth = 1;
+				c.fill = GridBagConstraints.HORIZONTAL;
+				c.insets = new Insets(vTop,vLeft,vBottom,vRight * multBorda);
+				c.gridx = 1;
+				c.gridy = 9;
+				c.gridwidth = 6;
+				painel.add(textNotas,c);
+				
+				//Linha separadora
 				c.gridwidth = 1;
 				c.fill = GridBagConstraints.HORIZONTAL;
 				c.insets = new Insets(vTop,vLeft,vBottom,vRight);
 				c.gridx = 0;
-				c.gridy = 6;
+				c.gridy = 10;
+				c.gridwidth =7;
+				painel.add(new JSeparator(SwingConstants.HORIZONTAL), c);
+				
+				//linha 6*******fim***********
+				c.gridwidth = 1;
+				c.fill = GridBagConstraints.HORIZONTAL;
+				c.insets = new Insets(vTop,vLeft,vBottom,vRight);
+				c.gridx = 0;
+				c.gridy = 11;
 				c.gridwidth = 5;
 				checkCampoDeferido.setSelected(true);
 				painel.add(checkCampoDeferido,c);
@@ -586,7 +764,7 @@ public class MakeBusinessRequest extends JFrame{
 				c.fill = GridBagConstraints.HORIZONTAL;
 				c.insets = new Insets(vTop,vLeft,vBottom,vRight);
 				c.gridx = 5;
-				c.gridy = 6;
+				c.gridy = 11;
 				c.gridwidth = 2;
 				painel.add(botaoSalvarAlteracoesCadastro,c);
 				botaoSalvarAlteracoesCadastro.setEnabled(isEmpresaNova ? true : false);//TEste....
@@ -658,7 +836,19 @@ public class MakeBusinessRequest extends JFrame{
 			
 			
 			textNum.setText(empresa.getNumero());
-			comboUf.setSelectedItem(empresa.getEstado());	
+			comboUf.setSelectedItem(empresa.getEstado());
+			
+			textBombeiro.setText(empresa.getBombeiro());
+			textAgua.setText(empresa.getAgua());
+			textCadastur.setText(empresa.getCadastur());
+			textCopam.setText(empresa.getCopam());
+			textFone.setText(empresa.getFone());
+			textEmail.setText(empresa.getEmail());
+			textNotas.setText(empresa.getNotas());
+			
+			comboStatus.setSelectedItem(empresa.getStatus());
+			comboLenha.setSelectedItem(empresa.getStatus());
+			
 		}
 		
 		private boolean validaCamposObrigatorios(){
@@ -712,6 +902,19 @@ public class MakeBusinessRequest extends JFrame{
 			empresa.setBairro(textBairro.getText());
 			empresa.setCidade(textCity.getText());
 			empresa.setEstado(uf[comboUf.getSelectedIndex()]);
+			
+			//Novos campos:
+			empresa.setBombeiro(textBombeiro.getText());
+			empresa.setAgua(textAgua.getText());
+			empresa.setCadastur(textCadastur.getText());
+			empresa.setCopam(textCopam.getText());
+			empresa.setFone(textFone.getText());
+			empresa.setEmail(textEmail.getText());
+			empresa.setNotas(textNotas.getText());
+			
+			empresa.setStatus(status[comboStatus.getSelectedIndex()]);
+			empresa.setLenha(lenha[comboLenha.getSelectedIndex()]);
+			
 			
 			return true;
 		}

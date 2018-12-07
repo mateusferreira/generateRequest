@@ -47,11 +47,43 @@ public class Empresa implements Serializable{
 	@Column(nullable = false, length = 2)
 	private String estado;
 	
+	@Column(length = 10)
+	private String bombeiro;
+	
+	@Column(length = 10)
+	private String agua;
+	
+	@Column(length = 10)
+	private String cadastur;
+	
+	@Column(length = 10)
+	private String copam;
+	
+	@Column(length = 10)
+	private String imposto;
+	
+	@Column(length = 11)
+	private String fone;
+	
+	@Column(length = 50)
+	private String email;
+	
+	@Column(length = 7)
+	private String status;
+	
+	@Column (length = 10)
+	private String lenha;
+	
+	@Column(length = 100)
+	private String notas;// Alguma coisa a ser observada na empresa, tipo algum aviso, ou coisa errada.
+	
+	
 	public Empresa(){
 		
 	}
 	
-	public Empresa(String cnpj, String razao,  String fantasia, String inscMunicipal,String atividade, Date dataInicio, String endereco, String numero, String bairro, String cidade, String estado){
+	public Empresa(String cnpj, String razao,  String fantasia, String inscMunicipal,String atividade, Date dataInicio, String endereco, String numero, String bairro, String cidade, String estado,
+			String bombeiro, String agua, String cadastur, String copam, String imposto, String fone, String email, String status, String lenha, String notas){
 		this.cnpj = cnpj;
 		this.razao = razao;
 		this.fantasia = fantasia;
@@ -63,6 +95,16 @@ public class Empresa implements Serializable{
 		this.bairro = bairro;
 		this.cidade = cidade;
 		this.estado = estado;
+		this.bombeiro = bombeiro;
+		this.agua = agua;
+		this.cadastur = cadastur;
+		this.copam = copam;
+		this.imposto = imposto;
+		this.fone = fone;
+		this.email = email;
+		this.status = status;
+		this.lenha = lenha;
+		this.notas = notas;
 	}
 
 	public String getCnpj() {
@@ -92,6 +134,26 @@ public class Empresa implements Serializable{
 	public String getInscMunicipal() {
 		return inscMunicipal;
 	}
+	
+	public String getBombeiro() {
+		return bombeiro;
+	}
+	
+	public String getAgua () {
+		return agua;
+	}
+	
+	public String getCadastur () {
+		return cadastur;
+	}
+	
+	public String getCopam() {
+		return copam;
+	}
+	
+	public String getImposto() {
+		return imposto;
+	}
 
 	public void setInscMunicipal(String inscMunicipal) {
 		this.inscMunicipal = inscMunicipal;
@@ -115,6 +177,49 @@ public class Empresa implements Serializable{
 
 	public String getEndereco() {
 		return endereco;
+	}
+	
+
+	public String getFone() {
+		return fone;
+	}
+
+	public void setFone(String fone) {
+		this.fone = fone;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+	
+	
+
+	public String getLenha() {
+		return lenha;
+	}
+
+	public void setLenha(String lenha) {
+		this.lenha = lenha;
+	}
+
+	public String getNotas() {
+		return notas;
+	}
+
+	public void setNotas(String notas) {
+		this.notas = notas;
 	}
 
 	public void setEndereco(String endereco) {
@@ -151,6 +256,26 @@ public class Empresa implements Serializable{
 
 	public void setEstado(String estado) {
 		this.estado = estado;
+	}
+	
+	public void setBombeiro(String bombeiro) {
+		this.bombeiro = bombeiro;
+	}
+	
+	public void setAgua(String agua) {
+		this.agua = agua;
+	}
+	
+	public void setCadastur(String cadastur) {
+		this.cadastur = cadastur;
+	}
+	
+	public void setCopam (String copam ) {
+		this.copam = copam;
+	}
+	
+	public void setImposto(String imposto ) {
+		this.imposto = imposto;
 	}
 	
 	

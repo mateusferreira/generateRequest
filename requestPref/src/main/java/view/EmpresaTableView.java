@@ -194,7 +194,7 @@ public class EmpresaTableView extends JFrame {
 		empresa = model.getPessoaAt(row);//implementar este método
 		
 		//System.out.println(pessoa.getNome());
-		//dispose();
+		dispose();
 		controller.goMakeRequest(empresa);//Alterar para empresa
 		
 	}

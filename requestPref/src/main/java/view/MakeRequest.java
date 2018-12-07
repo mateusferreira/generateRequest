@@ -34,6 +34,8 @@ import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.text.MaskFormatter;
 
 import control.Controller;
@@ -53,6 +55,8 @@ public class MakeRequest extends JFrame {
 	
 	private PessoaTableView pV;
 	
+	private boolean valor = false;//teste para setar o valor do representante na janela.
+	
 	private int vTop = 6;//10
 	private int vLeft = 1;//5
 	private int vRight = 1;//5
@@ -70,6 +74,7 @@ public class MakeRequest extends JFrame {
 	private JPanel painel;
 	private JPanel painelCentroSup;
 	private JPanel painelRequest;
+	private JPanel painelEmNomeDe;
 	
 	//Label....
 	private JLabel lcpf = new JLabel("CPF:");
@@ -89,6 +94,7 @@ public class MakeRequest extends JFrame {
 	//JFormattedTextField
 	private JFormattedTextField textCpf = null;
 	
+	
 	//TextField
 	private JTextField textNome = new JTextField(30);
 	private JTextField textNacionalidade = new JTextField(10);
@@ -96,9 +102,12 @@ public class MakeRequest extends JFrame {
 	private JTextField textAddress = new JTextField(10);
 	private JTextField textNum = new JTextField(5);
 	private JTextField textBairro = new JTextField();
+	private JTextField textReprCPF = new JTextField(8);
 	//textBairro.setDocument(new LimitedDocument(10));
 	
 	private JTextField textCity = new JTextField(10);
+	
+	private JTextField textRepresentante = new JTextField(30);
 	
 	private JTextArea areaRequest = new JTextArea();
 	
@@ -106,7 +115,7 @@ public class MakeRequest extends JFrame {
 	private String[] sexo = {"Masculino", "Feminino"};
 	JComboBox comboSexo = new JComboBox(sexo);
 	
-	private String[] estadoCivil = {"Casado(a)","Solteiro(a)","Divorciado(a)",""};
+	private String[] estadoCivil = {"Casado(a)","Solteiro(a)","Divorciado(a)","Viúvo(a)",""};
 	JComboBox comboEstadoCivil = new JComboBox(estadoCivil);
 	
 	private String[] uf = {"AC", "AL", "AM", "AP", "BA", "CE", "DF", "ES", "GO", "MA", "MT", "MS", "MG", "PA", "PB", "PR",
@@ -125,6 +134,8 @@ public class MakeRequest extends JFrame {
 	private JCheckBox checkCampoDeferido = new JCheckBox("IMPRIMIR LOCAL DEFERIMENTO");
 	
 	private Pessoa pessoa;
+	private Pessoa representante = null;
+	
 	
 	public MakeRequest(Controller controller, String titulo, Pessoa p){
 		super(titulo);
@@ -135,7 +146,7 @@ public class MakeRequest extends JFrame {
 	}
 	
 	public void init(){
-		super.setSize(650, 560);
+		super.setSize(660, 580);
 		super.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		super.setContentPane(getPainelGeral());
 		//super.setJMenuBar(getMenu());
@@ -320,8 +331,8 @@ public class MakeRequest extends JFrame {
 	}
 	
 	//retirar
-	private boolean validarCpf(){
-		String cpf = textCpf.getText();
+	private boolean validarCpf(JFormattedTextField inCPF){
+		String cpf = inCPF.getText();
 		
 		int digitoVerificadorUm;
 		int digitoVerificadorDois;
@@ -364,8 +375,9 @@ public class MakeRequest extends JFrame {
 		else
 			return false;
 	}
-	//retirar
+	//ver porque não consigo usar essa função passando argumento. Por isso tenho q usar uma cópia dela lá em baixo.
 	private JFormattedTextField mascaraCpf(){
+	
 		if(textCpf == null){
 			try {
 				MaskFormatter ms = new MaskFormatter("###.###.###-##");
@@ -379,7 +391,6 @@ public class MakeRequest extends JFrame {
 			textCpf.setPreferredSize(new Dimension(100,20));	
 			
 		}
-		
 		return textCpf;
 	}
 	
@@ -564,7 +575,7 @@ public class MakeRequest extends JFrame {
 			c.gridx = 0;
 			c.gridy = 5;
 			c.gridwidth = 5;
-			checkCampoDeferido.setSelected(true);
+			checkCampoDeferido.setSelected(false);// Selecionar ou não o campo Deferido
 			painel.add(checkCampoDeferido,c);
 			
 			
@@ -598,7 +609,7 @@ public class MakeRequest extends JFrame {
 					}
 					
 					else if(isPessoaNova == true){
-						if(validarCpf() == true){
+						if(validarCpf(textCpf) == true){
 							pessoa = new Pessoa();
 							pessoa.setCpf(textCpf.getText());
 							if(updateDataPessoa()){
@@ -653,13 +664,15 @@ public class MakeRequest extends JFrame {
 		
 		//System.out.println("NOME: "+pessoa.getNome()+" VALOR: "+pessoa.getEstadoCivil());
 		if(pessoa.getEstadoCivil() == null)
-			comboEstadoCivil.setSelectedIndex(3);
+			comboEstadoCivil.setSelectedIndex(4);
 		else if(pessoa.getEstadoCivil().equals("CASADO") || pessoa.getEstadoCivil().equals("CASADA"))
 			comboEstadoCivil.setSelectedIndex(0);
 		else if(pessoa.getEstadoCivil().equals("SOLTEIRO") || pessoa.getEstadoCivil().equals("SOLTEIRA"))
 			comboEstadoCivil.setSelectedIndex(1);
 		else if(pessoa.getEstadoCivil().equals("DIVORCIADO") || pessoa.getEstadoCivil().equals("DIVORCIADA"))
 			comboEstadoCivil.setSelectedIndex(2);
+		else if(pessoa.getEstadoCivil().equals("VIÚVO") || pessoa.getEstadoCivil().equals("VIÚVA"))
+			comboEstadoCivil.setSelectedIndex(3);
 
 		
 		comboUf.setSelectedItem(pessoa.getEstado());
@@ -728,6 +741,12 @@ public class MakeRequest extends JFrame {
 			else
 				pessoa.setEstadoCivil("DIVORCIADA");
 			break;
+		case 3:
+			if(pessoa.getSexo() == 'M')
+				pessoa.setEstadoCivil("VIÚVO");
+			else
+				pessoa.setEstadoCivil("VIÚVA");
+			break;
 		
 		default:
 			pessoa.setEstadoCivil(null);
@@ -741,6 +760,61 @@ public class MakeRequest extends JFrame {
 		
 		return true;
 	}
+	
+	
+	private JPanel getPanelEmNomeDe(){
+		painelEmNomeDe = new JPanel();
+		
+		 JLabel representado = new JLabel("Representado por:");
+		 JButton procurar = new JButton("...");
+		 
+		 JLabel reprCPF = new JLabel("CPF:");
+		 
+		 
+		 painelEmNomeDe.add(representado);
+		 painelEmNomeDe.add(procurar);
+		 
+		 
+		 procurar.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					controller.goShowPersonTable(true, true);
+					Runner.LOGGER.info("Procurar ... pressionado");
+					//while(controller.getJString() == null);
+					//textRepresentante.setText(controller.getJString());
+					
+				}
+			}); 
+		 
+		 textRepresentante.setEnabled(false);
+		 textReprCPF.setEnabled(false);
+		 painelEmNomeDe.add(textRepresentante);
+		 painelEmNomeDe.add(reprCPF);
+		 painelEmNomeDe.add(textReprCPF);
+		 
+		return painelEmNomeDe;
+		
+	}
+	///*******
+	
+	public void myTest(boolean val1){
+		valor = val1;
+		
+		if(valor == true){
+			representante = controller.getJString();
+			
+			if(representante.getCpf().equals(pessoa.getCpf())){
+				System.out.println("Como assim, representar a própria pessoa???");
+				representante = null;
+				JOptionPane.showMessageDialog(MakeRequest.this, "Não se pode representar ela mesma");
+			}
+			else{
+			textRepresentante.setText(representante.getNome());
+			textReprCPF.setText(representante.getCpf());
+			}
+		}
+	}
+	
+	
 	
 	private JTextArea getTextArea(){
 		areaRequest.setAlignmentX(CENTER_ALIGNMENT);
@@ -769,7 +843,7 @@ public class MakeRequest extends JFrame {
 				Runner.LOGGER.setLevel(Level.INFO);
 				Runner.LOGGER.info("BOTÃO  OK PRESSIONADO");
 				dispose();//Fecha a Aplicação.
-				controller.gerarWordCpf(pessoa, areaRequest.getText(), checkCND.isSelected(), checkRequerimento.isSelected(), checkCampoDeferido.isSelected());
+				controller.gerarWordCpf(pessoa, areaRequest.getText(), checkCND.isSelected(), checkRequerimento.isSelected(), checkCampoDeferido.isSelected(),representante);
 				controller.init();
 				
 			}
@@ -803,6 +877,7 @@ public class MakeRequest extends JFrame {
 			painelRequest.setLayout(layout);
 			
 			painelRequest.add(getTextArea(), BorderLayout.NORTH);
+			painelRequest.add(getPanelEmNomeDe(), BorderLayout.CENTER);
 			painelRequest.add(getPanelSubmit(), BorderLayout.SOUTH);
 			//painelRequest.setBackground(new Color(100,0,0));
 			//painelRequest.add(new JSeparator(SwingConstants.HORIZONTAL));

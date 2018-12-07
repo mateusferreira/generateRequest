@@ -43,6 +43,14 @@ CREATE TABLE tools(
 	CONSTRAINT tools_pk PRIMARY KEY(id)
 )
 
+/* ALGUNS COMANDOS UTILIZADOS:
+Adicionar colunas: alter table EMPRESA add column notas varchar(100)
+Deletar: delete from pessoa where cpf = '084.886.916-88';
+UPDATE tudo: UPDATE empresa SET STATUS = 'ATIVO';
+UPDATE : UPDATE empresa SET STATUS = 'ATIVO' where inscMunicipal = '4476';
+
+*/
+
 INSERT INTO tools VALUES(1,'D:\Usu�rios\Mateus_2\Documents\SECRETARIA\Secretaria 2017\REQUERIMENTOS 2017', 'Exm Sr.','Luiz Rosa da Silva','DD','Prefeito Municipal','Gon�alves - MG');
 
 INSERT INTO empresa VALUES('05.124.393/0001-69','JACIRA PEREIRA DA COSTA RIBEIRO EPP','400','COM�RCIO VAREJISTA DE PRODUTOS ALIMENT�CIOS N�O ESPECIFICADOS OU N�O CLASSIFICADOS','RUA CONSELHEIRO ALFREDO PINTO','240','CENTRO','GON�ALVES','MG');
@@ -53,4 +61,3 @@ INSERT INTO pessoa VALUES ('519.303.156-00','RICARDO REZENDE DE SOUZA','M','BRAS
 INSERT INTO pessoa VALUES('079.035.036-00','NATANAEL HELENO DE SOUZA', 'M','BRASILEIRO','SOLTEIRO','39.835.078-4','RUA CONSELHEIRO ALFREDO PINTO','365','CENTRO','GON�ALVES','MG');
 INSERT INTO pessoa (cpf,nome,sexo,nacionalidade,rg,endereco,numero,bairro,cidade,estado) VALUES('237.082.396-87','ARLETE VIEIRA MACEDO','F','BRASILEIRA','11.293.292','CORONEL JO�O VIEIRA','96','CENTRO','GON�ALVES','MG');
 
-delete from pessoa where cpf = '084.886.916-88';

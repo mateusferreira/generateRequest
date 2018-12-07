@@ -276,7 +276,7 @@ public class ViewStart extends JFrame{
 			
 			btMakeRequest.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
-					controller.goShowPersonTable(radioCPF.isSelected());
+					controller.goShowPersonTable(radioCPF.isSelected(),false);
 					Runner.LOGGER.info("BOTÃO MAKE REQUEST PRESSIONADO");
 				}
 			});
@@ -310,7 +310,7 @@ public class ViewStart extends JFrame{
 			c.gridy = 2;
 			painel.add(lEmpty, c);
 			
-			btMakeCnd = new JButton("<html><center>DISABLED</center></html>");
+			btMakeCnd = new JButton("<html><center>RELAÇÃO DE EMPRESAS</center></html>");
 			c.fill = GridBagConstraints.HORIZONTAL;
 			c.insets = new Insets(vTop,vLeft,vBottom,vRight);
 			c.weightx = 0.5;
@@ -321,12 +321,12 @@ public class ViewStart extends JFrame{
 			painel.add(btMakeCnd, c);
 			
 			btMakeCnd.addActionListener(new ActionListener() {
-				
-				public void actionPerformed(ActionEvent e) {
-					JOptionPane.showMessageDialog(ViewStart.this, "Ainda não implementado");
-					
+				public void actionPerformed(ActionEvent arg0) {
+					controller.goShowRelationTable();//aqui é certeza que é CNPJ por isso é false
+					Runner.LOGGER.info("BOTÃO RELAÇÃO DE EMPRESAS PRESSIONADO");
 				}
 			});
+			
 			
 		}
 		return painel;

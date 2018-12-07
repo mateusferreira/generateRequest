@@ -65,7 +65,7 @@ public class MakeWordDocument {
 	    jc.setVal(justification);
 	}
 	
-	public void geraReqCpf(Pessoa pessoa, String assunto, Tools tools, boolean areaDeferido){
+	public void geraReqCpf(Pessoa pessoa, String assunto, Tools tools, boolean areaDeferido, Pessoa representa){
 		int tF = 12;
 		int tabular = 1100;
 		String letra = "Times New Roman";
@@ -120,14 +120,24 @@ public class MakeWordDocument {
 			}
 			roda.setText(", inscrita no CPF nº ");
 		}
-		
-
 		roda.setText(pessoa.getCpf());
+		///**********************
+		//Arrumar issso..... 
+		
 		roda.setText(", residente na ");
 		roda.setText(capitalizeFirstWord(pessoa.getEndereco()));
 		roda.setText(", ");
-		roda.setText("nº "+pessoa.getNumero()+", bairro "+capitalizeFirstWord(pessoa.getBairro())+", ");
+		roda.setText("nº "+pessoa.getNumero()+", bairro "+capitalizeFirstWord(pessoa.getBairro())+", ");	
 		roda.setText(capitalizeFirstWord(pessoa.getCidade())+" - "+pessoa.getEstado());
+		
+		if(representa != null){
+			if(pessoa.getSexo() == 'F')
+				roda.setText(", aqui representada por ");
+			else
+				roda.setText(", aqui representado por ");
+			roda.setText(representa.getNome().toUpperCase());
+		}
+		
 		roda.setText(", vem mui respeitosamente requerer de V. Sª.,");
 		
 		
@@ -179,7 +189,15 @@ public class MakeWordDocument {
 		XWPFRun runSign = sign.createRun();
 		runSign.setText("_____________________________");
 		runSign.addBreak();
-		runSign.setText(capitalizeFirstWord(pessoa.getNome()));
+		
+		if(representa != null){//Se representante.....
+			runSign.setText(capitalizeFirstWord(representa.getNome()));
+			runSign.addBreak();
+			runSign.setText(representa.getCpf());
+		}
+		else
+			runSign.setText(capitalizeFirstWord(pessoa.getNome()));
+		
 		runSign.addBreak();
 		runSign.addBreak();
 		runSign.addBreak();

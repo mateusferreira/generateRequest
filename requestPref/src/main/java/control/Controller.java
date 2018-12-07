@@ -19,11 +19,12 @@ import view.EmpresaTableView;
 import view.MakeBusinessRequest;
 import view.MakeRequest;
 import view.PessoaTableView;
+import view.RelationListEmpresaTableView;
 import view.ViewStart;
 
 public class Controller {
 	
-	private String version = "VER.: 20181108.1516";
+	private String version = "VER.: 20181207.0920";
 	private MakeRequest request;
 	private MakeBusinessRequest businessRequest;
 	private ViewStart viewStart;
@@ -35,7 +36,9 @@ public class Controller {
 	private MakeWordBusinessDocument poiBusiness = new MakeWordBusinessDocument();
 	private PessoaTableView pessoaTableView;
 	private EmpresaTableView empresaTableView;
+	private RelationListEmpresaTableView relationList;
 	private MakeBusinessRequest empresa;
+	private Pessoa jstring;
 	
 	private Tools keepTools;
 	private DialogChangeMajor changeMajor = new DialogChangeMajor();
@@ -48,22 +51,32 @@ public class Controller {
 		
 	}
 	
-	public void goShowPersonTable(boolean cpfIsSelected){
+	public void goShowPersonTable(boolean cpfIsSelected, boolean representa){
 		viewStart.setVisible(false);
 		if(cpfIsSelected == true){//Vai pra tela de criação de requerimento Pessoa Física
-			pessoaTableView = new PessoaTableView(this, "Tabela");
+			pessoaTableView = new PessoaTableView(this, "Tabela", representa);
 			pessoaTableView.init(dao.getListPessoas());
+			System.out.println("Aqui: "+getJString());
+			
 		}
 		
 		else{
 			empresaTableView = new EmpresaTableView(this, "Tabela");
 			empresaTableView.init(daoEmpresa.getListEmpresa());
 		}
+	
+	}
+	
+	public void goShowRelationTable(){//Aqui será a tela de visualização das empresas.
+		relationList = new RelationListEmpresaTableView(this, "Tabela");
+		relationList.init(daoEmpresa.getListEmpresa());
+		
 	}
 	
 	public void goMakeRequest(Pessoa p){
 		//System.out.println(p.getNome());
 		//System.out.println("teste....");
+		jstring = null;
 		pessoaTableView.setVisible(false);
 		request = new MakeRequest(this, "Cria Requerimento "+version,p);
 		request.init();
@@ -71,9 +84,9 @@ public class Controller {
 	}
 	
 	public void goMakeRequest(Empresa empresa){
-		//System.out.println(p.getNome());
+		//System.out.println("CHEGOU AQUI EMPRESA........" +empresa.getRazao());
 		//System.out.println("teste....");
-		empresaTableView.setVisible(false);
+		//empresaTableView.setVisible(false);
 		businessRequest = new MakeBusinessRequest(this, "Cria Requerimento "+version,empresa);
 		businessRequest.init();
 		
@@ -110,12 +123,10 @@ public class Controller {
 		daoEmpresa.insertEmpresa(empresa);
 	}
 	
-	public void gerarWordCpf(Pessoa pessoa, String requere, boolean geraCND, boolean isGeraRequerimento, boolean flag){
-		//request.setVisible(false);
-		
-		//System.out.println("DADOS: "+pessoa.getNome()+" - "+requere);
+	public void gerarWordCpf(Pessoa pessoa, String requere, boolean geraCND, boolean isGeraRequerimento, boolean flag, Pessoa representa){
+				
 		if(isGeraRequerimento == true)//Se for falso não vai criar o requerimento
-			poi.geraReqCpf(pessoa, requere, keepTools, flag);
+			poi.geraReqCpf(pessoa, requere, keepTools, flag, representa);
 		
 		if(geraCND == true){
 			String resp = JOptionPane.showInputDialog(null, "FINALIDADE DA CND");
@@ -159,6 +170,16 @@ public class Controller {
 	
 	public void trocarPrefeito(Tools tools){
 		updateTools(changeMajor.display(tools));
+	}
+	
+	public void setJString (Pessoa texto){
+		
+		jstring = texto;
+		request.myTest(true);
+	}
+	
+	public Pessoa getJString(){
+		return jstring;
 	}
 
 }

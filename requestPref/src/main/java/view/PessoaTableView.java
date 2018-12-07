@@ -52,11 +52,14 @@ public class PessoaTableView extends JFrame {
 	private JButton botaoVoltarTelaInicial = new JButton("Voltar");
 	
 	private ArrayList<Pessoa> listPessoas;
+	
+	private boolean representa; // se representa for true quer dizer que não é para abrir o formulario de cadastro, mas retornar o nome do representante.
 
 	
-	public PessoaTableView(Controller controler, String titulo){
+	public PessoaTableView(Controller controler, String titulo, boolean representa){
 		super(titulo);
 		this.controller = controler;
+		this.representa = representa; 
 	}
 	
 	public void init(ArrayList<Pessoa>newList){
@@ -102,7 +105,6 @@ public class PessoaTableView extends JFrame {
 				public void mouseClicked(MouseEvent e) {
 					if(e.getClickCount() == 2) {
 						//fazer o que precisa aqui
-						
 						tableClicked();
 					}
 				}
@@ -209,7 +211,10 @@ public class PessoaTableView extends JFrame {
 		if(painelBotoes == null){
 			painelBotoes = new JPanel();
 			
+			if(representa == true)// Para evitar janelas em cascata. Só representa se já for cadastrado.
+				botaoAdicionarNovoCadastro.setEnabled(false);
 			painelBotoes.add(botaoAdicionarNovoCadastro);
+			
 			
 			botaoAdicionarNovoCadastro.addActionListener(new ActionListener() {
 				
@@ -241,7 +246,13 @@ public class PessoaTableView extends JFrame {
 		
 		//System.out.println(pessoa.getNome());
 		//dispose();
-		controller.goMakeRequest(pessoa);
+		if(representa == false)
+			controller.goMakeRequest(pessoa);
+		else{
+			//System.out.println("REPRESENTOU ......");
+			controller.setJString(pessoa);
+			dispose();
+		}
 		
 	}
 	
