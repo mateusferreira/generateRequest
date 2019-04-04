@@ -6,6 +6,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.logging.FileHandler;
+import java.util.logging.Level;
 
 import org.apache.poi.xwpf.usermodel.ParagraphAlignment;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
@@ -19,6 +21,7 @@ import org.openxmlformats.schemas.wordprocessingml.x2006.main.STJc;
 
 import entities.Pessoa;
 import entities.Tools;
+import requestPref.requestPref.Runner;
 
 public class MakeWordDocument {
 	
@@ -66,6 +69,12 @@ public class MakeWordDocument {
 	}
 	
 	public void geraReqCpf(Pessoa pessoa, String assunto, Tools tools, boolean areaDeferido, Pessoa representa){
+		
+		Runner.LOGGER.setLevel(Level.INFO);
+		Runner.LOGGER.info("Gerando documento WORD - pessoa física");
+		//private FileHandler arquivo;
+		//fileTxt = new FileHandler(System.getProperty("user.dir")+"/myLog.txt");
+		
 		int tF = 12;
 		int tabular = 1100;
 		String letra = "Times New Roman";
@@ -240,10 +249,14 @@ public class MakeWordDocument {
 		}
 		
 		try{
+			Runner.LOGGER.setLevel(Level.WARNING);
+			Runner.LOGGER.info("Gravando na pasta");
 			//String pathFile = "D:/Usuários/Mateus_2/Documents/SECRETARIA/Secretaria 2017/REQUERIMENTOS 2017/P.FISICA/";
 			String pathFile = tools.getPathFile()+"/P.FISICA/";
+			//String pathFile = "192.168.0.36/D:/P.FISICA/";
 			String nameFile = nameData +" "+pessoa.getNome()+".doc";
 		
+			System.out.println("Caminho de destino: "+pathFile);
 			System.out.println("NOME DO ARQUIVO: "+nameFile);
 			FileOutputStream output = new FileOutputStream(pathFile + nameFile);	
 			document.write(output);
@@ -256,6 +269,8 @@ public class MakeWordDocument {
 		}
 		catch(Exception e){
 			e.printStackTrace();
+			Runner.LOGGER.setLevel(Level.SEVERE);
+			Runner.LOGGER.info("FALHA AO CRIAR ARQUIVO....");
 		}
 		
 		

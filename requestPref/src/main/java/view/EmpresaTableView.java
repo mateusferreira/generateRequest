@@ -147,6 +147,7 @@ public class EmpresaTableView extends JFrame {
 					model = new EmpresaTableModel(model.getEmpresaByAtribute(listEmpresas,texto));
 					table.setModel(model);
 					//System.out.println(texto);
+
 				}
 				
 				public void keyPressed(KeyEvent e) {
@@ -168,7 +169,7 @@ public class EmpresaTableView extends JFrame {
 			botaoAdicionarNovoCadastro.addActionListener(new ActionListener() {
 				
 				public void actionPerformed(ActionEvent e) {
-					controller.goMakeRequest(empresa);//********alterar para empresa
+					controller.goMakeRequest(empresa, false);//********alterar para empresa
 					
 				}
 			});
@@ -194,8 +195,8 @@ public class EmpresaTableView extends JFrame {
 		empresa = model.getPessoaAt(row);//implementar este método
 		
 		//System.out.println(pessoa.getNome());
-		dispose();
-		controller.goMakeRequest(empresa);//Alterar para empresa
+		//dispose();
+		controller.goMakeRequest(empresa, false);//Alterar para empresa
 		
 	}
 	

@@ -24,7 +24,7 @@ import view.ViewStart;
 
 public class Controller {
 	
-	private String version = "VER.: 20181207.0920";
+	private String version = "VER.: 20190404.0901";
 	private MakeRequest request;
 	private MakeBusinessRequest businessRequest;
 	private ViewStart viewStart;
@@ -68,6 +68,7 @@ public class Controller {
 	}
 	
 	public void goShowRelationTable(){//Aqui será a tela de visualização das empresas.
+		viewStart.setVisible(false);
 		relationList = new RelationListEmpresaTableView(this, "Tabela");
 		relationList.init(daoEmpresa.getListEmpresa());
 		
@@ -83,10 +84,14 @@ public class Controller {
 		
 	}
 	
-	public void goMakeRequest(Empresa empresa){
+	public void goMakeRequest(Empresa empresa, Boolean relation){
 		//System.out.println("CHEGOU AQUI EMPRESA........" +empresa.getRazao());
 		//System.out.println("teste....");
-		//empresaTableView.setVisible(false);
+		if(relation == false)
+			empresaTableView.setVisible(false);
+		else
+			relationList.setVisible(false);
+		
 		businessRequest = new MakeBusinessRequest(this, "Cria Requerimento "+version,empresa);
 		businessRequest.init();
 		

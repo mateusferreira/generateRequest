@@ -16,10 +16,12 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.logging.Level;
 
 import javax.imageio.ImageIO;
 	import javax.swing.BorderFactory;
-	import javax.swing.ImageIcon;
+import javax.swing.ButtonGroup;
+import javax.swing.ImageIcon;
 	import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -29,7 +31,8 @@ import javax.swing.JComboBox;
 	import javax.swing.JOptionPane;
 	import javax.swing.JPanel;
 	import javax.swing.JPopupMenu;
-	import javax.swing.JSeparator;
+import javax.swing.JRadioButton;
+import javax.swing.JSeparator;
 	import javax.swing.JTable;
 	import javax.swing.JTextArea;
 	import javax.swing.JTextField;
@@ -41,6 +44,7 @@ import javax.swing.text.MaskFormatter;
 import entities.Empresa;
 import entities.Pessoa;
 import model.LimitTextField;
+import requestPref.requestPref.Runner;
 
 public class MakeBusinessRequest extends JFrame{
 	
@@ -91,6 +95,12 @@ public class MakeBusinessRequest extends JFrame{
 	private JLabel lStatus = new JLabel("Status");
 	private JLabel lLenha = new JLabel("Lenha");
 	private JLabel lNotas = new JLabel("Observação");
+	private JLabel lServices = new JLabel("Somente prestador?");
+	
+	private JRadioButton radioPrestadorYes = new JRadioButton("Sim");
+	private JRadioButton radioPrestadorNo = new JRadioButton("Não");
+	
+	private ButtonGroup group = new ButtonGroup();
 		
 		//TextField
 		//private JTextField textCpf = new JTextField(20);
@@ -128,7 +138,7 @@ public class MakeBusinessRequest extends JFrame{
 		
 		JComboBox comboUf = new JComboBox(uf);
 		
-		private String[] status = {"ATIVO", "BAIXADO", "CRIANDO"};
+		private String[] status = {"CRIANDO", "ATIVO", "BAIXADO"};
 		JComboBox comboStatus = new JComboBox(status);
 		
 		private String[] lenha = {"N/A", "OK", "FALTA DOC"};
@@ -152,10 +162,12 @@ public class MakeBusinessRequest extends JFrame{
 			super(titulo);
 			this.controller = controller;
 			empresa = e;
+			Runner.LOGGER.setLevel(Level.INFO);
+			Runner.LOGGER.info("Make BusinessRequest");
 		}
 		
 		public void init(){
-			super.setSize(700, 720);//Largura X Altura
+			super.setSize(700, 750);//Largura X Altura
 			super.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 			super.setContentPane(getPainelGeral());
 			//super.setJMenuBar(getMenu());
@@ -182,6 +194,10 @@ public class MakeBusinessRequest extends JFrame{
 		
 		private JPanel getPainelGeral(){
 			limitarTextFields();
+			
+			radioPrestadorNo.setSelected(true);
+			group.add(radioPrestadorNo);
+			group.add(radioPrestadorYes);
 			
 			if(painelGeral == null){
 				painelGeral = new JPanel();
@@ -249,6 +265,8 @@ public class MakeBusinessRequest extends JFrame{
 					//System.out.println("CPF não encontrado!");
 					int opcao = JOptionPane.showConfirmDialog(null, "Deseja cadastrar nova Firma?", "ATENÇÃO!",JOptionPane.YES_NO_OPTION);
 					//System.out.println(opcao);//0 - SIM - 1 - NÃO
+					Runner.LOGGER.setLevel(Level.WARNING);
+					Runner.LOGGER.info("PERGUNTA: DESEJA CADASTRAR NOVA FIRMA?");
 					
 					if(opcao == 0){
 						//textCpf.setEnabled(false);//trava o CPF;
@@ -286,6 +304,8 @@ public class MakeBusinessRequest extends JFrame{
 						botaoSalvarAlteracoesCadastro.setEnabled(true);
 						textCnpj.setEnabled(false);//Travar o CPF para não modificar....
 						isFieldsAble(true);
+						Runner.LOGGER.setLevel(Level.WARNING);
+						Runner.LOGGER.info("BOTÃO EDITAR INFORMAÇÕES CADASTRO EMPRESA PRESSIONADO");
 					}
 				});
 				
@@ -300,6 +320,8 @@ public class MakeBusinessRequest extends JFrame{
 						
 						if(opcao == 0){
 							//System.out.println("Implementar SIM");
+							Runner.LOGGER.setLevel(Level.WARNING);
+							Runner.LOGGER.info("DELETANDO EMPRESA: "+empresa.getRazao());
 							controller.excluirEmpresaBanco(empresa);
 							dispose();
 							controller.init();
@@ -335,15 +357,28 @@ public class MakeBusinessRequest extends JFrame{
 			textCity.setEditable(able);
 			textNum.setEditable(able);
 			comboUf.setEnabled(able);
-			textBombeiro.setEditable(able);
-			textAgua.setEditable(able);
-			textCadastur.setEditable(able);
-			textCopam.setEditable(able);
 			textFone.setEditable(able);
 			textEmail.setEditable(able);
 			comboStatus.setEnabled(able);
-			comboLenha.setEnabled(able);
 			textNotas.setEditable(able);
+			radioPrestadorNo.setEnabled(able);
+			radioPrestadorYes.setEnabled(able);
+			
+			if(radioPrestadorYes.isSelected()){
+				textBombeiro.setEditable(false);
+				textAgua.setEditable(false);
+				textCadastur.setEditable(false);
+				textCopam.setEditable(false);
+				comboLenha.setEnabled(false);
+			}
+			
+			else{
+				textBombeiro.setEditable(able);
+				textAgua.setEditable(able);
+				textCadastur.setEditable(able);
+				textCopam.setEditable(able);
+				comboLenha.setEnabled(able);
+			}
 			
 		}
 		
@@ -614,17 +649,42 @@ public class MakeBusinessRequest extends JFrame{
 				c.gridwidth =7;
 				painel.add(new JSeparator(SwingConstants.HORIZONTAL), c);
 				
+				//*********Separador***********
+				
 				//linha 5 Bombeiros - água cadastur
 				c.gridwidth = 1;
 				c.insets = new Insets(vTop,vLeft * multBorda,vBottom,vRight);
 				c.gridx = 0;
 				c.gridy = 6;
-				painel.add(lbombeiro, c);
+				painel.add(lServices, c);
 				
 				c.fill = GridBagConstraints.HORIZONTAL;
 				c.insets = new Insets(vTop,vLeft,vBottom,vRight);
 				c.gridx = 1;
 				c.gridy = 6;
+				painel.add(radioPrestadorYes,c);
+				
+				c.fill = GridBagConstraints.NONE;
+				c.anchor = GridBagConstraints.WEST;
+				c.insets = new Insets(vTop,vLeft,vBottom,vRight);
+				//c.weightx = 0.2;
+				//c.gridwidth = 1;
+				c.gridx = 2;
+				c.gridy = 6;
+				painel.add(radioPrestadorNo,c);
+				
+				
+				//linha 5 Bombeiros - água cadastur
+				c.gridwidth = 1;
+				c.insets = new Insets(vTop,vLeft * multBorda,vBottom,vRight);
+				c.gridx = 0;
+				c.gridy = 7;
+				painel.add(lbombeiro, c);
+				
+				c.fill = GridBagConstraints.HORIZONTAL;
+				c.insets = new Insets(vTop,vLeft,vBottom,vRight);
+				c.gridx = 1;
+				c.gridy = 7;
 				painel.add(textBombeiro,c);
 				
 				c.fill = GridBagConstraints.NONE;
@@ -632,7 +692,7 @@ public class MakeBusinessRequest extends JFrame{
 				c.insets = new Insets(vTop,vLeft,vBottom,vRight);
 				//c.weightx = 0.2;
 				c.gridx = 2;
-				c.gridy = 6;
+				c.gridy = 7;
 				painel.add(lagua,c);
 				
 				c.fill = GridBagConstraints.HORIZONTAL;
@@ -640,20 +700,20 @@ public class MakeBusinessRequest extends JFrame{
 				c.insets = new Insets(vTop,vLeft,vBottom,vRight);
 				c.gridwidth = 2;
 				c.gridx = 3;
-				c.gridy = 6;
+				c.gridy = 7;
 				painel.add(textAgua,c);
 				
 				c.gridwidth = 1;
 				c.fill = GridBagConstraints.HORIZONTAL;
 				c.insets = new Insets(vTop,vLeft,vBottom,vRight);
 				c.gridx = 5;
-				c.gridy = 6;
+				c.gridy = 7;
 				painel.add(lcadastur,c);
 				
 				c.fill = GridBagConstraints.HORIZONTAL;
 				c.insets = new Insets(vTop,vLeft,vBottom,vRight * multBorda);
 				c.gridx = 6;
-				c.gridy = 6;
+				c.gridy = 7;
 				painel.add(textCadastur,c);
 				
 				//Linha COPAM LENHA  E STATUS
@@ -661,25 +721,25 @@ public class MakeBusinessRequest extends JFrame{
 				c.gridwidth = 1;
 				c.insets = new Insets(vTop,vLeft * multBorda,vBottom,vRight);
 				c.gridx = 0;
-				c.gridy = 7;
+				c.gridy = 8;
 				painel.add(lcopam, c);
 				
 				c.fill = GridBagConstraints.HORIZONTAL;
 				c.insets = new Insets(vTop,vLeft,vBottom,vRight);
 				c.gridx = 1;
-				c.gridy = 7;
+				c.gridy = 8;
 				painel.add(textCopam,c);
 				
 				c.fill = GridBagConstraints.HORIZONTAL;
 				c.insets = new Insets(vTop,vLeft,vBottom,vRight);
 				c.gridx = 2;
-				c.gridy = 7;
+				c.gridy = 8;
 				painel.add(lLenha,c);
 				
 				c.fill = GridBagConstraints.HORIZONTAL;
 				c.insets = new Insets(vTop,vLeft,vBottom,vRight);
 				c.gridx = 3;
-				c.gridy = 7;
+				c.gridy = 8;
 				c.gridwidth = 2;
 				painel.add(comboLenha,c);
 				
@@ -687,26 +747,26 @@ public class MakeBusinessRequest extends JFrame{
 				c.fill = GridBagConstraints.HORIZONTAL;
 				c.insets = new Insets(vTop,vLeft,vBottom,vRight);
 				c.gridx = 5;
-				c.gridy = 7;
+				c.gridy = 8;
 				painel.add(lStatus,c);
 				
 				c.fill = GridBagConstraints.HORIZONTAL;
 				c.insets = new Insets(vTop,vLeft,vBottom,vRight * multBorda);
 				c.gridx = 6;
-				c.gridy = 7;
+				c.gridy = 8;
 				painel.add(comboStatus,c);
 				
 				//Linha Fone e Email
 				c.gridwidth = 1;
 				c.insets = new Insets(vTop,vLeft * multBorda,vBottom,vRight);
 				c.gridx = 0;
-				c.gridy = 8;
+				c.gridy = 9;
 				painel.add(lFone, c);
 				
 				c.fill = GridBagConstraints.HORIZONTAL;
 				c.insets = new Insets(vTop,vLeft,vBottom,vRight);
 				c.gridx = 1;
-				c.gridy = 8;
+				c.gridy = 9;
 				c.gridwidth = 2;
 				painel.add(textFone,c);
 				
@@ -714,14 +774,14 @@ public class MakeBusinessRequest extends JFrame{
 				c.fill = GridBagConstraints.HORIZONTAL;
 				c.insets = new Insets(vTop,vLeft,vBottom,vRight);
 				c.gridx = 3;
-				c.gridy = 8;
+				c.gridy = 9;
 				painel.add(lEmail,c);
 				
 				c.gridwidth = 1;
 				c.fill = GridBagConstraints.HORIZONTAL;
 				c.insets = new Insets(vTop,vLeft,vBottom,vRight * multBorda);
 				c.gridx = 4;
-				c.gridy = 8;
+				c.gridy = 9;
 				c.gridwidth = 4;
 				painel.add(textEmail,c);
 				
@@ -730,14 +790,14 @@ public class MakeBusinessRequest extends JFrame{
 				c.gridwidth = 1;
 				c.insets = new Insets(vTop,vLeft * multBorda,vBottom,vRight);
 				c.gridx = 0;
-				c.gridy = 9;
+				c.gridy = 10;
 				painel.add(lNotas, c);
 				
 				c.gridwidth = 1;
 				c.fill = GridBagConstraints.HORIZONTAL;
 				c.insets = new Insets(vTop,vLeft,vBottom,vRight * multBorda);
 				c.gridx = 1;
-				c.gridy = 9;
+				c.gridy = 10;
 				c.gridwidth = 6;
 				painel.add(textNotas,c);
 				
@@ -746,7 +806,7 @@ public class MakeBusinessRequest extends JFrame{
 				c.fill = GridBagConstraints.HORIZONTAL;
 				c.insets = new Insets(vTop,vLeft,vBottom,vRight);
 				c.gridx = 0;
-				c.gridy = 10;
+				c.gridy = 11;
 				c.gridwidth =7;
 				painel.add(new JSeparator(SwingConstants.HORIZONTAL), c);
 				
@@ -755,16 +815,16 @@ public class MakeBusinessRequest extends JFrame{
 				c.fill = GridBagConstraints.HORIZONTAL;
 				c.insets = new Insets(vTop,vLeft,vBottom,vRight);
 				c.gridx = 0;
-				c.gridy = 11;
+				c.gridy = 12;
 				c.gridwidth = 5;
-				checkCampoDeferido.setSelected(true);
+				checkCampoDeferido.setSelected(false);
 				painel.add(checkCampoDeferido,c);
 				
 				c.gridwidth = 1;
 				c.fill = GridBagConstraints.HORIZONTAL;
 				c.insets = new Insets(vTop,vLeft,vBottom,vRight);
 				c.gridx = 5;
-				c.gridy = 11;
+				c.gridy = 12;
 				c.gridwidth = 2;
 				painel.add(botaoSalvarAlteracoesCadastro,c);
 				botaoSalvarAlteracoesCadastro.setEnabled(isEmpresaNova ? true : false);//TEste....
@@ -774,6 +834,8 @@ public class MakeBusinessRequest extends JFrame{
 					public void actionPerformed(ActionEvent e) {
 						botaoCriarRequerimento.setEnabled(true);
 						areaRequest.setEnabled(true);
+						Runner.LOGGER.setLevel(Level.WARNING);
+						Runner.LOGGER.info("BOTAO SALVAR PRESSIONADO");
 						if(isEmpresaNova == false){
 							if(updateDataEmpresa()){
 								controller.editarEmpresa(empresa);//fazer......................
@@ -782,6 +844,8 @@ public class MakeBusinessRequest extends JFrame{
 								textCnpj.setEnabled(true);
 							}
 							else{
+								Runner.LOGGER.setLevel(Level.WARNING);
+								Runner.LOGGER.info("MENSAGEM: CAMPS DE PREENCHIMENTO OBRIGATÓRIO");
 								JOptionPane.showMessageDialog(null, "* CAMPOS DE PREENCHIMENTO OBRIGATÓRIO");
 							}
 						}
@@ -797,6 +861,8 @@ public class MakeBusinessRequest extends JFrame{
 									textCnpj.setEnabled(true);
 								}
 								else{
+									Runner.LOGGER.setLevel(Level.WARNING);
+									Runner.LOGGER.info("MENSAGEM: CAMPS DE PREENCHIMENTO OBRIGATÓRIO");
 									JOptionPane.showMessageDialog(null, "* CAMPOS DE PREENCHIMENTO OBRIGATÓRIO");
 								}
 							}
@@ -814,7 +880,8 @@ public class MakeBusinessRequest extends JFrame{
 			return painel;
 		}
 		
-		private void setPainelDataPessoa(){
+		private void setPainelDataPessoa(){// Metodo para setar as informações do banco na tela.
+			System.out.println(empresa.getRazao());
 			textCnpj.setText(empresa.getCnpj());
 			textRazao.setText(empresa.getRazao());
 			textFantasia.setText(empresa.getFantasia());
@@ -849,6 +916,21 @@ public class MakeBusinessRequest extends JFrame{
 			comboStatus.setSelectedItem(empresa.getStatus());
 			comboLenha.setSelectedItem(empresa.getStatus());
 			
+			if(empresa.getOnlyservices().equals("S")){
+				System.out.println("Uai... SIM");
+				//radioPrestadorYes.setEnabled(true);
+				//radioPrestadorNo.setEnabled(true);
+				radioPrestadorYes.setSelected(true);
+				//radioPrestadorNo.setSelected(false);
+				//radioPrestadorYes.setEnabled(false);
+				//radioPrestadorNo.setEnabled(false);
+			}
+			else{
+				System.out.println("Uai Nao");
+				radioPrestadorYes.setSelected(false);
+				radioPrestadorNo.setSelected(true);
+			}
+			
 		}
 		
 		private boolean validaCamposObrigatorios(){
@@ -859,7 +941,7 @@ public class MakeBusinessRequest extends JFrame{
 			return true;
 		}
 		
-		private boolean updateDataEmpresa(){
+		private boolean updateDataEmpresa(){//Metodo para gravar as informações no banco.
 			if(!validaCamposObrigatorios()){
 				return false;
 			}
@@ -915,6 +997,11 @@ public class MakeBusinessRequest extends JFrame{
 			empresa.setStatus(status[comboStatus.getSelectedIndex()]);
 			empresa.setLenha(lenha[comboLenha.getSelectedIndex()]);
 			
+			if(radioPrestadorYes.isSelected())
+				empresa.setOnlyservices("S");
+			else
+				empresa.setOnlyservices("N");
+			
 			
 			return true;
 		}
@@ -950,6 +1037,8 @@ public class MakeBusinessRequest extends JFrame{
 			botaoCriarRequerimento.addActionListener(new ActionListener() {
 				
 				public void actionPerformed(ActionEvent e) {
+					Runner.LOGGER.setLevel(Level.WARNING);
+					Runner.LOGGER.info("GERAR ARQUIVO REQUERIMENTO");
 					dispose();//Fecha a Aplicação.
 					controller.gerarWordCnpj(empresa, areaRequest.getText(), checkCND.isSelected(),checkRequerimento.isSelected(), checkCampoDeferido.isSelected());//**************TODO
 					controller.init();

@@ -77,13 +77,15 @@ public class Empresa implements Serializable{
 	@Column(length = 100)
 	private String notas;// Alguma coisa a ser observada na empresa, tipo algum aviso, ou coisa errada.
 	
+	@Column (length = 1)
+	private String onlyservices;// A idéia aqui é marcar se a empresa é apenas prestadora de serviços, se for, não tem alvará de bombeiros, água, etc.
 	
 	public Empresa(){
 		
 	}
 	
 	public Empresa(String cnpj, String razao,  String fantasia, String inscMunicipal,String atividade, Date dataInicio, String endereco, String numero, String bairro, String cidade, String estado,
-			String bombeiro, String agua, String cadastur, String copam, String imposto, String fone, String email, String status, String lenha, String notas){
+			String bombeiro, String agua, String cadastur, String copam, String imposto, String fone, String email, String status, String lenha, String notas, String onlyservices){
 		this.cnpj = cnpj;
 		this.razao = razao;
 		this.fantasia = fantasia;
@@ -105,6 +107,15 @@ public class Empresa implements Serializable{
 		this.status = status;
 		this.lenha = lenha;
 		this.notas = notas;
+		this.onlyservices = onlyservices;
+	}
+
+	public String getOnlyservices() {
+		return onlyservices;
+	}
+
+	public void setOnlyservices(String onlyservices) {
+		this.onlyservices = onlyservices;
 	}
 
 	public String getCnpj() {
