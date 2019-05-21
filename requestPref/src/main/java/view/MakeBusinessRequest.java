@@ -8,7 +8,10 @@ package view;
 	import java.awt.GridBagLayout;
 	import java.awt.Image;
 	import java.awt.Insets;
-	import java.awt.event.ActionEvent;
+import java.awt.Toolkit;
+import java.awt.datatransfer.StringSelection;
+import java.awt.datatransfer.Transferable;
+import java.awt.event.ActionEvent;
 	import java.awt.event.ActionListener;
 	import java.io.IOException;
 	import java.io.InputStream;
@@ -43,6 +46,7 @@ import javax.swing.text.MaskFormatter;
 	import control.Controller;
 import entities.Empresa;
 import entities.Pessoa;
+import entities.Tools;
 import model.LimitTextField;
 import requestPref.requestPref.Runner;
 
@@ -63,7 +67,7 @@ public class MakeBusinessRequest extends JFrame{
 	private boolean isEmpresaNova;// ao clicar no botão salvar alterações, esta variavel decidirá se irá cadastrar um novo ou se vai editar as informações.
 	
 	private Controller controller;
-		
+	private Tools tools;
 	//Paineis....
 	private JPanel painelGeral;
 	private JPanel painelLogo;
@@ -149,6 +153,7 @@ public class MakeBusinessRequest extends JFrame{
 		private JButton editarInformacoesCadastro = new JButton("Editar");
 		private JButton botaoDeletarEmpresa = new JButton("Excluir");
 		private JButton botaoSalvarAlteracoesCadastro = new JButton("Salvar Alterações");
+		private JButton botaoCopyToClipboard = new JButton("Copy To Clipboard");
 		private JButton botaoCriarRequerimento = new JButton("Criar");
 		
 		private JCheckBox checkRequerimento = new JCheckBox("Gerar Req.");
@@ -459,6 +464,38 @@ public class MakeBusinessRequest extends JFrame{
 			}
 			
 			return textDataInicio;
+		}
+		
+		private String formStringCopyPast(){
+			tools = controller.getTools(1);
+			String str = tools.getVar();
+			
+			String valor = "INSCRIÇÃO: "+empresa.getInscMunicipal()+"\nCNPJ: "+empresa.getCnpj()+
+			"\nRAZÃO: "+empresa.getRazao()+"\nFANTASIA: "+empresa.getFantasia()+
+			"\nEND.: "+empresa.getEndereco()+" "+empresa.getNumero()+ " "+empresa.getBairro()+
+			"\nSITUAÇÃO: "+empresa.getStatus();
+			
+			if(str.substring(0,1).equals("1"))
+				valor += "\nATIVIDADE: "+empresa.getAtividade();
+			
+			if(str.substring(1,2).equals("1"))
+				valor += "\nBOMBEIRO: "+empresa.getBombeiro();
+			
+			if(str.substring(2,3).equals("1"))
+				valor += "\nÁGUA: "+empresa.getAgua();
+			
+			if(str.substring(3,4).equals("1")){
+				String yesNo;
+				if(empresa.getOnlyservices().equals("N"))
+					yesNo = "NÃO";
+				else
+					yesNo = "SIM";
+				valor += "\nPRESTADOR DE SERVIÇOS?: "+yesNo;
+			}
+			
+			return valor;
+			
+	
 		}
 		
 		private JPanel getPainelCentralInferior(){
@@ -816,9 +853,35 @@ public class MakeBusinessRequest extends JFrame{
 				c.insets = new Insets(vTop,vLeft,vBottom,vRight);
 				c.gridx = 0;
 				c.gridy = 12;
-				c.gridwidth = 5;
+				c.gridwidth = 3;
 				checkCampoDeferido.setSelected(false);
 				painel.add(checkCampoDeferido,c);
+				
+				c.gridwidth = 1;
+				c.fill = GridBagConstraints.HORIZONTAL;
+				c.insets = new Insets(vTop,vLeft,vBottom,vRight);
+				c.gridx = 3;
+				c.gridy = 12;
+				c.gridwidth = 2;
+				painel.add(botaoCopyToClipboard,c);
+				botaoCopyToClipboard.addActionListener(new ActionListener(){
+					public void actionPerformed(ActionEvent e){
+					
+						String corrente = formStringCopyPast();
+						Transferable transferableText = new StringSelection(corrente);
+						/*Transferable transferableText = new StringSelection("INSCRIÇÃO: "+empresa.getInscMunicipal()+"\nCNPJ: "+empresa.getCnpj()+
+								"\nRAZÃO: "+empresa.getRazao()+"\nFANTASIA: "+empresa.getFantasia()+
+								"\nEND.: "+empresa.getEndereco()+" "+empresa.getNumero()+ " "+empresa.getBairro()+
+								"\nSITUAÇÃO: "+empresa.getStatus());*/
+						
+				        Toolkit.getDefaultToolkit().getSystemClipboard().setContents(transferableText, null);
+				        
+				        JOptionPane.showMessageDialog(MakeBusinessRequest.this, "Copiado para área de Transferência\n"
+				        		+ "Use CTRL + V para colar");
+				        
+				        
+					}
+				});
 				
 				c.gridwidth = 1;
 				c.fill = GridBagConstraints.HORIZONTAL;

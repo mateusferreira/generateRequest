@@ -15,6 +15,7 @@ import poi.MakeCND;
 import poi.MakeWordBusinessDocument;
 import poi.MakeWordDocument;
 import view.DialogChangeMajor;
+import view.DialogSelectOptionCopyPast;
 import view.EmpresaTableView;
 import view.MakeBusinessRequest;
 import view.MakeRequest;
@@ -24,7 +25,7 @@ import view.ViewStart;
 
 public class Controller {
 	
-	private String version = "VER.: 20190404.0901";
+	private String version = "VER.: 20190521";
 	private MakeRequest request;
 	private MakeBusinessRequest businessRequest;
 	private ViewStart viewStart;
@@ -42,6 +43,7 @@ public class Controller {
 	
 	private Tools keepTools;
 	private DialogChangeMajor changeMajor = new DialogChangeMajor();
+	private DialogSelectOptionCopyPast changeCopyPast = new DialogSelectOptionCopyPast();
 	
 	public void init(){
 		//request = new MakeRequest(this);
@@ -175,6 +177,10 @@ public class Controller {
 	
 	public void trocarPrefeito(Tools tools){
 		updateTools(changeMajor.display(tools));
+	}
+	
+	public void configCopyPast(Tools tools){
+		updateTools (changeCopyPast.display(tools));
 	}
 	
 	public void setJString (Pessoa texto){

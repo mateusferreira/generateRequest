@@ -87,9 +87,6 @@ import org.apache.poi.hssf.usermodel.HSSFCell;
 		
 		private Color corPendencia = new Color(250,120,120);
 		
-		//private boolean maquina = true;
-		//private int contMaq = 0;
-
 		
 		public RelationListEmpresaTableView(Controller controler, String titulo){
 			super(titulo);

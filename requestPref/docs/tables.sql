@@ -39,6 +39,7 @@ CREATE TABLE tools(
 	tratamento VARCHAR(20),--DD
 	cargo VARCHAR(40),
 	cidadeEstado VARCHAR (50),
+	var VARCHAR(20),
 	
 	CONSTRAINT tools_pk PRIMARY KEY(id)
 )

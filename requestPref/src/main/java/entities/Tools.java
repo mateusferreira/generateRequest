@@ -32,11 +32,14 @@ public class Tools {
 	@Column(length=50)
 	private String cidadeEstado;
 	
+	@Column(length = 20)
+	private String var;
+	
 	public Tools(){
 		
 	}
 
-	public Tools(int id, String pathFile, String pronome, String nome, String tratamento, String cargo, String cidadeEstado) {
+	public Tools(int id, String pathFile, String pronome, String nome, String tratamento, String cargo, String cidadeEstado, String var) {
 		
 		this.id = id;
 		this.pathFile = pathFile;
@@ -45,7 +48,9 @@ public class Tools {
 		this.tratamento = tratamento;
 		this.cargo = cargo;
 		this.cidadeEstado = cidadeEstado;
+		this.var = var;
 	}
+	
 
 	public int getId() {
 		return id;
@@ -103,7 +108,13 @@ public class Tools {
 		this.cidadeEstado = cidadeEstado;
 	}
 	
+	public String getVar(){
+		return var;
+	}
 	
+	public void setVar(String var){
+		this.var = var;
+	}
 	
 	
 

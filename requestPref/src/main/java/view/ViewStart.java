@@ -348,10 +348,12 @@ public class ViewStart extends JFrame{
 			
 			JMenuItem itemTrocaMajor = new JMenuItem("Trocar Prefeito", new ImageIcon("images/add.png"));
 			JMenuItem itemSaveFile = new JMenuItem("Pasta Destino", new ImageIcon("images/add.png"));
+			JMenuItem itemCopiarColar = new JMenuItem("Configurar Ctrl+C/V", new ImageIcon("images/add.png"));
 			JMenuItem itemSair = new JMenuItem("Sair", new ImageIcon("images/sair.png"));
 			
 			menuPrincipal.add(itemTrocaMajor);
 			menuPrincipal.add(itemSaveFile);
+			menuPrincipal.add(itemCopiarColar);
 			menuPrincipal.add(itemSair);
 			
 			itemTrocaMajor.addActionListener(new ActionListener() {
@@ -362,6 +364,15 @@ public class ViewStart extends JFrame{
 					controller.trocarPrefeito(tools);
 				}
 			});
+			
+			itemCopiarColar.addActionListener(new ActionListener() {
+							
+							public void actionPerformed(ActionEvent arg0) {
+								//System.out.println("teste...");
+								Runner.LOGGER.info("MENU CONFIGURAR COPIAR COLAR PRESSIONADO");
+								controller.configCopyPast(tools);
+							}
+						});
 			
 			itemSaveFile.addActionListener(new ActionListener() {
 				
@@ -447,7 +458,7 @@ public class ViewStart extends JFrame{
 					Runner.LOGGER.info("MENU SOBRE PRESSIONADO");
 					System.out.println("clicked");
 					JOptionPane.showMessageDialog(ViewStart.this, "Software para gestão Secretaria PMG!\n"
-							+ "Beta Version - @2018\n\nDeveloped By Mateus Ferreira de Souza\nmateus.ferreira@goncalves.mg.gov.br"
+							+ "Beta Version - @2019\n\nDeveloped By Mateus Ferreira de Souza\nmateus.ferreira@goncalves.mg.gov.br"
 							+"\nseraomateus@hotmail.com");
 					
 				}
