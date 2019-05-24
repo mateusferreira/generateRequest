@@ -62,7 +62,7 @@ public class Empresa implements Serializable{
 	@Column(length = 10)
 	private String imposto;
 	
-	@Column(length = 11)
+	@Column(length = 15)
 	private String fone;
 	
 	@Column(length = 50)

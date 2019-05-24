@@ -190,6 +190,7 @@ public class MakeBusinessRequest extends JFrame{
 			textNum.setDocument(new LimitTextField(14));
 			textCity.setDocument(new LimitTextField(20));
 			textInscricao.setDocument(new LimitTextField(6));
+			textFone.setDocument(new LimitTextField(15));
 
 			//Implementar depois os novos campos (bombeiros, agua, etc....)
 			textEmail.setDocument(new LimitTextField(50));
@@ -492,6 +493,12 @@ public class MakeBusinessRequest extends JFrame{
 					yesNo = "SIM";
 				valor += "\nPRESTADOR DE SERVIÇOS?: "+yesNo;
 			}
+			
+			if(str.substring(4,5).equals("1"))
+				valor += "\nFONE: "+empresa.getFone();
+			
+			if(str.substring(5,6).equals("1"))
+				valor += "\nEMAIL: "+empresa.getEmail();
 			
 			return valor;
 			

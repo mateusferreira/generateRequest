@@ -41,6 +41,7 @@ import java.io.*;
 import java.sql.*;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.hssf.util.HSSFColor.GREEN;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 
@@ -149,13 +150,15 @@ import org.apache.poi.hssf.usermodel.HSSFCell;
 							{
 								c.setBackground(getBackground());
 								int modelRow = convertRowIndexToModel(row);
+								//Ver "RelationTableModel - String header. linha 17
 								String marcaBombeiro = (String)getModel().getValueAt(modelRow, 4);// Coluna Bombeiro
 								String marcaIsento = (String)getModel().getValueAt(modelRow, 0);// Coluna Inscrição Municipal
 								String marcaAgua = (String)getModel().getValueAt(modelRow, 5);// Coluna Agua
 								String marcaCadastur = (String)getModel().getValueAt(modelRow, 6);// Coluna CADASTUR
 								String marcaCopam = (String)getModel().getValueAt(modelRow, 7);// Coluna COPAM
 								String marcaLenha = (String)getModel().getValueAt(modelRow, 9);// Coluna Lenha
-								//String avisoBombeiro = (String)getModel().getValueAt(modelRow, 4);
+								String baixado = (String)getModel().getValueAt(modelRow, 10); // coluna Status. 
+								
 								
 								if ("FALTA DOC".equals(marcaBombeiro)) c.setBackground(corPendencia);
 								else if ("VENCIDO".equals(marcaBombeiro)) c.setBackground(corPendencia);
@@ -176,6 +179,7 @@ import org.apache.poi.hssf.usermodel.HSSFCell;
 								else if(model.verificaData(marcaCadastur) == true) c.setBackground(corPendencia); //Testa se data já é vencida.
 								else if(model.verificaData(marcaCopam) == true) c.setBackground(corPendencia); //Testa se data já é vencida.
 								
+								if("BAIXADO".equals(baixado)) c.setBackground(Color.GRAY);
 								
 							}
 

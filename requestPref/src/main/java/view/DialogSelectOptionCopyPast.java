@@ -24,6 +24,8 @@ public class DialogSelectOptionCopyPast {
 	private JCheckBox checkBombeiro = new JCheckBox("Bombeiro");
 	private JCheckBox checkAgua = new JCheckBox("Água");
 	private JCheckBox checkPrestador = new JCheckBox("Prestador");
+	private JCheckBox checkFone = new JCheckBox("Fone");
+	private JCheckBox checkEmail = new JCheckBox("Email");
 
 	public DialogSelectOptionCopyPast(){
 		
@@ -71,6 +73,18 @@ public class DialogSelectOptionCopyPast {
 		else
 			str = alteraBitString(str,3,false);
 		
+		//Fone
+		if(checkFone.isSelected()==true)
+			str = alteraBitString(str, 4, true);
+		else
+			str = alteraBitString(str,4,false);
+		
+		//Email
+		if(checkEmail.isSelected()==true)
+			str = alteraBitString(str, 5, true);
+		else
+			str = alteraBitString(str,5,false);
+		
 		System.out.println("TESTA:::: "+str);
 		return str;
 	}
@@ -100,6 +114,16 @@ public class DialogSelectOptionCopyPast {
 		 c.gridx = 1;
 		 c.gridy = 1;
 		 painel.add(checkPrestador,c);
+		 
+		 c.fill = GridBagConstraints.HORIZONTAL;
+		 c.gridx = 0;
+		 c.gridy = 2;
+		 painel.add(checkFone,c);
+		 
+		 c.fill = GridBagConstraints.HORIZONTAL;
+		 c.gridx = 1;
+		 c.gridy = 2;
+		 painel.add(checkEmail,c);
 		String temp;
 		valor = tools.getVar();
 	
@@ -123,6 +147,17 @@ public class DialogSelectOptionCopyPast {
 			checkPrestador.setSelected(true);
 		else
 			checkPrestador.setSelected(false);
+		
+		if(valor.substring(4, 5).equals("1"))//Fone - Posição 4
+			checkFone.setSelected(true);
+		else
+			checkFone.setSelected(false);
+		
+		if(valor.substring(5, 6).equals("1"))//Email - Posição 5
+			checkEmail.setSelected(true);
+		else
+			checkEmail.setSelected(false);
+		
 		
 		
 		 int result = JOptionPane.showConfirmDialog(null, painel, "Configuração Copiar/Colar",
