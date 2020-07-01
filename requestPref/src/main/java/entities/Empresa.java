@@ -80,12 +80,15 @@ public class Empresa implements Serializable{
 	@Column (length = 1)
 	private String onlyservices;// A idéia aqui é marcar se a empresa é apenas prestadora de serviços, se for, não tem alvará de bombeiros, água, etc.
 	
+	@Column (length = 30)
+	private String classifica; //Classificar a empresa por tipo de atividade. Será muito util para gerar relatório para o pessoal do turismo.
+	
 	public Empresa(){
 		
 	}
 	
 	public Empresa(String cnpj, String razao,  String fantasia, String inscMunicipal,String atividade, Date dataInicio, String endereco, String numero, String bairro, String cidade, String estado,
-			String bombeiro, String agua, String cadastur, String copam, String imposto, String fone, String email, String status, String lenha, String notas, String onlyservices){
+			String bombeiro, String agua, String cadastur, String copam, String imposto, String fone, String email, String status, String lenha, String notas, String onlyservices, String classifica){
 		this.cnpj = cnpj;
 		this.razao = razao;
 		this.fantasia = fantasia;
@@ -108,6 +111,15 @@ public class Empresa implements Serializable{
 		this.lenha = lenha;
 		this.notas = notas;
 		this.onlyservices = onlyservices;
+		this.classifica = classifica;
+	}
+	
+	public String getClassifica() {
+		return classifica;
+	}
+
+	public void setClassifica(String classifica) {
+		this.classifica = classifica;
 	}
 
 	public String getOnlyservices() {

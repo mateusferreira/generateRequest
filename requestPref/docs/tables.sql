@@ -49,6 +49,7 @@ Adicionar colunas: alter table EMPRESA add column notas varchar(100)
 Deletar: delete from pessoa where cpf = '084.886.916-88';
 UPDATE tudo: UPDATE empresa SET STATUS = 'ATIVO';
 UPDATE : UPDATE empresa SET STATUS = 'ATIVO' where inscMunicipal = '4476';
+SELECT: SELECT razao, cnpj, classifica from empresa where inscMunicipal = '3549'
 
 */
 

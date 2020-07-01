@@ -100,6 +100,7 @@ public class MakeBusinessRequest extends JFrame{
 	private JLabel lLenha = new JLabel("Lenha");
 	private JLabel lNotas = new JLabel("Observação");
 	private JLabel lServices = new JLabel("Somente prestador?");
+	private JLabel lclassification = new JLabel("Classificação:");
 	
 	private JRadioButton radioPrestadorYes = new JRadioButton("Sim");
 	private JRadioButton radioPrestadorNo = new JRadioButton("Não");
@@ -147,6 +148,9 @@ public class MakeBusinessRequest extends JFrame{
 		
 		private String[] lenha = {"N/A", "OK", "FALTA DOC"};
 		JComboBox comboLenha = new JComboBox(lenha);
+		
+		private String[] classificar = {"DIVERSOS", "POUSADA", "RESTAURANTE", "BAR", "PIZZARIA", "ARTESANATO","CASA ALUGUEL", "AGÊNCIA TURISMO"};
+		JComboBox comboClassifica = new JComboBox(classificar);
 		
 		
 		//JButton
@@ -366,6 +370,7 @@ public class MakeBusinessRequest extends JFrame{
 			textFone.setEditable(able);
 			textEmail.setEditable(able);
 			comboStatus.setEnabled(able);
+			comboClassifica.setEnabled(able);
 			textNotas.setEditable(able);
 			radioPrestadorNo.setEnabled(able);
 			radioPrestadorYes.setEnabled(able);
@@ -695,7 +700,7 @@ public class MakeBusinessRequest extends JFrame{
 				
 				//*********Separador***********
 				
-				//linha 5 Bombeiros - água cadastur
+				//linha 5 Somente prestador:??
 				c.gridwidth = 1;
 				c.insets = new Insets(vTop,vLeft * multBorda,vBottom,vRight);
 				c.gridx = 0;
@@ -717,8 +722,21 @@ public class MakeBusinessRequest extends JFrame{
 				c.gridy = 6;
 				painel.add(radioPrestadorNo,c);
 				
+				//*******************NOVO ITEM: CLASSIFICAÇÃO
+				c.fill = GridBagConstraints.HORIZONTAL;
+				c.insets = new Insets(vTop,vLeft,vBottom,vRight);
+				c.gridx = 3;
+				c.gridy = 6;
+				painel.add(lclassification,c);
 				
-				//linha 5 Bombeiros - água cadastur
+				c.fill = GridBagConstraints.HORIZONTAL;
+				c.insets = new Insets(vTop,vLeft,vBottom,vRight * multBorda);
+				c.gridwidth = 3;
+				c.gridx = 4;
+				c.gridy = 6;
+				painel.add(comboClassifica,c);
+				
+				//linha 6 Bombeiros - água cadastur
 				c.gridwidth = 1;
 				c.insets = new Insets(vTop,vLeft * multBorda,vBottom,vRight);
 				c.gridx = 0;
@@ -985,6 +1003,7 @@ public class MakeBusinessRequest extends JFrame{
 			
 			comboStatus.setSelectedItem(empresa.getStatus());
 			comboLenha.setSelectedItem(empresa.getStatus());
+			comboClassifica.setSelectedItem(empresa.getClassifica());
 			
 			if(empresa.getOnlyservices().equals("S")){
 				System.out.println("Uai... SIM");
@@ -1066,6 +1085,7 @@ public class MakeBusinessRequest extends JFrame{
 			
 			empresa.setStatus(status[comboStatus.getSelectedIndex()]);
 			empresa.setLenha(lenha[comboLenha.getSelectedIndex()]);
+			empresa.setClassifica(classificar[comboClassifica.getSelectedIndex()]);
 			
 			if(radioPrestadorYes.isSelected())
 				empresa.setOnlyservices("S");

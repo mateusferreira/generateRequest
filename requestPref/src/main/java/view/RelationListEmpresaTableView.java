@@ -15,12 +15,18 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Hashtable;
 
 import javax.swing.ButtonGroup;
-	import javax.swing.JButton;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 	import javax.swing.JRadioButton;
@@ -36,6 +42,7 @@ import entities.Empresa;
 	import model.EmpresaTableModel;
 import model.MyTableCellRender;
 import model.RelationTableModel;
+import requestPref.requestPref.Runner;
 
 import java.io.*;
 import java.sql.*;
@@ -60,27 +67,24 @@ import org.apache.poi.hssf.usermodel.HSSFCell;
 		private JTextField textBusca = new JTextField(30);
 		//private JFormattedTextField textBusca = null;
 		
-		private JRadioButton radioInsc = new JRadioButton("Inscrição");
-		private JRadioButton radioNome = new JRadioButton("Razão");
-		private JRadioButton radioFantasy = new JRadioButton("Fantasia");
-		private JRadioButton radioCNPJ = new JRadioButton("CNPJ");
 		
 		
+		private JLabel lPesquisa = new JLabel("Pesquisar por:");
 		private ButtonGroup group = new ButtonGroup();
 		
-		//private JButton botaoAdicionarNovoCadastro = new JButton("Adicionar");
+		private String[] itensPesquisa = {"RAZÃO", "FANTASIA", "INSCRIÇÃO", "CNPJ"};
+		JComboBox comboItensPesquisa = new JComboBox(itensPesquisa);
+			
+		private JMenuBar menu;
+		private JMenu menuPrincipal;
+		
 		private JButton botaoVoltarTelaInicial = new JButton("Voltar");
 		private JButton botaoExport = new JButton("Export to excel");
-		
-		private JButton botaoPendentes = new JButton("Pendentes");
-		private JButton botaoRegular = new JButton("Regulares");
-		private JButton botaoObserva = new JButton("Observação");
-		private JButton botaoEmpresaAtiva = new JButton("Ativas");
 		
 		private ArrayList<Empresa> listEmpresas;
 		ArrayList<Empresa> listaExport = new ArrayList<Empresa>();
 		
-		private int controlaOption = 0; //vou usar para controlar o cabeçalho do arquivo gerado na exportação Excel;
+		private int controlaOption = 0; //vou usar para controlar o cabeçalho do arquivo gerado na exportação Excel; (Método makeExcel )
 		
 		private int totalRow = 0;
 		
@@ -151,13 +155,14 @@ import org.apache.poi.hssf.usermodel.HSSFCell;
 								c.setBackground(getBackground());
 								int modelRow = convertRowIndexToModel(row);
 								//Ver "RelationTableModel - String header. linha 17
+								//0-Insc |1-Razão |2-Fantasia |3-CNPJ |4-Bombeiro |5-Agua |6-Cadastur |7-COPAM |8-Lenha |9-Status |10 -Somente Serviços |11-Classificação
 								String marcaBombeiro = (String)getModel().getValueAt(modelRow, 4);// Coluna Bombeiro
 								String marcaIsento = (String)getModel().getValueAt(modelRow, 0);// Coluna Inscrição Municipal
 								String marcaAgua = (String)getModel().getValueAt(modelRow, 5);// Coluna Agua
 								String marcaCadastur = (String)getModel().getValueAt(modelRow, 6);// Coluna CADASTUR
 								String marcaCopam = (String)getModel().getValueAt(modelRow, 7);// Coluna COPAM
-								String marcaLenha = (String)getModel().getValueAt(modelRow, 9);// Coluna Lenha
-								String baixado = (String)getModel().getValueAt(modelRow, 10); // coluna Status. 
+								String marcaLenha = (String)getModel().getValueAt(modelRow, 8);// Coluna Lenha
+								String baixado = (String)getModel().getValueAt(modelRow, 9); // coluna Status. 
 								
 								
 								if ("FALTA DOC".equals(marcaBombeiro)) c.setBackground(corPendencia);
@@ -171,6 +176,7 @@ import org.apache.poi.hssf.usermodel.HSSFCell;
 								else if ("ISENTO".equals(marcaIsento)) c.setBackground(Color.GREEN);
 								//if("PROTOCOLO".equals(marcaBombeiro)) c.setBackground(Color.YELLOW );
 								else if("PROTOCOLO".equals(marcaBombeiro)) c.setBackground(Color.YELLOW );
+								else if("AGUARDANDO".equals(marcaBombeiro)) c.setBackground(Color.ORANGE);
 								
 								//System.out.println("Imprime: "+modelRow);
 								
@@ -261,93 +267,40 @@ import org.apache.poi.hssf.usermodel.HSSFCell;
 		*/
 		
 		private int retornaPesquisa(){
-			
+			//Implementação antiga com radioButton
+			/*
 			if(radioInsc.isSelected() == true) return 0;
 			else if(radioNome.isSelected() == true) return 1;
 			else if(radioFantasy.isSelected() == true) return 2;
 			else  return 3;
+			*/
+			//Nova implementação com comboText:
+			//{"RAZÃO", "FANTASIA", "INSCRIÇÃO", "CNPJ"}
 			
+			switch(comboItensPesquisa.getSelectedIndex()){
+			case 0:
+				return 1;
+			case 1:
+				return 2;
+			case 2:
+				return 0;
+			default:
+				return 3;
+			}
 		}
+		
 		private JPanel getPainelBusca(){
 			if(painelBusca == null){
 				painelBusca = new JPanel();
 				
-				group.add(radioInsc);
-				group.add(radioNome);
-				group.add(radioFantasy);
-				group.add(radioCNPJ);
 				
-				radioNome.setSelected(true);
+				
 				painelBusca.add(textBusca);
-				painelBusca.add(radioInsc);
-				painelBusca.add(radioNome);
-				painelBusca.add(radioFantasy);
-				painelBusca.add(radioCNPJ);
-				painelBusca.add(botaoEmpresaAtiva);
-				painelBusca.add(botaoPendentes);
-				painelBusca.add(botaoRegular);
+				painelBusca.add(lPesquisa);
+				painelBusca.add(comboItensPesquisa);
+	
+				painelBusca.add(getMenu());
 				
-				botaoRegular.addActionListener(new ActionListener(){ //EMPRESA REGULAR
-					public void actionPerformed(ActionEvent e){
-						listaExport = model.getEmpresaRegular(listEmpresas);
-						model = new RelationTableModel(listaExport);
-						controlaOption = 3; // 3 é regular;
-						table.setModel(model);
-						totalRow = table.getRowCount();
-						jTotal.setText(String.valueOf(totalRow));
-					}
-				});
-				
-				painelBusca.add(botaoObserva);
-				
-				botaoPendentes.addActionListener(new ActionListener() { //EMPRESA PENDENTE
-									
-									public void actionPerformed(ActionEvent e) {
-										listaExport = model.getEmpresaPendente(listEmpresas);
-										model = new RelationTableModel(listaExport);
-										controlaOption = 1; // 1 é pendente;
-										//model = new RelationTableModel(model.getEmpresaPendente(listEmpresas));
-										table.setModel(model);
-										totalRow = table.getRowCount();
-										jTotal.setText(String.valueOf(totalRow));
-										
-									}
-								});
-				
-				botaoObserva.addActionListener(new ActionListener() {
-					
-					public void actionPerformed(ActionEvent e) {
-						listaExport = model.getEmpresaObserva(listEmpresas);
-						model = new RelationTableModel(listaExport);
-						controlaOption = 2; //2 é observação;
-						//model = new RelationTableModel(model.getEmpresaObserva(listEmpresas));
-						table.setModel(model);
-						totalRow = table.getRowCount();
-						jTotal.setText(String.valueOf(totalRow));
-						
-					}
-				});
-				
-				botaoEmpresaAtiva.addActionListener(new ActionListener(){ //EMPRESAS ATIVAS
-					public void actionPerformed(ActionEvent e){
-						listaExport = model.getEmpresasAtivas(listEmpresas);
-						model = new RelationTableModel(listaExport);
-						controlaOption = 4; // 4 são as empresas ativas;
-						table.setModel(model);
-						totalRow = table.getRowCount();
-						jTotal.setText(String.valueOf(totalRow));
-					}
-				});
-				
-				/*radioCNPJ.addActionListener(new ActionListener() {
-					
-					public void actionPerformed(ActionEvent e) {
-						// TODO Auto-generated method stub
-						System.out.println("entrou na busca por CNPJ");
-						//mascaraCpf();
-						
-					}
-				});*/
 				
 				textBusca.addKeyListener(new KeyListener() {
 					
@@ -369,14 +322,9 @@ import org.apache.poi.hssf.usermodel.HSSFCell;
 					}
 				});
 				
-				
-				
 				System.out.println("TOTAL: "+totalRow);
 				
 			}
-			
-			
-			
 			
 			return painelBusca;
 		}
@@ -423,6 +371,190 @@ import org.apache.poi.hssf.usermodel.HSSFCell;
 			
 		}
 		
+		private JMenuBar getMenu(){
+			
+			if(menu == null){
+				menu = new JMenuBar();
+				menu.add(getMenuPrincipal());
+			}
+			return menu;
+		}
+		
+		private JMenu getMenuPrincipal(){
+			if(menuPrincipal == null){
+				menuPrincipal = new JMenu("Filtrar Por:");
+				JMenuItem itemAtiva = new JMenuItem("ATIVA");
+				JMenuItem itemPendente = new JMenuItem("PENDENTE");
+				JMenuItem itemRegular = new JMenuItem("REGULAR");
+				JMenuItem itemObserva = new JMenuItem("OBSERVAÇÃO");
+				
+				JMenu subMenuClassifica = new JMenu("CLASSIFICAÇÃO");
+				//{"DIVERSOS", "POUSADA", "RESTAURANTE", "BAR", "PIZZARIA", "ARTESANTO","CASA ALUGUEL", "AGÊNCIA TURISMO"};
+				JMenuItem subMPousada = new JMenuItem("POUSADA");
+				JMenuItem subMRestaurante = new JMenuItem("RESTAURANTE");
+				JMenuItem subMPizzaria = new JMenuItem("PIZZARIA");
+				JMenuItem subMCasa = new JMenuItem("CASA ALUGUEL");
+				JMenuItem subMTurismo = new JMenuItem("AGÊNCIA TURISMO");
+				JMenuItem subMBar = new JMenuItem("BAR");
+				JMenuItem subMArtesanato = new JMenuItem("ARTESANATO");
+				
+				subMenuClassifica.add(subMPousada);
+				subMenuClassifica.add(subMRestaurante);
+				subMenuClassifica.add(subMPizzaria);
+				subMenuClassifica.add(subMCasa);
+				subMenuClassifica.add(subMTurismo);
+				subMenuClassifica.add(subMBar);
+				subMenuClassifica.add(subMArtesanato);
+				
+				menuPrincipal.add(itemAtiva);
+				menuPrincipal.add(itemPendente);
+				menuPrincipal.add(itemRegular);
+				menuPrincipal.add(itemObserva);
+				menuPrincipal.add(subMenuClassifica);
+			
+				
+				itemAtiva.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent arg0) {
+						menuPrincipal.setText("ATIVA");
+						listaExport = model.getEmpresasAtivas(listEmpresas);
+						model = new RelationTableModel(listaExport);
+						controlaOption = 4; // 4 são as empresas ativas;
+						table.setModel(model);
+						totalRow = table.getRowCount();
+						jTotal.setText(String.valueOf(totalRow));
+						}
+					});
+				
+				itemPendente.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent arg0) {
+						menuPrincipal.setText("PENDENTE");
+						listaExport = model.getEmpresaPendente(listEmpresas);
+						model = new RelationTableModel(listaExport);
+						controlaOption = 1; // 1 é pendente;
+						//model = new RelationTableModel(model.getEmpresaPendente(listEmpresas));
+						table.setModel(model);
+						totalRow = table.getRowCount();
+						jTotal.setText(String.valueOf(totalRow));
+						}
+					});
+				
+				itemRegular.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent arg0) {
+						menuPrincipal.setText("REGULAR");
+						listaExport = model.getEmpresaRegular(listEmpresas);
+						model = new RelationTableModel(listaExport);
+						controlaOption = 3; // 3 é regular;
+						table.setModel(model);
+						totalRow = table.getRowCount();
+						jTotal.setText(String.valueOf(totalRow));
+						//****************
+						}
+					});
+				
+				itemObserva.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent arg0) {
+						menuPrincipal.setText("OBSERVAÇÃO");
+						listaExport = model.getEmpresaObserva(listEmpresas);
+						model = new RelationTableModel(listaExport);
+						controlaOption = 2; //2 é observação;
+						//model = new RelationTableModel(model.getEmpresaObserva(listEmpresas));
+						table.setModel(model);
+						totalRow = table.getRowCount();
+						jTotal.setText(String.valueOf(totalRow));
+						}
+					});
+				
+				subMPousada.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent arg0) {
+						menuPrincipal.setText("POUSADA");
+						listaExport = model.getEmpresaByClassifica(listEmpresas, "POUSADA");
+						model = new RelationTableModel(listaExport);
+						controlaOption = 5; // 5 é Pousada;
+						//model = new RelationTableModel(model.getEmpresaObserva(listEmpresas));
+						table.setModel(model);
+						totalRow = table.getRowCount();
+						jTotal.setText(String.valueOf(totalRow));
+						}
+					});	
+				subMRestaurante.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent arg0) {
+						menuPrincipal.setText("RESTAURANTE");
+						listaExport = model.getEmpresaByClassifica(listEmpresas, "RESTAURANTE");
+						model = new RelationTableModel(listaExport);
+						controlaOption = 5; // 5 é Pousada;
+						//model = new RelationTableModel(model.getEmpresaObserva(listEmpresas));
+						table.setModel(model);
+						totalRow = table.getRowCount();
+						jTotal.setText(String.valueOf(totalRow));
+						}
+					});	
+				subMPizzaria.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent arg0) {
+						menuPrincipal.setText("PIZZARIA");
+						listaExport = model.getEmpresaByClassifica(listEmpresas, "PIZZARIA");
+						model = new RelationTableModel(listaExport);
+						controlaOption = 5; // 5 é Pousada;
+						//model = new RelationTableModel(model.getEmpresaObserva(listEmpresas));
+						table.setModel(model);
+						totalRow = table.getRowCount();
+						jTotal.setText(String.valueOf(totalRow));
+						}
+					});
+				subMCasa.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent arg0) {
+						menuPrincipal.setText("CASA ALUGUEL");
+						listaExport = model.getEmpresaByClassifica(listEmpresas, "CASA ALUGUEL");
+						model = new RelationTableModel(listaExport);
+						controlaOption = 5; // 5 é Pousada;
+						//model = new RelationTableModel(model.getEmpresaObserva(listEmpresas));
+						table.setModel(model);
+						totalRow = table.getRowCount();
+						jTotal.setText(String.valueOf(totalRow));
+						}
+					});	
+				subMTurismo.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent arg0) {
+						menuPrincipal.setText("AGÊNCIA TURISMO");
+						listaExport = model.getEmpresaByClassifica(listEmpresas, "AGÊNCIA TURISMO");
+						model = new RelationTableModel(listaExport);
+						controlaOption = 5; // 5 é Pousada;
+						//model = new RelationTableModel(model.getEmpresaObserva(listEmpresas));
+						table.setModel(model);
+						totalRow = table.getRowCount();
+						jTotal.setText(String.valueOf(totalRow));
+						}
+					});	
+				subMBar.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent arg0) {
+						menuPrincipal.setText("BAR");
+						listaExport = model.getEmpresaByClassifica(listEmpresas, "BAR");
+						model = new RelationTableModel(listaExport);
+						controlaOption = 5; // 5 é Pousada;
+						//model = new RelationTableModel(model.getEmpresaObserva(listEmpresas));
+						table.setModel(model);
+						totalRow = table.getRowCount();
+						jTotal.setText(String.valueOf(totalRow));
+						}
+					});	
+				subMArtesanato.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent arg0) {
+						menuPrincipal.setText("ARTESANATO");
+						listaExport = model.getEmpresaByClassifica(listEmpresas, "ARTESANATO");
+						model = new RelationTableModel(listaExport);
+						controlaOption = 5; // 5 é Pousada;
+						//model = new RelationTableModel(model.getEmpresaObserva(listEmpresas));
+						table.setModel(model);
+						totalRow = table.getRowCount();
+						jTotal.setText(String.valueOf(totalRow));
+						}
+					});	
+				
+			}
+			
+			
+			return menuPrincipal;
+		}
+		
 		private void makeExcel(){
 			HSSFWorkbook wb = new HSSFWorkbook();
 			String texto = null;
@@ -431,6 +563,7 @@ import org.apache.poi.hssf.usermodel.HSSFCell;
 			else if(controlaOption == 2) texto = "Observações";
 			else if(controlaOption == 3) texto = "Empresas Regulares";
 			else if(controlaOption == 4) texto = "Empresas Ativas";
+			else if(controlaOption == 5) texto = "Pousadas";
 			
             HSSFSheet sheet = wb.createSheet(texto);
             HSSFRow rowhead = sheet.createRow((short) 0);

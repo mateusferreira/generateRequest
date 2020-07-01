@@ -14,7 +14,7 @@ public class RelationTableModel extends DefaultTableModel {
 	
 	private ArrayList<Empresa> internalList;
 	private RelationListEmpresaTableView metodo;
-	private String[] header = new String[] { "Insc. Mun.", "Razão", "Nome Fantasia", "CNPJ", "Bombeiro", "água", "CADASTUR", "COPAM","IMPOSTO", "LENHA","STATUS", "PRESTADOR?","OBSERVAÇÃO"};
+	private String[] header = new String[] { "Insc. Mun.", "Razão", "Nome Fantasia", "CNPJ", "Bombeiro", "água", "CADASTUR", "COPAM", "LENHA","STATUS", "PRESTADOR?","CLASSIFICAÇÃO","OBSERVAÇÃO"};
 
 	public RelationTableModel(ArrayList<Empresa> newList) {
 		this.internalList = newList;
@@ -90,7 +90,9 @@ public class RelationTableModel extends DefaultTableModel {
 
 
 	public Object getValueAt(int row, int column) {
-		Empresa empresa = internalList.get(row); // objeto student da linha pedida
+		Empresa empresa = internalList.get(row); // INDICE DA COLUNA:
+		//0-Insc |1-Razão |2-Fantasia |3-CNPJ |4-Bombeiro |5-Agua |6-Cadastur |7-COPAM |8-Lenha |9-Status |10 -Somente Serviços |11-Classificação
+		//ATENÇÃO: SE ALTERAR A SEQUENCIA AQUI, TERÁ QUE ALTERAR A SEQUENCIA NAS CORES DE AVISOS LÁ EM VIEW->RelationListEmpresaTableView - Metódo getPainelTable()
 		
 		if(column == 0)return empresa.getInscMunicipal();
 		if(column == 1)return empresa.getRazao(); 
@@ -100,10 +102,10 @@ public class RelationTableModel extends DefaultTableModel {
 		if(column == 5)return empresa.getAgua();
 		if(column == 6)return empresa.getCadastur();
 		if(column == 7)return empresa.getCopam();
-		if(column == 8)return empresa.getImposto();
-		if(column == 9)return empresa.getLenha();
-		if(column == 10)return empresa.getStatus();
-		if(column == 11)return empresa.getOnlyservices();
+		if(column == 8)return empresa.getLenha();
+		if(column == 9)return empresa.getStatus();
+		if(column == 10)return empresa.getOnlyservices();
+		if(column == 11)return empresa.getClassifica();
 		else return empresa.getNotas();
 		
 	}
@@ -198,14 +200,15 @@ public class RelationTableModel extends DefaultTableModel {
 		
 		int i = 0;
 		for(; i< p.size(); i++){
-					
+			//Pula as empresas que estão baixadas, criando ou tem algum campo vazio.		
 			if(p.get(i).getAgua() == null || p.get(i).getBombeiro() == null || p.get(i).getCadastur() == null || p.get(i).getCopam() == null || 
 					p.get(i).getLenha() == null || p.get(i).getStatus().equals("CRIANDO") || p.get(i).getStatus().equals("BAIXADO")) 
 				continue;
-			
+			//pula as empresas isentas;
 			else if(p.get(i).getInscMunicipal() == null || p.get(i).getInscMunicipal().equals("ISENTO"))
 				continue;
 			
+			//pula as empresas que estão faltando, vencido ou no protocolo algum documento
 			else if(
 					/*AGUA*/
 					p.get(i).getAgua().equals("FALTA DOC") || p.get(i).getAgua().equals("VENCIDO") || 
@@ -219,9 +222,9 @@ public class RelationTableModel extends DefaultTableModel {
 					p.get(i).getLenha().equals("FALTA DOC")
 					)
 				continue;
-			
+			//verifica se a data está ou não vencida. Se sim, pula.
 			else if(verificaData(p.get(i).getBombeiro()) == true || verificaData(p.get(i).getAgua()) == true 
-					||verificaData(p.get(i).getCadastur())== true)
+					||verificaData(p.get(i).getCadastur())== true || verificaData(p.get(i).getCopam()) == true)
 				continue;
 			
 			else
@@ -252,6 +255,18 @@ public class RelationTableModel extends DefaultTableModel {
 					novaLista.add(p.get(i));
 			}
 			return novaLista;
+	}
+	
+	public ArrayList<Empresa> getEmpresaByClassifica (ArrayList<Empresa> p, String nomeClassifica){// EMPRESAS POUSADA
+		ArrayList<Empresa> novaLista = new ArrayList<Empresa>();
+		
+		int i = 0;
+		for(; i< p.size(); i++){
+			
+			if(p.get(i).getClassifica().equals(nomeClassifica))
+				novaLista.add(p.get(i));
+		}
+		return novaLista;
 	}
 }
 
