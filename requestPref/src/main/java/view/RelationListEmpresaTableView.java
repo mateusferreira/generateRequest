@@ -37,9 +37,12 @@ import javax.swing.table.TableCellRenderer;
 import javax.swing.text.MaskFormatter;
 
 import control.Controller;
+import control.FerramentasControle;
+import control.ListasEafins;
 import dao.EmpresaDAO;
 import entities.Empresa;
-	import model.EmpresaTableModel;
+import entities.Tools;
+import model.EmpresaTableModel;
 import model.MyTableCellRender;
 import model.RelationTableModel;
 import requestPref.requestPref.Runner;
@@ -49,11 +52,14 @@ import java.sql.*;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.hssf.util.HSSFColor.GREEN;
+import org.apache.poi.util.SystemOutLogger;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 
 	public class RelationListEmpresaTableView extends JFrame {
 		
+		private FerramentasControle workingDate = new FerramentasControle();
+		private ListasEafins classifica = new ListasEafins();
 		private Controller controller;
 		private RelationTableModel model;
 		private JTable table;
@@ -67,7 +73,7 @@ import org.apache.poi.hssf.usermodel.HSSFCell;
 		private JTextField textBusca = new JTextField(30);
 		//private JFormattedTextField textBusca = null;
 		
-		
+		private Tools tools;
 		
 		private JLabel lPesquisa = new JLabel("Pesquisar por:");
 		private ButtonGroup group = new ButtonGroup();
@@ -96,6 +102,7 @@ import org.apache.poi.hssf.usermodel.HSSFCell;
 		public RelationListEmpresaTableView(Controller controler, String titulo){
 			super(titulo);
 			this.controller = controler;
+			
 		}
 		
 		public void init(ArrayList<Empresa>newList){
@@ -155,37 +162,21 @@ import org.apache.poi.hssf.usermodel.HSSFCell;
 								c.setBackground(getBackground());
 								int modelRow = convertRowIndexToModel(row);
 								//Ver "RelationTableModel - String header. linha 17
-								//0-Insc |1-Razão |2-Fantasia |3-CNPJ |4-Bombeiro |5-Agua |6-Cadastur |7-COPAM |8-Lenha |9-Status |10 -Somente Serviços |11-Classificação
-								String marcaBombeiro = (String)getModel().getValueAt(modelRow, 4);// Coluna Bombeiro
-								String marcaIsento = (String)getModel().getValueAt(modelRow, 0);// Coluna Inscrição Municipal
-								String marcaAgua = (String)getModel().getValueAt(modelRow, 5);// Coluna Agua
-								String marcaCadastur = (String)getModel().getValueAt(modelRow, 6);// Coluna CADASTUR
-								String marcaCopam = (String)getModel().getValueAt(modelRow, 7);// Coluna COPAM
-								String marcaLenha = (String)getModel().getValueAt(modelRow, 8);// Coluna Lenha
-								String baixado = (String)getModel().getValueAt(modelRow, 9); // coluna Status. 
+				
+								empresa = model.getPessoaAt(modelRow);
+								workingDate.verificaStatusEmpresa(empresa);
+								//String marcaBombeiro = (String)getModel().getValueAt(modelRow, 4);// Coluna Bombeiro
 								
+								//p.setInscMunicipal((String)getModel().getValueAt(modelRow, 0));
+								//System.out.println(getModel().getValueAt());
+								String cor = workingDate.getSistemaCores();
+								//System.out.println("COR: "+cor);
+								//opções: PENDENTE, REGULAR, texto (CRIANDO, BAIXADO, ISENTO)
+								if(cor.equals("PENDENTE")) c.setBackground(corPendencia);
+								else if(cor.equals("CRIANDO")) c.setBackground(Color.PINK);
+								else if(cor.equals("BAIXADO")) c.setBackground(Color.GRAY);
+								else if(cor.equals("ISENTO")) c.setBackground(Color.GREEN);
 								
-								if ("FALTA DOC".equals(marcaBombeiro)) c.setBackground(corPendencia);
-								else if ("VENCIDO".equals(marcaBombeiro)) c.setBackground(corPendencia);
-								else if ("FALTA DOC".equals(marcaAgua)) c.setBackground(corPendencia);
-								else if ("FALTA DOC".equals(marcaCadastur)) c.setBackground(corPendencia);
-								else if ("FALTA DOC".equals(marcaCopam)) c.setBackground(corPendencia);
-								else if ("FALTA DOC".equals(marcaLenha)) c.setBackground(corPendencia);
-								
-								
-								else if ("ISENTO".equals(marcaIsento)) c.setBackground(Color.GREEN);
-								//if("PROTOCOLO".equals(marcaBombeiro)) c.setBackground(Color.YELLOW );
-								else if("PROTOCOLO".equals(marcaBombeiro)) c.setBackground(Color.YELLOW );
-								else if("AGUARDANDO".equals(marcaBombeiro)) c.setBackground(Color.ORANGE);
-								
-								//System.out.println("Imprime: "+modelRow);
-								
-								if(model.verificaData(marcaBombeiro) == true) c.setBackground(corPendencia); //Testa se data já é vencida.
-								else if(model.verificaData(marcaAgua) == true) c.setBackground(corPendencia); //Testa se data já é vencida.
-								else if(model.verificaData(marcaCadastur) == true) c.setBackground(corPendencia); //Testa se data já é vencida.
-								else if(model.verificaData(marcaCopam) == true) c.setBackground(corPendencia); //Testa se data já é vencida.
-								
-								if("BAIXADO".equals(baixado)) c.setBackground(Color.GRAY);
 								
 							}
 
@@ -383,10 +374,11 @@ import org.apache.poi.hssf.usermodel.HSSFCell;
 		private JMenu getMenuPrincipal(){
 			if(menuPrincipal == null){
 				menuPrincipal = new JMenu("Filtrar Por:");
-				JMenuItem itemAtiva = new JMenuItem("ATIVA");
+				JMenuItem itemAtiva = new JMenuItem("BAIXADA");
 				JMenuItem itemPendente = new JMenuItem("PENDENTE");
 				JMenuItem itemRegular = new JMenuItem("REGULAR");
 				JMenuItem itemObserva = new JMenuItem("OBSERVAÇÃO");
+				JMenuItem itemCriando = new JMenuItem("CRIANDO");
 				
 				JMenu subMenuClassifica = new JMenu("CLASSIFICAÇÃO");
 				//{"DIVERSOS", "POUSADA", "RESTAURANTE", "BAR", "PIZZARIA", "ARTESANTO","CASA ALUGUEL", "AGÊNCIA TURISMO"};
@@ -409,14 +401,15 @@ import org.apache.poi.hssf.usermodel.HSSFCell;
 				menuPrincipal.add(itemAtiva);
 				menuPrincipal.add(itemPendente);
 				menuPrincipal.add(itemRegular);
+				menuPrincipal.add(itemCriando);
 				menuPrincipal.add(itemObserva);
 				menuPrincipal.add(subMenuClassifica);
 			
 				
 				itemAtiva.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent arg0) {
-						menuPrincipal.setText("ATIVA");
-						listaExport = model.getEmpresasAtivas(listEmpresas);
+						menuPrincipal.setText("BAIXADA");
+						listaExport = model.getEmpresasBaixadas(listEmpresas);
 						model = new RelationTableModel(listaExport);
 						controlaOption = 4; // 4 são as empresas ativas;
 						table.setModel(model);
@@ -433,6 +426,7 @@ import org.apache.poi.hssf.usermodel.HSSFCell;
 						controlaOption = 1; // 1 é pendente;
 						//model = new RelationTableModel(model.getEmpresaPendente(listEmpresas));
 						table.setModel(model);
+						
 						totalRow = table.getRowCount();
 						jTotal.setText(String.valueOf(totalRow));
 						}
@@ -448,6 +442,19 @@ import org.apache.poi.hssf.usermodel.HSSFCell;
 						totalRow = table.getRowCount();
 						jTotal.setText(String.valueOf(totalRow));
 						//****************
+						}
+					});
+				
+				itemCriando.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent arg0) {
+						menuPrincipal.setText("CRIANDO");
+						listaExport = model.getEmpresaCriando(listEmpresas);
+						model = new RelationTableModel(listaExport);
+						controlaOption = 12; //
+						//model = new RelationTableModel(model.getEmpresaObserva(listEmpresas));
+						table.setModel(model);
+						totalRow = table.getRowCount();
+						jTotal.setText(String.valueOf(totalRow));
 						}
 					});
 				
@@ -468,6 +475,7 @@ import org.apache.poi.hssf.usermodel.HSSFCell;
 					public void actionPerformed(ActionEvent arg0) {
 						menuPrincipal.setText("POUSADA");
 						listaExport = model.getEmpresaByClassifica(listEmpresas, "POUSADA");
+						System.out.println("SAIU....  ");
 						model = new RelationTableModel(listaExport);
 						controlaOption = 5; // 5 é Pousada;
 						//model = new RelationTableModel(model.getEmpresaObserva(listEmpresas));
@@ -481,7 +489,7 @@ import org.apache.poi.hssf.usermodel.HSSFCell;
 						menuPrincipal.setText("RESTAURANTE");
 						listaExport = model.getEmpresaByClassifica(listEmpresas, "RESTAURANTE");
 						model = new RelationTableModel(listaExport);
-						controlaOption = 5; // 5 é Pousada;
+						controlaOption = 6; // 6 é Restaurante;
 						//model = new RelationTableModel(model.getEmpresaObserva(listEmpresas));
 						table.setModel(model);
 						totalRow = table.getRowCount();
@@ -493,7 +501,7 @@ import org.apache.poi.hssf.usermodel.HSSFCell;
 						menuPrincipal.setText("PIZZARIA");
 						listaExport = model.getEmpresaByClassifica(listEmpresas, "PIZZARIA");
 						model = new RelationTableModel(listaExport);
-						controlaOption = 5; // 5 é Pousada;
+						controlaOption = 7; // 5 é Pousada;
 						//model = new RelationTableModel(model.getEmpresaObserva(listEmpresas));
 						table.setModel(model);
 						totalRow = table.getRowCount();
@@ -505,7 +513,7 @@ import org.apache.poi.hssf.usermodel.HSSFCell;
 						menuPrincipal.setText("CASA ALUGUEL");
 						listaExport = model.getEmpresaByClassifica(listEmpresas, "CASA ALUGUEL");
 						model = new RelationTableModel(listaExport);
-						controlaOption = 5; // 5 é Pousada;
+						controlaOption = 8; // 5 é Pousada;
 						//model = new RelationTableModel(model.getEmpresaObserva(listEmpresas));
 						table.setModel(model);
 						totalRow = table.getRowCount();
@@ -517,7 +525,7 @@ import org.apache.poi.hssf.usermodel.HSSFCell;
 						menuPrincipal.setText("AGÊNCIA TURISMO");
 						listaExport = model.getEmpresaByClassifica(listEmpresas, "AGÊNCIA TURISMO");
 						model = new RelationTableModel(listaExport);
-						controlaOption = 5; // 5 é Pousada;
+						controlaOption = 9; // 5 é Pousada;
 						//model = new RelationTableModel(model.getEmpresaObserva(listEmpresas));
 						table.setModel(model);
 						totalRow = table.getRowCount();
@@ -529,7 +537,7 @@ import org.apache.poi.hssf.usermodel.HSSFCell;
 						menuPrincipal.setText("BAR");
 						listaExport = model.getEmpresaByClassifica(listEmpresas, "BAR");
 						model = new RelationTableModel(listaExport);
-						controlaOption = 5; // 5 é Pousada;
+						controlaOption = 10; // 5 é Pousada;
 						//model = new RelationTableModel(model.getEmpresaObserva(listEmpresas));
 						table.setModel(model);
 						totalRow = table.getRowCount();
@@ -541,7 +549,7 @@ import org.apache.poi.hssf.usermodel.HSSFCell;
 						menuPrincipal.setText("ARTESANATO");
 						listaExport = model.getEmpresaByClassifica(listEmpresas, "ARTESANATO");
 						model = new RelationTableModel(listaExport);
-						controlaOption = 5; // 5 é Pousada;
+						controlaOption = 11; // 5 é Pousada;
 						//model = new RelationTableModel(model.getEmpresaObserva(listEmpresas));
 						table.setModel(model);
 						totalRow = table.getRowCount();
@@ -556,17 +564,53 @@ import org.apache.poi.hssf.usermodel.HSSFCell;
 		}
 		
 		private void makeExcel(){
+			
+			tools = controller.getTools(1);
+			String ponteiro = tools.getExcel();
+			
+			
 			HSSFWorkbook wb = new HSSFWorkbook();
 			String texto = null;
 			if (controlaOption == 0) texto = "Todas empresas";
 			else if (controlaOption == 1) texto = "Empresas Pendentes";
 			else if(controlaOption == 2) texto = "Observações";
 			else if(controlaOption == 3) texto = "Empresas Regulares";
-			else if(controlaOption == 4) texto = "Empresas Ativas";
+			else if(controlaOption == 4) texto = "Empresas Baixadas";
 			else if(controlaOption == 5) texto = "Pousadas";
+			else if(controlaOption == 6) texto = "Restaurantes";
+			else if(controlaOption == 7) texto = "Pizzarias";
+			else if(controlaOption == 8) texto = "Casas de Aluguel";
+			else if(controlaOption == 9) texto = "Agência de Turismo";
+			else if(controlaOption == 10) texto = "Bar";
+			else if(controlaOption == 11) texto = "Artesanato";
+			else if(controlaOption == 12) texto = "Criando";
 			
             HSSFSheet sheet = wb.createSheet(texto);
             HSSFRow rowhead = sheet.createRow((short) 0);
+            int x = 1;
+            
+            rowhead.createCell((short) 0).setCellValue("CNPJ");// coluna 0 - sempre vai ter.
+            
+            if(ponteiro.substring(0, 1).equals("1")){
+            	rowhead.createCell((short) x).setCellValue("Inscrição");
+            	x++;
+            }
+            
+            if(ponteiro.substring(1, 2).equals("1")){
+            	rowhead.createCell((short) x).setCellValue("Razão");
+            	x++;
+            }
+            
+            if(ponteiro.substring(2, 3).equals("1")){
+            	rowhead.createCell((short) x).setCellValue("Fantasia");
+            	x++;
+            }
+            
+            if(ponteiro.substring(3, 4).equals("1")){
+            	rowhead.createCell((short) x).setCellValue("Fone");
+            	x++;
+            }
+            /*
             rowhead.createCell((short) 0).setCellValue("Inscrição");
             rowhead.createCell((short) 1).setCellValue("Razão");
             rowhead.createCell((short) 2).setCellValue("Fantasia");
@@ -576,31 +620,49 @@ import org.apache.poi.hssf.usermodel.HSSFCell;
             rowhead.createCell((short) 6).setCellValue("CADASTUR");
             rowhead.createCell((short) 7).setCellValue("COPAM");
             rowhead.createCell((short) 8).setCellValue("Lenha");
-            rowhead.createCell((short) 9).setCellValue("Observações");
+            rowhead.createCell((short) 9).setCellValue("Observações");*/
             
            
             
             
             //listaExport = model.getEmpresaPendente(listEmpresas);
-            
-            for(int index = 0; index < listaExport.size(); index++){
+           x = 1;
+           System.out.println("TOTAL:  "+listaExport.size());
+            for(int index = 0; index < listaExport.size(); index++, x++){
 	            HSSFRow row = sheet.createRow((short) index + 1);
-	            row.createCell((short) 0).setCellValue(listaExport.get(index).getInscMunicipal());
-	            row.createCell((short) 1).setCellValue(listaExport.get(index).getRazao());
-	            row.createCell((short) 2).setCellValue(listaExport.get(index).getFantasia());
-	            row.createCell((short) 3).setCellValue(listaExport.get(index).getCnpj());
+	            row.createCell((short) 0).setCellValue(listaExport.get(index).getCnpj());
+	            
+	            if(ponteiro.substring(0, 1).equals("1")){
+	            	row.createCell((short) x).setCellValue(listaExport.get(index).getInscMunicipal());
+	            	x++;
+	            }
+	            if(ponteiro.substring(1, 2).equals("1")){
+	            	row.createCell((short) x).setCellValue(listaExport.get(index).getRazao());
+	            	x++;
+	            }
+	            if(ponteiro.substring(2, 3).equals("1")){
+	            	row.createCell((short) x).setCellValue(listaExport.get(index).getFantasia());
+	            	x++;
+	            }
+	            if(ponteiro.substring(3, 4).equals("1")){
+	            	row.createCell((short) x).setCellValue(listaExport.get(index).getFone());
+	            	x++;
+	            }
+	            x = 0;
+	
+	            /*
 	            row.createCell((short) 4).setCellValue(listaExport.get(index).getBombeiro());
 	            row.createCell((short) 5).setCellValue(listaExport.get(index).getAgua());
 	            row.createCell((short) 6).setCellValue(listaExport.get(index).getCadastur());
 	            row.createCell((short) 7).setCellValue(listaExport.get(index).getCopam());
 	            row.createCell((short) 8).setCellValue(listaExport.get(index).getLenha());
-	            row.createCell((short) 9).setCellValue(listaExport.get(index).getNotas());
+	            row.createCell((short) 9).setCellValue(listaExport.get(index).getNotas());*/
             }
             try{
             	
             
            // FileOutputStream fileOut = new FileOutputStream("D:/excelFile.xls");
-            FileOutputStream fileOut = new FileOutputStream("D:/"+texto+".xls");
+            FileOutputStream fileOut = new FileOutputStream("D:/"+workingDate.setDataNomeArquivo()+texto+".xls");
             wb.write(fileOut);
             fileOut.close();
             System.out.println("exportou?");

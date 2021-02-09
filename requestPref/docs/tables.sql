@@ -39,7 +39,8 @@ CREATE TABLE tools(
 	tratamento VARCHAR(20),--DD
 	cargo VARCHAR(40),
 	cidadeEstado VARCHAR (50),
-	var VARCHAR(20),
+	var VARCHAR(20), /*utilizado para controlar quais dados da empresa será copiado*/
+	excel VARCHAR(10), /*utilizado para controlar o que será exportado para o excel*/
 	
 	CONSTRAINT tools_pk PRIMARY KEY(id)
 )

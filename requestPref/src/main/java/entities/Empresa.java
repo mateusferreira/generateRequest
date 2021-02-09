@@ -79,6 +79,8 @@ public class Empresa implements Serializable{
 	
 	@Column (length = 1)
 	private String onlyservices;// A idéia aqui é marcar se a empresa é apenas prestadora de serviços, se for, não tem alvará de bombeiros, água, etc.
+	//Ideia inicial desativada. Vou usar esta columa para setar o status da empresa. Para centralizar e facilitar os relatorios. 
+	
 	
 	@Column (length = 30)
 	private String classifica; //Classificar a empresa por tipo de atividade. Será muito util para gerar relatório para o pessoal do turismo.

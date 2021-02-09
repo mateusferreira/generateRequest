@@ -15,6 +15,7 @@ import poi.MakeCND;
 import poi.MakeWordBusinessDocument;
 import poi.MakeWordDocument;
 import view.DialogChangeMajor;
+import view.DialogOptionExcel;
 import view.DialogSelectOptionCopyPast;
 import view.EmpresaTableView;
 import view.MakeBusinessRequest;
@@ -44,6 +45,7 @@ public class Controller {
 	private Tools keepTools;
 	private DialogChangeMajor changeMajor = new DialogChangeMajor();
 	private DialogSelectOptionCopyPast changeCopyPast = new DialogSelectOptionCopyPast();
+	private DialogOptionExcel optionExcel = new DialogOptionExcel();
 	
 	public void init(){
 		//request = new MakeRequest(this);
@@ -181,6 +183,12 @@ public class Controller {
 	
 	public void configCopyPast(Tools tools){
 		updateTools (changeCopyPast.display(tools));
+	}
+	
+	public void configExcel(Tools tools){
+		//updateTools (optionExcel.display(tools)); *****implementar DAO
+		updateTools (optionExcel.display(tools));
+		//System.out.println("VOU IMPLEMENTAR AINDA");
 	}
 	
 	public void setJString (Pessoa texto){

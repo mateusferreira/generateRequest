@@ -13,7 +13,8 @@ import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.Transferable;
 import java.awt.event.ActionEvent;
 	import java.awt.event.ActionListener;
-	import java.io.IOException;
+import java.awt.event.TextListener;
+import java.io.IOException;
 	import java.io.InputStream;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -44,6 +45,8 @@ import javax.swing.plaf.basic.BasicComboBoxUI.ComboBoxLayoutManager;
 import javax.swing.text.MaskFormatter;
 
 	import control.Controller;
+import control.FerramentasControle;
+import control.ListasEafins;
 import entities.Empresa;
 import entities.Pessoa;
 import entities.Tools;
@@ -57,6 +60,8 @@ public class MakeBusinessRequest extends JFrame{
 	final static boolean shouldWeightX = true;
 	
 	private PessoaTableView pV;
+	private ListasEafins classifica = new ListasEafins();
+	private FerramentasControle ferramenta = new FerramentasControle();
 	
 	private int vTop = 6;//10
 	private int vLeft = 1;//5
@@ -149,8 +154,8 @@ public class MakeBusinessRequest extends JFrame{
 		private String[] lenha = {"N/A", "OK", "FALTA DOC"};
 		JComboBox comboLenha = new JComboBox(lenha);
 		
-		private String[] classificar = {"DIVERSOS", "POUSADA", "RESTAURANTE", "BAR", "PIZZARIA", "ARTESANATO","CASA ALUGUEL", "AGÊNCIA TURISMO"};
-		JComboBox comboClassifica = new JComboBox(classificar);
+		//private String[] classificar = {"DIVERSOS", "POUSADA", "RESTAURANTE", "BAR", "PIZZARIA", "ARTESANATO","CASA ALUGUEL", "AGÊNCIA TURISMO", "LOJA ROUPAS", "VINHOS & QUEIJOS", "FABRICAÇÃO ALIMENTOS"};
+		JComboBox comboClassifica = new JComboBox(classifica.getClassificaComercio());
 		
 		
 		//JButton
@@ -375,7 +380,7 @@ public class MakeBusinessRequest extends JFrame{
 			radioPrestadorNo.setEnabled(able);
 			radioPrestadorYes.setEnabled(able);
 			
-			if(radioPrestadorYes.isSelected()){
+			/*if(radioPrestadorYes.isSelected()){
 				textBombeiro.setEditable(false);
 				textAgua.setEditable(false);
 				textCadastur.setEditable(false);
@@ -383,13 +388,13 @@ public class MakeBusinessRequest extends JFrame{
 				comboLenha.setEnabled(false);
 			}
 			
-			else{
+			else{*/
 				textBombeiro.setEditable(able);
 				textAgua.setEditable(able);
 				textCadastur.setEditable(able);
 				textCopam.setEditable(able);
 				comboLenha.setEnabled(able);
-			}
+		//	}
 			
 		}
 		
@@ -933,8 +938,8 @@ public class MakeBusinessRequest extends JFrame{
 							}
 							else{
 								Runner.LOGGER.setLevel(Level.WARNING);
-								Runner.LOGGER.info("MENSAGEM: CAMPS DE PREENCHIMENTO OBRIGATÓRIO");
-								JOptionPane.showMessageDialog(null, "* CAMPOS DE PREENCHIMENTO OBRIGATÓRIO");
+								Runner.LOGGER.info("MENSAGEM: DADOS NÃO GRAVADOS NO BANCO ");
+								JOptionPane.showMessageDialog(null, "ERRO! DADOS NÃO GRAVADOS NO BANCO");
 							}
 						}
 						
@@ -950,8 +955,8 @@ public class MakeBusinessRequest extends JFrame{
 								}
 								else{
 									Runner.LOGGER.setLevel(Level.WARNING);
-									Runner.LOGGER.info("MENSAGEM: CAMPS DE PREENCHIMENTO OBRIGATÓRIO");
-									JOptionPane.showMessageDialog(null, "* CAMPOS DE PREENCHIMENTO OBRIGATÓRIO");
+									Runner.LOGGER.info("MENSAGEM: DADOS NÃO GRAVADOS NO BANCO");
+									JOptionPane.showMessageDialog(null, "ERRO! DADOS NÃO GRAVADOS NO BANCO");
 								}
 							}
 							else{
@@ -1025,9 +1030,21 @@ public class MakeBusinessRequest extends JFrame{
 		private boolean validaCamposObrigatorios(){
 			if(textCnpj.getText().isEmpty() || textRazao.getText().isEmpty() || textAddress.getText().isEmpty() ||
 					textBairro.getText().isEmpty() || textCity.getText().isEmpty()){
+				
+				Runner.LOGGER.info("MENSAGEM: CAMPOS DE PREENCHIMENTO OBRIGATÓRIO");
+				JOptionPane.showMessageDialog(null, "* CAMPOS DE PREENCHIMENTO OBRIGATÓRIO");
+				
 				return false;
 			}
 			return true;
+		}
+		
+		private boolean validaCamposPadronizados(){
+			
+			//BOMBEIRO - AGUA - CADASTUR - COPAM
+			String temporario[] = {textBombeiro.getText(), textAgua.getText(), textCadastur.getText(), textCopam.getText()};
+			
+			return ferramenta.testaDadosEntrada(temporario);
 		}
 		
 		private boolean updateDataEmpresa(){//Metodo para gravar as informações no banco.
@@ -1035,6 +1052,9 @@ public class MakeBusinessRequest extends JFrame{
 				return false;
 			}
 			
+			if(!validaCamposPadronizados()){
+				return false;
+			}
 			empresa.setRazao(textRazao.getText());
 			empresa.setFantasia(textFantasia.getText());
 			
@@ -1085,7 +1105,7 @@ public class MakeBusinessRequest extends JFrame{
 			
 			empresa.setStatus(status[comboStatus.getSelectedIndex()]);
 			empresa.setLenha(lenha[comboLenha.getSelectedIndex()]);
-			empresa.setClassifica(classificar[comboClassifica.getSelectedIndex()]);
+			empresa.setClassifica(classifica.getClassificaComercio()[comboClassifica.getSelectedIndex()]);
 			
 			if(radioPrestadorYes.isSelected())
 				empresa.setOnlyservices("S");

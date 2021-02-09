@@ -349,11 +349,13 @@ public class ViewStart extends JFrame{
 			JMenuItem itemTrocaMajor = new JMenuItem("Trocar Prefeito", new ImageIcon("images/add.png"));
 			JMenuItem itemSaveFile = new JMenuItem("Pasta Destino", new ImageIcon("images/add.png"));
 			JMenuItem itemCopiarColar = new JMenuItem("Configurar Ctrl+C/V", new ImageIcon("images/add.png"));
+			JMenuItem itemConfigExcel = new JMenuItem("Config. Exportar Excel", new ImageIcon("images/add.png"));
 			JMenuItem itemSair = new JMenuItem("Sair", new ImageIcon("images/sair.png"));
 			
 			menuPrincipal.add(itemTrocaMajor);
 			menuPrincipal.add(itemSaveFile);
 			menuPrincipal.add(itemCopiarColar);
+			menuPrincipal.add(itemConfigExcel);
 			menuPrincipal.add(itemSair);
 			
 			itemTrocaMajor.addActionListener(new ActionListener() {
@@ -373,6 +375,15 @@ public class ViewStart extends JFrame{
 								controller.configCopyPast(tools);
 							}
 						});
+			
+			itemConfigExcel.addActionListener(new ActionListener() {
+				
+				public void actionPerformed(ActionEvent arg0) {
+					//System.out.println("teste...");
+					Runner.LOGGER.info("MENU CONFIGURAR CONFIGURAR EXCEL PRESSIONADO");
+					controller.configExcel(tools);//********VOU IMPLEMENTAR......
+				}
+			});
 			
 			itemSaveFile.addActionListener(new ActionListener() {
 				

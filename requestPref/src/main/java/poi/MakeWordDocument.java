@@ -19,11 +19,13 @@ import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTJc;
 import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTTblPr;
 import org.openxmlformats.schemas.wordprocessingml.x2006.main.STJc;
 
+import control.FerramentasControle;
 import entities.Pessoa;
 import entities.Tools;
 import requestPref.requestPref.Runner;
 
 public class MakeWordDocument {
+	private FerramentasControle workingDate = new FerramentasControle();
 	
 	private String capitalizeFirstWord(String word){
 		word = word.toLowerCase();
@@ -176,11 +178,11 @@ public class MakeWordDocument {
 		runTermos.addBreak();
 		runTermos.setText("Gonçalves, ");
 		
-		SimpleDateFormat sdf = new SimpleDateFormat("dd' de 'MMMM' de 'yyyy'.'");
-		Date data = new Date();
-		String t;
-		t = sdf.format(data);
-		runTermos.setText(t.toLowerCase());
+		//SimpleDateFormat sdf = new SimpleDateFormat("dd' de 'MMMM' de 'yyyy'.'");
+		//Date data = new Date();
+		//String t;
+		//t = sdf.format(data);
+		runTermos.setText(workingDate.setDataPorExtenso().toLowerCase());
 		runTermos.setFontSize(tF);
 		runTermos.setFontFamily(letra);
 		runTermos.setBold(false);
@@ -189,9 +191,9 @@ public class MakeWordDocument {
 		runTermos.addBreak();
 		runTermos.addBreak();
 		
-		SimpleDateFormat formataData = new SimpleDateFormat("yyMMdd");
+		//SimpleDateFormat formataData = new SimpleDateFormat("yyMMdd");
 		
-		String nameData = formataData.format(data);
+		//String nameData = formataData.format(data);
 		//System.out.println(nameData+" "+pessoa.getNome());
 		
 		XWPFParagraph sign = document.createParagraph();
@@ -254,7 +256,7 @@ public class MakeWordDocument {
 			//String pathFile = "D:/Usuários/Mateus_2/Documents/SECRETARIA/Secretaria 2017/REQUERIMENTOS 2017/P.FISICA/";
 			String pathFile = tools.getPathFile()+"/P.FISICA/";
 			//String pathFile = "192.168.0.36/D:/P.FISICA/";
-			String nameFile = nameData +" "+pessoa.getNome()+".doc";
+			String nameFile = workingDate.setDataNomeArquivo() +" "+pessoa.getNome()+".doc";
 		
 			System.out.println("Caminho de destino: "+pathFile);
 			System.out.println("NOME DO ARQUIVO: "+nameFile);

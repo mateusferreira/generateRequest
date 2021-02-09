@@ -35,11 +35,14 @@ public class Tools {
 	@Column(length = 20)
 	private String var;
 	
+	@Column(length = 10)
+	private String excel;
+	
 	public Tools(){
 		
 	}
 
-	public Tools(int id, String pathFile, String pronome, String nome, String tratamento, String cargo, String cidadeEstado, String var) {
+	public Tools(int id, String pathFile, String pronome, String nome, String tratamento, String cargo, String cidadeEstado, String var, String excel) {
 		
 		this.id = id;
 		this.pathFile = pathFile;
@@ -49,6 +52,7 @@ public class Tools {
 		this.cargo = cargo;
 		this.cidadeEstado = cidadeEstado;
 		this.var = var;
+		this.excel = excel;
 	}
 	
 
@@ -116,6 +120,12 @@ public class Tools {
 		this.var = var;
 	}
 	
+	public String getExcel(){
+		return excel;
+	}
 	
+	public void setExcel(String excel){
+		this.excel = excel;
+	}
 
 }
