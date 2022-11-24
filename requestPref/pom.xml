@@ -16,7 +16,7 @@
 	<maven.compiler.target>1.7</maven.compiler.target>
 
 	<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-	<hibernate-core-version>3.5.0-Final</hibernate-core-version>
+	<hibernate-core-version>5.3.20.Final</hibernate-core-version>
   </properties>
 
   <dependencies>
